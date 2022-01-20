@@ -96,6 +96,7 @@
     <Compile Include="IO\Ports\Router\PortManager.cs" />
     <Compile Include="Math\MathEx.cs" />
     <Compile Include="Math\PiecewiseLinearFunction.cs" />
+    <Compile Include="Other\Progress.cs" />
     <Compile Include="RS.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
