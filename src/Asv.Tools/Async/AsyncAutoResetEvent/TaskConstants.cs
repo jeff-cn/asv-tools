@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Nito.AsyncEx
+namespace Asv.Tools
 {
     /// <summary>
     /// Provides completed task constants.

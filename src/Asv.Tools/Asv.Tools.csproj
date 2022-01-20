@@ -87,7 +87,20 @@
     <Compile Include="Configuration\Json\JsonConfiguration.cs" />
     <Compile Include="Configuration\Json\JsonOneFileConfiguration.cs" />
     <Compile Include="Console\AssemblyInfoHelper.cs" />
+    <Compile Include="Console\ConsoleDialogs.cs" />
     <Compile Include="Console\ConsoleWelcomePrinter.cs" />
+    <Compile Include="Console\TextRender.cs" />
+    <Compile Include="Console\TextTable.cs" />
+    <Compile Include="IO\LinkIndicator.cs" />
+    <Compile Include="IO\Ports\Router\IPortManager.cs" />
+    <Compile Include="IO\Ports\Router\PortManager.cs" />
+    <Compile Include="Math\MathEx.cs" />
+    <Compile Include="Math\PiecewiseLinearFunction.cs" />
+    <Compile Include="RS.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RS.resx</DependentUpon>
+    </Compile>
     <Compile Include="StringExtensions.cs" />
     <Compile Include="IO\IDataStream.cs" />
     <Compile Include="IO\JsonStream\IJsonStream.cs" />
@@ -117,9 +130,15 @@
     <Compile Include="Reactive\RxValue\ObserverHelper.cs" />
     <Compile Include="Reactive\RxValue\RxValue.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="RS.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>RS.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

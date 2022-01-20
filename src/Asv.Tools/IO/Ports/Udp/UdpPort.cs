@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NLog;
 
-namespace Asv.Tools.Udp
+namespace Asv.Tools
 {
     public class UdpPort : PortBase
     {

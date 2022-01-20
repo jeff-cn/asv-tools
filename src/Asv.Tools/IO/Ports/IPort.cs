@@ -1,7 +1,6 @@
 using System;
 using Asv.Tools.Serial;
 using Asv.Tools.Tcp;
-using Asv.Tools.Udp;
 
 namespace Asv.Tools
 {
