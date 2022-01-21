@@ -1,13 +1,66 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading;
 
 namespace Asv.Tools
 {
     public static class ObservableExtensions
     {
+        public static IObservable<T> IgnoreObserverExceptions<T, TException>(
+            this IObservable<T> source
+        ) where TException : Exception
+        {
+            return Observable.Create<T>(
+                o => source.Subscribe(
+                    v =>
+                    {
+                        try
+                        {
+                            o.OnNext(v);
+                        }
+                        catch (TException)
+                        {
+                        }
+                    },
+                    ex => o.OnError(ex),
+                    () => o.OnCompleted()
+                ));
+        }
+
+        public static IObservable<T> IgnoreObserverExceptions<T>(
+            this IObservable<T> source
+        )
+        {
+            return Observable.Create<T>(
+                o => source.Subscribe(
+                    v =>
+                    {
+                        try
+                        {
+                            o.OnNext(v);
+                        }
+                        catch
+                        {
+                            Debug.Assert(false, "Exception ignored");
+                            // ignored
+                        }
+                    },
+                    ex => o.OnError(ex),
+                    () => o.OnCompleted()
+                ));
+        }
+
+        public static IObservable<T> SubscribeEx<T>(this IObservable<T> src, IObserver<T> observer,
+            CancellationToken cancel)
+        {
+            src.Subscribe(observer, cancel);
+            return src;
+        }
+
         /// <summary>
         /// Скользящее окно
         /// </summary>
@@ -29,6 +82,7 @@ namespace Asv.Tools
                     {
                         list.RemoveFirst();
                     }
+
                     o.OnNext(list.Select(tx2 => tx2.Value).ToArray());
                 }, o.OnError, o.OnCompleted);
             });

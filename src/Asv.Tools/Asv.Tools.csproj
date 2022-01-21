@@ -88,6 +88,18 @@
     <Compile Include="Console\ConsoleWelcomePrinter.cs" />
     <Compile Include="Console\TextRender.cs" />
     <Compile Include="Console\TextTable.cs" />
+    <Compile Include="Diagnostic\Diagnostic.cs" />
+    <Compile Include="Diagnostic\DiagnosticKey.cs" />
+    <Compile Include="Diagnostic\DiagnosticSource.cs" />
+    <Compile Include="Diagnostic\Speed\SpeedDiagnostic.cs" />
+    <Compile Include="Diagnostic\Speed\ISpeedDiagnostic.cs" />
+    <Compile Include="Diagnostic\Reals\DoubleDiagnostic.cs" />
+    <Compile Include="Diagnostic\IDiagnostic.cs" />
+    <Compile Include="Diagnostic\IDiagnosticSource.cs" />
+    <Compile Include="Diagnostic\Integers\IntegerDiagnostic.cs" />
+    <Compile Include="Diagnostic\Speed\SpeedIndicator.cs" />
+    <Compile Include="Diagnostic\Strings\StringDiagnostic.cs" />
+    <Compile Include="Other\GeoPoint.cs" />
     <Compile Include="Other\CsvHelper.cs" />
     <Compile Include="IO\LinkIndicator.cs" />
     <Compile Include="IO\Ports\Router\IPortManager.cs" />
@@ -99,6 +111,7 @@
     <Compile Include="Other\EnumHelper.cs" />
     <Compile Include="Other\Progress.cs" />
     <Compile Include="Other\SemVersion.cs" />
+    <Compile Include="Other\ToleranceEqualExtension.cs" />
     <Compile Include="Reactive\ObservableExtensions.cs" />
     <Compile Include="RS.Designer.cs">
       <AutoGen>True</AutoGen>
