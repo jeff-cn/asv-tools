@@ -88,6 +88,12 @@
     <Compile Include="Console\ConsoleWelcomePrinter.cs" />
     <Compile Include="Console\TextRender.cs" />
     <Compile Include="Console\TextTable.cs" />
+    <Compile Include="Dsp\BandpassFilter.cs" />
+    <Compile Include="Dsp\BiQuad.cs" />
+    <Compile Include="Dsp\KalmanFilterSimple1D.cs" />
+    <Compile Include="Dsp\LowpassFilter.cs" />
+    <Compile Include="Dsp\WindowFilters.cs" />
+    <Compile Include="Other\CircularBuffer.cs" />
     <Compile Include="Other\CsvHelper.cs" />
     <Compile Include="IO\LinkIndicator.cs" />
     <Compile Include="IO\Ports\Router\IPortManager.cs" />

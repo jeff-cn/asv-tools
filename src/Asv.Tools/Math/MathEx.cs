@@ -6,6 +6,8 @@ namespace Asv.Mavlink
 {
     public class MathEx
     {
+        private const double Pi2 = 2 * Math.PI;
+
         public static string AngleToDegreeString(double angleValue,string formatStringForMinute = "00.00", string nanString = "-")
         {
             if (double.IsNaN(angleValue)) return "";
@@ -107,6 +109,23 @@ namespace Asv.Mavlink
             else if (distance > 179)
                 distance -= 360;
             return distance;
+        }
+
+        public static double GetDistanceAngleRad(double a, double b)
+        {
+            var distance = a - b;
+
+            while (distance >= Pi2)
+            {
+                distance -= Pi2;
+            }
+
+            if (distance < -Math.PI)
+                distance += Math.PI;
+            else if (distance > Math.PI)
+                distance -= Pi2;
+            return distance;
+
         }
 
     }
