@@ -9,7 +9,7 @@ namespace Asv.Tools
 
     public interface IDiagnostic: IDisposable
     {
-        IEnumerable<KeyValuePair<DiagnosticKey, DiagnosticItem>> GetItems();
+        KeyValuePair<DiagnosticKey, DiagnosticItem>[] GetItems();
         void ClearItems();
         IDiagnosticSource this[string group] { get; }
     }

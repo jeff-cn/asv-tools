@@ -69,6 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Async\AsyncAutoResetEvent\AsyncAutoResetEvent.cs" />
+    <Compile Include="Async\AsyncAutoResetEvent\AsyncReaderWriterLock.cs" />
+    <Compile Include="Async\AsyncAutoResetEvent\BoundAction.cs" />
     <Compile Include="Async\AsyncAutoResetEvent\CollectionHelpers.cs" />
     <Compile Include="Async\AsyncAutoResetEvent\Deque.cs" />
     <Compile Include="Async\AsyncAutoResetEvent\ExceptionHelpers.cs" />
@@ -77,7 +79,6 @@
     <Compile Include="Async\AsyncAutoResetEvent\TaskConstants.cs" />
     <Compile Include="Async\AsyncAutoResetEvent\TaskExtensions.cs" />
     <Compile Include="Async\AsyncLock.cs" />
-    <Compile Include="Async\AsyncReaderWriterLock.cs" />
     <Compile Include="Async\AsyncAutoResetEvent\AsyncWaitQueue.cs" />
     <Compile Include="Async\SingleThreadTaskScheduler.cs" />
     <Compile Include="Configuration\IConfiguration.cs" />
@@ -100,6 +101,15 @@
     <Compile Include="Diagnostic\Speed\SpeedIndicator.cs" />
     <Compile Include="Diagnostic\Strings\StringDiagnostic.cs" />
     <Compile Include="Other\GeoPoint.cs" />
+    <Compile Include="Dsp\BandpassFilter.cs" />
+    <Compile Include="Dsp\BiQuad.cs" />
+    <Compile Include="Dsp\KalmanFilterSimple1D.cs" />
+    <Compile Include="Dsp\LowpassFilter.cs" />
+    <Compile Include="Dsp\WindowFilters.cs" />
+    <Compile Include="Other\BitHelper.cs" />
+    <Compile Include="Collections\CircularBuffer.cs" />
+    <Compile Include="Collections\ConcurrentCircularTimeBuffer.cs" />
+    <Compile Include="Collections\ConcurrentTimeDictionary.cs" />
     <Compile Include="Other\CsvHelper.cs" />
     <Compile Include="IO\LinkIndicator.cs" />
     <Compile Include="IO\Ports\Router\IPortManager.cs" />
@@ -109,6 +119,7 @@
     <Compile Include="Other\CallbackComparer.cs" />
     <Compile Include="Other\EnumerableExtensions.cs" />
     <Compile Include="Other\EnumHelper.cs" />
+    <Compile Include="Other\PasswordHash.cs" />
     <Compile Include="Other\Progress.cs" />
     <Compile Include="Other\SemVersion.cs" />
     <Compile Include="Other\ToleranceEqualExtension.cs" />
@@ -144,8 +155,8 @@
     <Compile Include="Reactive\RxCollection\SynchronizedList.cs" />
     <Compile Include="Reactive\RxValue\CancellationWrapper.cs" />
     <Compile Include="Reactive\RxValue\IRxValue.cs" />
-    <Compile Include="Reactive\RxValue\ObserverHelper.cs" />
     <Compile Include="Reactive\RxValue\RxValue.cs" />
+    <Compile Include="TimeService\ITimeService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="RS.resx">

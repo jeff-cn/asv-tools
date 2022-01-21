@@ -1,6 +1,4 @@
-using Asv.Tools;
-
-namespace Asv.Mavlink
+namespace Asv.Tools
 {
     public enum LinkState
     {
