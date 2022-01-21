@@ -15,6 +15,41 @@ namespace Asv.Tools
     /// </summary>
     public static class StringExtensions
     {
+        public static string ByteArrayToString(this byte[] buff, uint startBitIndex, uint bitLength, params int[] printLength)
+        {
+            var sb = new StringBuilder();
+            if (printLength == null || printLength.Length == 0)
+            {
+                for (uint i = 0; i < bitLength; i++)
+                {
+                    sb.Append(BitHelper.GetBitU(buff, startBitIndex + i, 1) == 0 ? "0" : "1");
+                }
+            }
+            else
+            {
+                int printIndex = 0;
+                int index = 1;
+                for (uint i = 0; i < bitLength; i++)
+                {
+                    sb.Append(BitHelper.GetBitU(buff, startBitIndex + i, 1) == 0 ? "0" : "1");
+
+                    if (index % printLength[printIndex] == 0)
+                    {
+                        sb.Append(" ");
+                        printIndex++;
+                        index = 0;
+                        if (printIndex >= printLength.Length)
+                        {
+                            printIndex = 0;
+                        }
+                    }
+
+                    index++;
+                }
+            }
+            return sb.ToString();
+        }
+
         public static string BytesToString(this long byteCount)
         {
             string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
