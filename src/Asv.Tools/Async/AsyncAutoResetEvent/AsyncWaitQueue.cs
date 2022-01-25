@@ -4,11 +4,10 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Nito.Collections;
 
 [assembly:InternalsVisibleTo("AsyncEx.Coordination.UnitTests")]
 
-namespace Nito.AsyncEx
+namespace Asv.Tools
 {
     /// <summary>
     /// A collection of cancelable <see cref="TaskCompletionSource{T}"/> instances. Implementations must assume the caller is holding a lock.

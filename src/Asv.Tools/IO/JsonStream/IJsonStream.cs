@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace Asv.Tools.JsonStream
+namespace Asv.Tools
 {
     public interface IJsonStream : IDisposable, IObservable<JObject>
     {

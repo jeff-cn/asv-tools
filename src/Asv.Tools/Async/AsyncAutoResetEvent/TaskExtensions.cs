@@ -1,9 +1,8 @@
-﻿using System;
-using System.Runtime.ExceptionServices;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Nito.AsyncEx.Synchronous
+namespace Asv.Tools
 {
     /// <summary>
     /// Provides synchronous extension methods for tasks.

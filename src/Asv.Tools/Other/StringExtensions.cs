@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,6 +15,51 @@ namespace Asv.Tools
     /// </summary>
     public static class StringExtensions
     {
+        public static string ByteArrayToString(this byte[] buff, uint startBitIndex, uint bitLength, params int[] printLength)
+        {
+            var sb = new StringBuilder();
+            if (printLength == null || printLength.Length == 0)
+            {
+                for (uint i = 0; i < bitLength; i++)
+                {
+                    sb.Append(BitHelper.GetBitU(buff, startBitIndex + i, 1) == 0 ? "0" : "1");
+                }
+            }
+            else
+            {
+                int printIndex = 0;
+                int index = 1;
+                for (uint i = 0; i < bitLength; i++)
+                {
+                    sb.Append(BitHelper.GetBitU(buff, startBitIndex + i, 1) == 0 ? "0" : "1");
+
+                    if (index % printLength[printIndex] == 0)
+                    {
+                        sb.Append(" ");
+                        printIndex++;
+                        index = 0;
+                        if (printIndex >= printLength.Length)
+                        {
+                            printIndex = 0;
+                        }
+                    }
+
+                    index++;
+                }
+            }
+            return sb.ToString();
+        }
+
+        public static string BytesToString(this long byteCount)
+        {
+            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
+            if (byteCount == 0)
+                return "0" + suf[0];
+            long bytes = Math.Abs(byteCount);
+            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+            return (Math.Sign(byteCount) * num).ToString() + suf[place];
+        }
 
         public static string RightMargin(this string src, int charCount, char fillChar = ' ')
         {

@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
-using Nito.AsyncEx.Synchronous;
 
-namespace Nito.AsyncEx
+namespace Asv.Tools
 {
     /// <summary>
     /// Provides extension methods for <see cref="TaskCompletionSource{TResult}"/>.
