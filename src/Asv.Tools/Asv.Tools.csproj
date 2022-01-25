@@ -88,6 +88,8 @@
     <Compile Include="Configuration\Json\JsonOneFileConfiguration.cs" />
     <Compile Include="Console\AssemblyInfoHelper.cs" />
     <Compile Include="Console\ConsoleWelcomePrinter.cs" />
+    <Compile Include="IO\TextStream\TelnetConfig.cs" />
+    <Compile Include="IO\TextStream\TelnetStream.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="IO\IDataStream.cs" />
     <Compile Include="IO\JsonStream\IJsonStream.cs" />
