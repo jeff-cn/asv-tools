@@ -40,7 +40,8 @@ namespace Asv.Tools
                 Name = threadName,
                 Priority = priority
             };
-            _workThread.SetApartmentState(apartmentState);
+            
+            //_workThread.SetApartmentState(apartmentState);
             _workThread.Start();
         }
 
