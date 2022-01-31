@@ -28,15 +28,15 @@ namespace Asv.Tools
         {
             if (flushToFileDelayMs == null)
             {
-                Logger.Debug($"ctor {nameof(JsonOneFileConfiguration)} file:{fileName} createIfNotExist:{createIfNotExist} flushToFileDelay: No, write immediately ");
+                Logger.Debug($"{fileName} create:{createIfNotExist} flush: No, write immediately ");
             }
             else
             {
-                Logger.Debug($"ctor {nameof(JsonOneFileConfiguration)} file:{fileName} createIfNotExist:{createIfNotExist} flushToFileDelay every {flushToFileDelayMs.Value.TotalSeconds:F2} seconds");
+                Logger.Debug($"{fileName} create:{createIfNotExist} flush: every {flushToFileDelayMs.Value.TotalSeconds:F2} seconds");
             }
 
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentException($"File name {fileName} cannot be null or empty.", nameof(fileName));
+                throw new ArgumentException("Config file name cannot be null or empty.", nameof(fileName));
 
             var dir = Path.GetDirectoryName(Path.GetFullPath(fileName));
             if (string.IsNullOrWhiteSpace(dir)) throw new InvalidOperationException("Directory path is null");
@@ -54,7 +54,6 @@ namespace Asv.Tools
             _fileName = fileName;
             if (File.Exists(fileName) == false)
             {
-                Logger.Warn($"Config file not exist");
                 if (createIfNotExist)
                 {
                     Logger.Warn($"Config file not exist. Try to create {fileName}");

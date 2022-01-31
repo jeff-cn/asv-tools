@@ -29,7 +29,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace Asv.Gbas.Server
+namespace Asv.Tools
 {
     /// <summary>
     /// Salted password hashing with PBKDF2-SHA1.
