@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -67,15 +68,22 @@ namespace Asv.Tools.Tcp
                     {
                         if ((DateTime.Now - _lastData).TotalMilliseconds > _cfg.ReconnectTimeout)
                         {
-                            _tcp.GetStream().Write(new byte[0], 0, 0);
+                            _tcp.GetStream().Write(Array.Empty<byte>(), 0, 0);
                         }
                     }
                     if (_tcp.Available != 0)
                     {
                         _lastData = DateTime.Now;
-                        var buff = new byte[_tcp.Available];
-                        _tcp.GetStream().Read(buff, 0, buff.Length);
-                        InternalOnData(buff);
+                        var buff = ArrayPool<byte>.Shared.Rent(_tcp.Available);
+                        try
+                        {
+                            var count = _tcp.GetStream().Read(buff, 0, buff.Length);
+                            InternalOnData(buff);
+                        }
+                        finally
+                        {
+                            ArrayPool<byte>.Shared.Return(buff);
+                        }
                     }
                     else
                     {

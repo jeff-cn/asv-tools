@@ -15,6 +15,27 @@ namespace Asv.Tools
 
         public string GroupName { get; }
 
+        public void Update(string name, Func<double, double> updateCallback)
+        {
+            _values.AddOrUpdate(new DiagnosticKey(GroupName, name), new DiagnosticItem
+            {
+                LastUpdate = DateTime.Now,
+                FormatString = null,
+                RealValue = updateCallback(0),
+                ItemType = DiagnosticItemType.Real,
+            }, (diagnosticKey, s) =>
+            {
+                s.RealValue = updateCallback(s.RealValue);
+                s.LastUpdate = DateTime.Now;
+                return s;
+            });
+        }
+
+        public void Increment(string name, double value)
+        {
+            Update(name,_=>_+=value);
+        }
+
         public double this[string name]
         {
             get => Get(name)?.RealValue ?? 0.0;

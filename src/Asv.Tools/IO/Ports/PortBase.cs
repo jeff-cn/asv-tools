@@ -10,6 +10,7 @@ namespace Asv.Tools
 {
     public abstract class PortBase : IPort
     {
+        private readonly IDiagnosticSource _diag;
         private readonly CancellationTokenSource _disposedCancel = new CancellationTokenSource();
         private int _isEvaluating;
         private readonly RxValue<Exception> _portErrorStream = new RxValue<Exception>();
@@ -170,6 +171,7 @@ namespace Asv.Tools
         {
             if (Interlocked.CompareExchange(ref _isDisposed,1,0) != 0) return;
             Disable();
+            _diag.Dispose();
             _portErrorStream.Dispose();
             _portStateStream.Dispose();
             _enableStream.Dispose();

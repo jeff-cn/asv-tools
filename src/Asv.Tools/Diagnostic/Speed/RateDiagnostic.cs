@@ -3,12 +3,12 @@ using System.Collections.Concurrent;
 
 namespace Asv.Tools
 {
-    public class SpeedDiagnostic : ISpeedDiagnostic
+    public class RateDiagnostic : IRateDiagnostic
     {
         private readonly IDigitDiagnostic<double> _src;
-        private readonly ConcurrentDictionary<string, SpeedIndicator> _indicators = new ConcurrentDictionary<string, SpeedIndicator>();
+        private readonly ConcurrentDictionary<string, RateIndicator> _indicators = new ConcurrentDictionary<string, RateIndicator>();
 
-        public SpeedDiagnostic(IDigitDiagnostic<double> src)
+        public RateDiagnostic(IDigitDiagnostic<double> src)
         {
             _src = src;
         }
@@ -22,9 +22,9 @@ namespace Asv.Tools
             _indicators.Clear();
         }
 
-        public SpeedIndicator this[string name] => _indicators.GetOrAdd(name, _=> _src.CreateSpeedIndicator(_));
+        public RateIndicator this[string name] => _indicators.GetOrAdd(name, _=> _src.CreateSpeedIndicator(_));
 
-        public SpeedIndicator
+        public RateIndicator
             this[string name, string format, TimeSpan? lifeTime = null, TimeSpan? updateTime = null] =>
             _indicators.GetOrAdd(name, _src.CreateSpeedIndicator(name, format, lifeTime, updateTime));
 

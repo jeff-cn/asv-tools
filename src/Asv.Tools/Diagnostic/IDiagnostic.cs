@@ -52,10 +52,17 @@ namespace Asv.Tools
     public interface IDigitDiagnostic<T>: IDisposable
     {
         string GroupName { get; }
+        void Update(string name, Func<T, T> updateCallback);
+        void Increment(string name, T value);
         T this[string name] { get; set; }
         T this[string name, string format] { set; }
         T this[string name, string format, TimeSpan lifeTime] { set; }
         T this[string name, TimeSpan lifeTime] { set; }
+    }
+
+    public interface IDigitDiagnosticItem<in T>
+    {
+        void Increment(T value);
     }
 
     public interface IStringDiagnostic: IDisposable
@@ -67,6 +74,8 @@ namespace Asv.Tools
 
     public static class SimpleDiagnosticHelper
     {
+        
+
         public static void Print(this IDiagnostic src, Action<string> printCallback, TextTableBorder border = null)
         {
             foreach (var group in src.GetItems().GroupBy(_=>_.Key.Group))
@@ -75,16 +84,16 @@ namespace Asv.Tools
             }
         }
 
-        public static SpeedIndicator CreateSpeedIndicator(this IDiagnosticSource src, string name, string format = null,
+        public static RateIndicator CreateSpeedIndicator(this IDiagnosticSource src, string name, string format = null,
             TimeSpan? lifeTime = null, TimeSpan? updateTime = null)
         {
-            return new SpeedIndicator(src.Real, name, format, lifeTime, updateTime);
+            return new RateIndicator(src.Real, name, format, lifeTime, updateTime);
         }
 
-        public static SpeedIndicator CreateSpeedIndicator(this IDigitDiagnostic<double> src, string name, string format = null,
+        public static RateIndicator CreateSpeedIndicator(this IDigitDiagnostic<double> src, string name, string format = null,
             TimeSpan? lifeTime = null, TimeSpan? updateTime = null)
         {
-            return new SpeedIndicator(src, name, format, lifeTime, updateTime);
+            return new RateIndicator(src, name, format, lifeTime, updateTime);
         }
     }
 

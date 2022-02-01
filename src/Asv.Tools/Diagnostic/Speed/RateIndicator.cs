@@ -4,13 +4,13 @@ using System.Threading;
 
 namespace Asv.Tools
 {
-    public class SpeedIndicator : IDisposable
+    public class RateIndicator : IDisposable
     {
         private readonly IDisposable _subscription;
         private int _value;
         private DateTime _lastUpdate;
 
-        public SpeedIndicator(IDigitDiagnostic<double> source, string name, string format = null, TimeSpan? lifeTime = null, TimeSpan? updateTime = null)
+        public RateIndicator(IDigitDiagnostic<double> source, string name, string format = null, TimeSpan? lifeTime = null, TimeSpan? updateTime = null)
         {
             var time = updateTime ?? TimeSpan.FromSeconds(5);
             if (lifeTime.HasValue)

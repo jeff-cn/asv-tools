@@ -8,6 +8,6 @@ namespace Asv.Tools
         IDigitDiagnostic<double> Real { get; }
         IDigitDiagnostic<int> Int { get; }
         IStringDiagnostic Str { get; }
-        ISpeedDiagnostic Speed { get; }
+        IRateDiagnostic Rate { get; }
     }
 }
