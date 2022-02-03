@@ -61,41 +61,23 @@ namespace Asv.Tools
             }
         }
 
-        public async Task<JObject> RequestText(string request, Func<JObject, bool> responseFilter, CancellationToken cancel)
+        public async Task<JObject> RequestText(string request, Func<JObject, bool> responseFilter,
+            CancellationToken cancel)
         {
-            JObject jobject;
-            using (CancellationTokenSource timeoutCancel = new CancellationTokenSource(this._requestTimeout))
-            {
-                using (CancellationTokenSource linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(cancel, timeoutCancel.Token))
-                {
-                    IDisposable subscribe = (IDisposable)null;
-                    try
-                    {
-                        AsyncAutoResetEvent eve = new AsyncAutoResetEvent(false);
-                        JObject result = (JObject)null;
-                        subscribe = this.FirstAsync<JObject>(responseFilter).Subscribe<JObject>((Action<JObject>)(_ =>
-                        {
-                            result = _;
-                            eve.Set();
-                        }));
-                        await SendText(request, linkedCancel.Token);
-                        await eve.WaitAsync(linkedCancel.Token);
-                        jobject = result;
-                    }
-                    finally
-                    {
-                        subscribe?.Dispose();
-                    }
-                }
-            }
-            return jobject;
+            using var linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(cancel);
+            linkedCancel.CancelAfter(_requestTimeout);
+            var tcs = new TaskCompletionSource<JObject>();
+            linkedCancel.Token.Register(tcs.SetCanceled);
+            using var subscribe = this.FirstAsync(responseFilter).Subscribe(tcs.SetResult);
+            await SendText(request, linkedCancel.Token).ConfigureAwait(false);
+            return  await tcs.Task.ConfigureAwait(false);
         }
 
         public async Task SendText(string data, CancellationToken cancel)
         {
             try
             {
-                await _textStream.Send(data, cancel);
+                await _textStream.Send(data, cancel).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -103,48 +85,30 @@ namespace Asv.Tools
             }
         }
 
-        public async Task<JObject> Request<TRequest>(TRequest request, Func<JObject, bool> responseFilter, CancellationToken cancel)
+        public async Task<JObject> Request<TRequest>(TRequest request, Func<JObject, bool> responseFilter,
+            CancellationToken cancel)
         {
-            JObject jobject;
-            using (CancellationTokenSource timeoutCancel = new CancellationTokenSource(this._requestTimeout))
-            {
-                using (CancellationTokenSource linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(cancel, timeoutCancel.Token))
-                {
-                    IDisposable subscribe = (IDisposable)null;
-                    try
-                    {
-                        AsyncAutoResetEvent eve = new AsyncAutoResetEvent(false);
-                        JObject result = (JObject)null;
-                        subscribe = this.FirstAsync<JObject>(responseFilter).Subscribe<JObject>((Action<JObject>)(_ =>
-                        {
-                            result = _;
-                            eve.Set();
-                        }));
-                        await this.Send<TRequest>(request, linkedCancel.Token);
-                        await eve.WaitAsync(linkedCancel.Token);
-                        jobject = result;
-                    }
-                    finally
-                    {
-                        subscribe?.Dispose();
-                    }
-                }
-            }
-            return jobject;
+            using CancellationTokenSource linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(cancel);
+            linkedCancel.CancelAfter(_requestTimeout);
+            var tcs = new TaskCompletionSource<JObject>();
+            linkedCancel.Token.Register(tcs.SetCanceled);
+            using var subscribe = this.FirstAsync(responseFilter).Subscribe(tcs.SetResult);
+            await Send(request, linkedCancel.Token).ConfigureAwait(false);
+            return await tcs.Task.ConfigureAwait(false);
         }
 
         public void Dispose()
         {
-            this._disposeCancel.Cancel(false);
-            this._disposeCancel.Dispose();
-            if (!this._disposeStream)
+            _disposeCancel.Cancel(false);
+            _disposeCancel.Dispose();
+            if (!_disposeStream)
                 return;
-            this._textStream?.Dispose();
+            _textStream?.Dispose();
         }
 
         public IDisposable Subscribe(IObserver<JObject> observer)
         {
-            return this._onData.Subscribe(observer);
+            return _onData.Subscribe(observer);
         }
     }
 
