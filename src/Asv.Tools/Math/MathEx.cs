@@ -120,13 +120,21 @@ namespace Asv.Mavlink
                 distance -= Pi2;
             }
 
+            while (distance <= -Pi2)
+            {
+                distance += Pi2;
+            }
+
             if (distance < -Math.PI)
-                distance += Math.PI;
+                distance += Pi2;
             else if (distance > Math.PI)
                 distance -= Pi2;
+            
             return distance;
 
         }
+
+        
 
     }
 }

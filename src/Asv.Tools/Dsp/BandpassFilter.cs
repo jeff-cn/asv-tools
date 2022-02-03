@@ -18,6 +18,12 @@ namespace Asv.Tools
         {
         }
 
+        public BandpassFilter(int sampleRate, double frequency, double q)
+            : base(sampleRate, frequency, q)
+        {
+
+        }
+
         /// <summary>
         /// Calculates all coefficients.
         /// </summary>
