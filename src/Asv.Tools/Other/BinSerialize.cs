@@ -17,6 +17,7 @@ namespace Asv.Tools
                 throw new NotSupportedException("BigEndian systems are not supported at this time.");
         }
 
+        
         /// <summary>
         /// Read a packed integer.
         /// </summary>
@@ -1134,5 +1135,7 @@ namespace Asv.Tools
             (min == max) ? 0f : Clamp01((val - min) / (max - min));
 
         private static float Clamp01(float val) => val < 0f ? 0f : (val > 1f ? 1f : val);
+
+        
     }
 }
