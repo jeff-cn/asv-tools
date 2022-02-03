@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
@@ -19,7 +20,6 @@ namespace Asv.Tools
         private readonly Subject<byte[]> _outputData = new Subject<byte[]>();
         private long _rxBytes;
         private long _txBytes;
-
         public IRxValue<bool> IsEnabled => _enableStream;
         public long RxBytes => Interlocked.Read(ref _rxBytes);
         public long TxBytes => Interlocked.Read(ref _txBytes);
@@ -30,9 +30,16 @@ namespace Asv.Tools
         private int _errCnt;
         private DateTime _lastSuccess;
         private int _isDisposed;
+        private static readonly Meter Meter = new Meter("Asv.Tools.Ports");
+        private readonly ObservableCounter<int> _probeError;
+        private readonly Counter<long> _probeTx;
+
 
         protected PortBase()
         {
+            _probeError = Meter.CreateObservableCounter("err",()=> _errCnt, "items","Connection errors");
+            _probeTx = Meter.CreateCounter<long>("tx","bytes", "Transmit bytes");
+
             State.Where(_ => _ == PortState.Connected).Subscribe(_ =>
             {
                 _lastSuccess = DateTime.Now;
@@ -64,6 +71,7 @@ namespace Asv.Tools
             try
             {
                 await InternalSend(data, count, cancel).ConfigureAwait(false);
+                _probeTx.Add(count);
                 Interlocked.Add(ref _txBytes, count);
                 return true;
             }
