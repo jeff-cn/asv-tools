@@ -2,8 +2,14 @@ using System;
 
 namespace Asv.Tools
 {
-    public static class BitHelperSpan
+    public  static partial class SpanBitHelper
     {
+        
+        
+
+
+
+
         public static uint GetBitU(ref ReadOnlySpan<byte> buff,ref uint pos, uint len)
         {
             uint bits = 0;
