@@ -4,7 +4,8 @@ namespace Asv.Tools
 {
     public static partial class SpanBitHelper
     {
-             #region FixedPointS3
+    
+         #region FixedPointS3
 
          public const int FixedPointS3PositiveInf = 3;
          public const int FixedPointS3NegativeInf = -3;
@@ -47,6 +48,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS3Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS3Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS3Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 3);
             var convertedValue = value switch
             {
@@ -106,16 +114,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS3Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS3Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS3Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS3Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS4
+    
+         #region FixedPointS4
 
          public const int FixedPointS4PositiveInf = 7;
          public const int FixedPointS4NegativeInf = -7;
@@ -158,6 +174,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS4Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS4Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS4Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 4);
             var convertedValue = value switch
             {
@@ -217,16 +240,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS4Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS4Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS4Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS4Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS5
+    
+         #region FixedPointS5
 
          public const int FixedPointS5PositiveInf = 15;
          public const int FixedPointS5NegativeInf = -15;
@@ -269,6 +300,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS5Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS5Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS5Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 5);
             var convertedValue = value switch
             {
@@ -328,16 +366,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS5Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS5Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS5Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS5Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS6
+    
+         #region FixedPointS6
 
          public const int FixedPointS6PositiveInf = 31;
          public const int FixedPointS6NegativeInf = -31;
@@ -380,6 +426,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS6Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS6Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS6Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 6);
             var convertedValue = value switch
             {
@@ -439,16 +492,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS6Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS6Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS6Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS6Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS7
+    
+         #region FixedPointS7
 
          public const int FixedPointS7PositiveInf = 63;
          public const int FixedPointS7NegativeInf = -63;
@@ -491,6 +552,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS7Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS7Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS7Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 7);
             var convertedValue = value switch
             {
@@ -550,16 +618,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS7Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS7Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS7Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS7Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS8
+    
+         #region FixedPointS8
 
          public const int FixedPointS8PositiveInf = 127;
          public const int FixedPointS8NegativeInf = -127;
@@ -602,6 +678,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS8Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS8Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS8Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 8);
             var convertedValue = value switch
             {
@@ -661,16 +744,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS8Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS8Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS8Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS8Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS9
+    
+         #region FixedPointS9
 
          public const int FixedPointS9PositiveInf = 255;
          public const int FixedPointS9NegativeInf = -255;
@@ -713,6 +804,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS9Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS9Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS9Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 9);
             var convertedValue = value switch
             {
@@ -772,16 +870,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS9Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS9Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS9Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS9Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS10
+    
+         #region FixedPointS10
 
          public const int FixedPointS10PositiveInf = 511;
          public const int FixedPointS10NegativeInf = -511;
@@ -824,6 +930,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS10Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS10Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS10Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 10);
             var convertedValue = value switch
             {
@@ -883,16 +996,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS10Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS10Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS10Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS10Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS11
+    
+         #region FixedPointS11
 
          public const int FixedPointS11PositiveInf = 1023;
          public const int FixedPointS11NegativeInf = -1023;
@@ -935,6 +1056,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS11Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS11Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS11Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 11);
             var convertedValue = value switch
             {
@@ -994,16 +1122,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS11Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS11Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS11Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS11Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS12
+    
+         #region FixedPointS12
 
          public const int FixedPointS12PositiveInf = 2047;
          public const int FixedPointS12NegativeInf = -2047;
@@ -1046,6 +1182,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS12Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS12Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS12Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 12);
             var convertedValue = value switch
             {
@@ -1105,16 +1248,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS12Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS12Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS12Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS12Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS13
+    
+         #region FixedPointS13
 
          public const int FixedPointS13PositiveInf = 4095;
          public const int FixedPointS13NegativeInf = -4095;
@@ -1157,6 +1308,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS13Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS13Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS13Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 13);
             var convertedValue = value switch
             {
@@ -1216,16 +1374,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS13Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS13Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS13Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS13Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS14
+    
+         #region FixedPointS14
 
          public const int FixedPointS14PositiveInf = 8191;
          public const int FixedPointS14NegativeInf = -8191;
@@ -1268,6 +1434,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS14Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS14Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS14Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 14);
             var convertedValue = value switch
             {
@@ -1327,16 +1500,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS14Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS14Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS14Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS14Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS15
+    
+         #region FixedPointS15
 
          public const int FixedPointS15PositiveInf = 16383;
          public const int FixedPointS15NegativeInf = -16383;
@@ -1379,6 +1560,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS15Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS15Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS15Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 15);
             var convertedValue = value switch
             {
@@ -1438,16 +1626,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS15Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS15Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS15Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS15Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS16
+    
+         #region FixedPointS16
 
          public const int FixedPointS16PositiveInf = 32767;
          public const int FixedPointS16NegativeInf = -32767;
@@ -1490,6 +1686,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS16Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS16Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS16Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 16);
             var convertedValue = value switch
             {
@@ -1549,16 +1752,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS16Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS16Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS16Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS16Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS17
+    
+         #region FixedPointS17
 
          public const int FixedPointS17PositiveInf = 65535;
          public const int FixedPointS17NegativeInf = -65535;
@@ -1601,6 +1812,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS17Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS17Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS17Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 17);
             var convertedValue = value switch
             {
@@ -1660,16 +1878,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS17Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS17Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS17Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS17Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS18
+    
+         #region FixedPointS18
 
          public const int FixedPointS18PositiveInf = 131071;
          public const int FixedPointS18NegativeInf = -131071;
@@ -1712,6 +1938,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS18Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS18Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS18Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 18);
             var convertedValue = value switch
             {
@@ -1771,16 +2004,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS18Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS18Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS18Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS18Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS19
+    
+         #region FixedPointS19
 
          public const int FixedPointS19PositiveInf = 262143;
          public const int FixedPointS19NegativeInf = -262143;
@@ -1823,6 +2064,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS19Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS19Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS19Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 19);
             var convertedValue = value switch
             {
@@ -1882,16 +2130,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS19Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS19Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS19Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS19Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS20
+    
+         #region FixedPointS20
 
          public const int FixedPointS20PositiveInf = 524287;
          public const int FixedPointS20NegativeInf = -524287;
@@ -1934,6 +2190,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS20Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS20Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS20Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 20);
             var convertedValue = value switch
             {
@@ -1993,16 +2256,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS20Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS20Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS20Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS20Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS21
+    
+         #region FixedPointS21
 
          public const int FixedPointS21PositiveInf = 1048575;
          public const int FixedPointS21NegativeInf = -1048575;
@@ -2045,6 +2316,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS21Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS21Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS21Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 21);
             var convertedValue = value switch
             {
@@ -2104,16 +2382,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS21Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS21Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS21Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS21Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS22
+    
+         #region FixedPointS22
 
          public const int FixedPointS22PositiveInf = 2097151;
          public const int FixedPointS22NegativeInf = -2097151;
@@ -2156,6 +2442,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS22Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS22Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS22Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 22);
             var convertedValue = value switch
             {
@@ -2215,16 +2508,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS22Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS22Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS22Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS22Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS23
+    
+         #region FixedPointS23
 
          public const int FixedPointS23PositiveInf = 4194303;
          public const int FixedPointS23NegativeInf = -4194303;
@@ -2267,6 +2568,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS23Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS23Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS23Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 23);
             var convertedValue = value switch
             {
@@ -2326,16 +2634,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS23Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS23Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS23Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS23Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS24
+    
+         #region FixedPointS24
 
          public const int FixedPointS24PositiveInf = 8388607;
          public const int FixedPointS24NegativeInf = -8388607;
@@ -2378,6 +2694,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS24Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS24Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS24Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 24);
             var convertedValue = value switch
             {
@@ -2437,16 +2760,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS24Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS24Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS24Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS24Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS25
+    
+         #region FixedPointS25
 
          public const int FixedPointS25PositiveInf = 16777215;
          public const int FixedPointS25NegativeInf = -16777215;
@@ -2489,6 +2820,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS25Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS25Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS25Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 25);
             var convertedValue = value switch
             {
@@ -2548,16 +2886,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS25Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS25Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS25Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS25Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS26
+    
+         #region FixedPointS26
 
          public const int FixedPointS26PositiveInf = 33554431;
          public const int FixedPointS26NegativeInf = -33554431;
@@ -2600,6 +2946,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS26Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS26Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS26Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 26);
             var convertedValue = value switch
             {
@@ -2659,16 +3012,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS26Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS26Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS26Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS26Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS27
+    
+         #region FixedPointS27
 
          public const int FixedPointS27PositiveInf = 67108863;
          public const int FixedPointS27NegativeInf = -67108863;
@@ -2711,6 +3072,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS27Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS27Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS27Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 27);
             var convertedValue = value switch
             {
@@ -2770,16 +3138,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS27Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS27Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS27Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS27Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS28
+    
+         #region FixedPointS28
 
          public const int FixedPointS28PositiveInf = 134217727;
          public const int FixedPointS28NegativeInf = -134217727;
@@ -2822,6 +3198,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS28Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS28Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS28Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 28);
             var convertedValue = value switch
             {
@@ -2881,16 +3264,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS28Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS28Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS28Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS28Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS29
+    
+         #region FixedPointS29
 
          public const int FixedPointS29PositiveInf = 268435455;
          public const int FixedPointS29NegativeInf = -268435455;
@@ -2933,6 +3324,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS29Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS29Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS29Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 29);
             var convertedValue = value switch
             {
@@ -2992,16 +3390,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS29Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS29Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS29Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS29Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS30
+    
+         #region FixedPointS30
 
          public const int FixedPointS30PositiveInf = 536870911;
          public const int FixedPointS30NegativeInf = -536870911;
@@ -3044,6 +3450,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS30Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS30Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS30Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 30);
             var convertedValue = value switch
             {
@@ -3103,16 +3516,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS30Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS30Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS30Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS30Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS31
+    
+         #region FixedPointS31
 
          public const int FixedPointS31PositiveInf = 1073741823;
          public const int FixedPointS31NegativeInf = -1073741823;
@@ -3155,6 +3576,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS31Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS31Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS31Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 31);
             var convertedValue = value switch
             {
@@ -3214,16 +3642,24 @@ namespace Asv.Tools
 
         public static void SetFixedPointS31Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS31Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS31Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS31Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-             #region FixedPointS32
+    
+         #region FixedPointS32
 
          public const int FixedPointS32PositiveInf = 2147483647;
          public const int FixedPointS32NegativeInf = -2147483647;
@@ -3266,6 +3702,13 @@ namespace Asv.Tools
          }
          public static double GetFixedPointS32Bit(ref ReadOnlySpan<byte> buffer, ref uint bitIndex, double fraction, double offset, double validateMax,double validateMin)
          {
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS32Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS32Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
             var value = GetBitS(ref buffer, ref bitIndex, 32);
             var convertedValue = value switch
             {
@@ -3325,14 +3768,22 @@ namespace Asv.Tools
 
         public static void SetFixedPointS32Bit(ref Span<byte> buffer, ref uint bitIndex, double value,double fraction, double offset, double validateMax,double validateMin)
         {
-            if (value > (validateMax + fraction))
+            if (Math.Abs(validateMax - validateMin) <= fraction)
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMax > (FixedPointS32Max * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+            if (validateMin < (FixedPointS32Min * fraction + offset))
+                throw new ArgumentOutOfRangeException(nameof(validateMax));
+
+            if (value >= (validateMax + fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
-            if (value < (validateMin - fraction))
+            if (value <= (validateMin - fraction))
                 throw new ArgumentOutOfRangeException(nameof(value));
             SetFixedPointS32Bit(ref buffer, ref bitIndex, (value - offset) / fraction );
         }
 
         #endregion
 
-        }
+    
+    }
 }
