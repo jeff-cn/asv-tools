@@ -4,8 +4,7 @@ namespace Asv.Tools
 {
     public static partial class SpanBitHelper
     {
-    
-         #region FixedPointS3
+             #region FixedPointS3
 
          public const int FixedPointS3PositiveInf = 3;
          public const int FixedPointS3NegativeInf = -3;
@@ -116,8 +115,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS4
+             #region FixedPointS4
 
          public const int FixedPointS4PositiveInf = 7;
          public const int FixedPointS4NegativeInf = -7;
@@ -228,8 +226,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS5
+             #region FixedPointS5
 
          public const int FixedPointS5PositiveInf = 15;
          public const int FixedPointS5NegativeInf = -15;
@@ -340,8 +337,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS6
+             #region FixedPointS6
 
          public const int FixedPointS6PositiveInf = 31;
          public const int FixedPointS6NegativeInf = -31;
@@ -452,8 +448,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS7
+             #region FixedPointS7
 
          public const int FixedPointS7PositiveInf = 63;
          public const int FixedPointS7NegativeInf = -63;
@@ -564,8 +559,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS8
+             #region FixedPointS8
 
          public const int FixedPointS8PositiveInf = 127;
          public const int FixedPointS8NegativeInf = -127;
@@ -676,8 +670,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS9
+             #region FixedPointS9
 
          public const int FixedPointS9PositiveInf = 255;
          public const int FixedPointS9NegativeInf = -255;
@@ -788,8 +781,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS10
+             #region FixedPointS10
 
          public const int FixedPointS10PositiveInf = 511;
          public const int FixedPointS10NegativeInf = -511;
@@ -900,8 +892,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS11
+             #region FixedPointS11
 
          public const int FixedPointS11PositiveInf = 1023;
          public const int FixedPointS11NegativeInf = -1023;
@@ -1012,8 +1003,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS12
+             #region FixedPointS12
 
          public const int FixedPointS12PositiveInf = 2047;
          public const int FixedPointS12NegativeInf = -2047;
@@ -1124,8 +1114,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS13
+             #region FixedPointS13
 
          public const int FixedPointS13PositiveInf = 4095;
          public const int FixedPointS13NegativeInf = -4095;
@@ -1236,8 +1225,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS14
+             #region FixedPointS14
 
          public const int FixedPointS14PositiveInf = 8191;
          public const int FixedPointS14NegativeInf = -8191;
@@ -1348,8 +1336,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS15
+             #region FixedPointS15
 
          public const int FixedPointS15PositiveInf = 16383;
          public const int FixedPointS15NegativeInf = -16383;
@@ -1460,8 +1447,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS16
+             #region FixedPointS16
 
          public const int FixedPointS16PositiveInf = 32767;
          public const int FixedPointS16NegativeInf = -32767;
@@ -1572,8 +1558,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS17
+             #region FixedPointS17
 
          public const int FixedPointS17PositiveInf = 65535;
          public const int FixedPointS17NegativeInf = -65535;
@@ -1684,8 +1669,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS18
+             #region FixedPointS18
 
          public const int FixedPointS18PositiveInf = 131071;
          public const int FixedPointS18NegativeInf = -131071;
@@ -1796,8 +1780,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS19
+             #region FixedPointS19
 
          public const int FixedPointS19PositiveInf = 262143;
          public const int FixedPointS19NegativeInf = -262143;
@@ -1908,8 +1891,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS20
+             #region FixedPointS20
 
          public const int FixedPointS20PositiveInf = 524287;
          public const int FixedPointS20NegativeInf = -524287;
@@ -2020,8 +2002,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS21
+             #region FixedPointS21
 
          public const int FixedPointS21PositiveInf = 1048575;
          public const int FixedPointS21NegativeInf = -1048575;
@@ -2132,8 +2113,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS22
+             #region FixedPointS22
 
          public const int FixedPointS22PositiveInf = 2097151;
          public const int FixedPointS22NegativeInf = -2097151;
@@ -2244,8 +2224,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS23
+             #region FixedPointS23
 
          public const int FixedPointS23PositiveInf = 4194303;
          public const int FixedPointS23NegativeInf = -4194303;
@@ -2356,8 +2335,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS24
+             #region FixedPointS24
 
          public const int FixedPointS24PositiveInf = 8388607;
          public const int FixedPointS24NegativeInf = -8388607;
@@ -2468,8 +2446,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS25
+             #region FixedPointS25
 
          public const int FixedPointS25PositiveInf = 16777215;
          public const int FixedPointS25NegativeInf = -16777215;
@@ -2580,8 +2557,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS26
+             #region FixedPointS26
 
          public const int FixedPointS26PositiveInf = 33554431;
          public const int FixedPointS26NegativeInf = -33554431;
@@ -2692,8 +2668,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS27
+             #region FixedPointS27
 
          public const int FixedPointS27PositiveInf = 67108863;
          public const int FixedPointS27NegativeInf = -67108863;
@@ -2804,8 +2779,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS28
+             #region FixedPointS28
 
          public const int FixedPointS28PositiveInf = 134217727;
          public const int FixedPointS28NegativeInf = -134217727;
@@ -2916,8 +2890,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS29
+             #region FixedPointS29
 
          public const int FixedPointS29PositiveInf = 268435455;
          public const int FixedPointS29NegativeInf = -268435455;
@@ -3028,8 +3001,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS30
+             #region FixedPointS30
 
          public const int FixedPointS30PositiveInf = 536870911;
          public const int FixedPointS30NegativeInf = -536870911;
@@ -3140,8 +3112,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS31
+             #region FixedPointS31
 
          public const int FixedPointS31PositiveInf = 1073741823;
          public const int FixedPointS31NegativeInf = -1073741823;
@@ -3252,8 +3223,7 @@ namespace Asv.Tools
 
         #endregion
 
-    
-         #region FixedPointS32
+             #region FixedPointS32
 
          public const int FixedPointS32PositiveInf = 2147483647;
          public const int FixedPointS32NegativeInf = -2147483647;
@@ -3364,6 +3334,5 @@ namespace Asv.Tools
 
         #endregion
 
-    
-    }
+        }
 }

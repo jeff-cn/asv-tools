@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,16 +75,10 @@ namespace Asv.Tools.Tcp
                     if (_tcp.Available != 0)
                     {
                         _lastData = DateTime.Now;
-                        var buff = ArrayPool<byte>.Shared.Rent(_tcp.Available);
-                        try
-                        {
-                            var count = _tcp.GetStream().Read(buff, 0, buff.Length);
-                            InternalOnData(buff);
-                        }
-                        finally
-                        {
-                            ArrayPool<byte>.Shared.Return(buff);
-                        }
+                        var buff = new byte[_tcp.Available];
+                        var readed = _tcp.GetStream().Read(buff, 0, buff.Length);
+                        Debug.Assert(readed == buff.Length);
+                        InternalOnData(buff);
                     }
                     else
                     {
