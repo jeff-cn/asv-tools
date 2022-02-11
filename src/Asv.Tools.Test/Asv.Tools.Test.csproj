@@ -8,11 +8,31 @@
 
     <ItemGroup>
         <PackageReference Include="DeepEqual" Version="2.0.0" />
+        <PackageReference Include="FluentAssertions" Version="6.4.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Asv.Tools\Asv.Tools.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="SpanBitHelperExtTest.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>SpanBitHelperExtTest.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="SpanBitHelperExtTest.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>SpanBitHelperExtTest.tt</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>
