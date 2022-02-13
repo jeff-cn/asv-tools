@@ -65,10 +65,10 @@ namespace Asv.Tools
 
             internal async Task<IDisposable> ObtainLockAsync(CancellationToken ct = default)
             {
-                while (!await TryEnterAsync())
+                while (!await TryEnterAsync().ConfigureAwait(false))
                 {
                     // We need to wait for someone to leave the lock before trying again.
-                    await _parent._retry.WaitAsync(ct);
+                    await _parent._retry.WaitAsync(ct).ConfigureAwait(false);
                 }
                 // Reset the owning thread id after all await calls have finished, otherwise we
                 // could be resumed on a different thread and set an incorrect value.
@@ -90,7 +90,7 @@ namespace Asv.Tools
 
             private async Task<bool> TryEnterAsync()
             {
-                await _parent._reentrancy.WaitAsync();
+                await _parent._reentrancy.WaitAsync().ConfigureAwait(false);
                 return InnerTryEnter();
             }
 
@@ -166,7 +166,7 @@ namespace Asv.Tools
                 var oldThreadId = this._oldThreadId;
                 Task.Run(async () =>
                 {
-                    await @this._parent._reentrancy.WaitAsync();
+                    await @this._parent._reentrancy.WaitAsync().ConfigureAwait(false);
                     try
                     {
                         Interlocked.Decrement(ref @this._parent._reentrances);

@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Asv.Tmda.Core
+namespace Asv.Tools
 {
     public enum WindowFilterEnum
     {

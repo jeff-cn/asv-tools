@@ -218,7 +218,7 @@ namespace Asv.Tools
             {
                 ports = _ports.Where(_ => _.Port.IsEnabled.Value).ToArray();
             }
-            var res = await Task.WhenAll(ports.Select(_ => _.Port.Send(data, count, cancel)));
+            var res = await Task.WhenAll(ports.Select(_ => _.Port.Send(data, count, cancel))).ConfigureAwait(false);
             return res.Any();
         }
     }

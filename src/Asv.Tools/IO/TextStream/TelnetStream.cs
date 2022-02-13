@@ -104,7 +104,7 @@ namespace Asv.Tools
             {
                 linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(cancel, _cancel.Token);
                 var data = _config.DefaultEncoding.GetBytes(value + _endBytes[0] + _endBytes[1]);
-                await _input.Send(data, data.Length, linkedCancel.Token);
+                await _input.Send(data, data.Length, linkedCancel.Token).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

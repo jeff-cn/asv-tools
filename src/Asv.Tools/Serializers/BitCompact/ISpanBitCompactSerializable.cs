@@ -2,7 +2,7 @@ using System;
 
 namespace Asv.Tools
 {
-    public interface ISpanBitCompactSerializable:ISpanSerializable
+    public interface ISpanBitCompactSerializable:ISizedSpanSerializable
     {
         uint GetBitSize();
         void Deserialize(ref ReadOnlySpan<byte> buffer, ref uint bitPosition);

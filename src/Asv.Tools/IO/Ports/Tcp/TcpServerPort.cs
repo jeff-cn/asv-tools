@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -17,8 +18,8 @@ namespace Asv.Tools.Tcp
         private TcpListener _tcp;
         private CancellationTokenSource _stop;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly List<TcpClient> _clients = new List<TcpClient>();
-        private ReaderWriterLockSlim _rw = new ReaderWriterLockSlim();
+        private readonly List<TcpClient> _clients = new();
+        private readonly ReaderWriterLockSlim _rw = new();
 
         public TcpServerPort(TcpPortConfig cfg)
         {
@@ -34,21 +35,19 @@ namespace Asv.Tools.Tcp
             {
 
                 var itemsToDelete = _clients.Where(_ => _.Connected == false).ToArray();
-                if (itemsToDelete.Length != 0)
+                if (itemsToDelete.Length == 0) return;
+                _rw.EnterWriteLock();
+                try
                 {
-                    _rw.EnterWriteLock();
-                    try
+                    foreach (var tcpClient in itemsToDelete)
                     {
-                        foreach (var tcpClient in itemsToDelete)
-                        {
-                            _clients.Remove(tcpClient);
-                            _logger.Info($"Remove TCP client {tcpClient?.Client?.RemoteEndPoint}");
-                        }
+                        _clients.Remove(tcpClient);
+                        _logger.Info($"Remove TCP client {tcpClient?.Client?.RemoteEndPoint}");
                     }
-                    finally
-                    {
-                        _rw.ExitWriteLock();
-                    }
+                }
+                finally
+                {
+                    _rw.ExitWriteLock();
                 }
             }
             catch (Exception e)
@@ -78,7 +77,7 @@ namespace Asv.Tools.Tcp
             if (_tcp == null || client == null || client.Connected == false) return;
             try
             {
-                await client.GetStream().WriteAsync(data, 0, count, cancel);
+                await client.GetStream().WriteAsync(data, 0, count, cancel).ConfigureAwait(false);
             }
             catch (Exception e)
             {

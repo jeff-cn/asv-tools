@@ -4,12 +4,6 @@ namespace Asv.Tools
 {
     public  static partial class SpanBitHelper
     {
-        
-        
-
-
-
-
         public static uint GetBitU(ref ReadOnlySpan<byte> buff,ref uint pos, uint len)
         {
             uint bits = 0;
@@ -115,5 +109,9 @@ namespace Asv.Tools
             SetBitSReverse(ref buff, ref pos, len, (int)data);
         }
 
+        public static void SetBitStr(ref Span<byte> buffer, ref uint bitPosition, string message, int maxBitSize)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

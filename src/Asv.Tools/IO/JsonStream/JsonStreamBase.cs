@@ -52,7 +52,7 @@ namespace Asv.Tools
             try
             {
                 string str = JsonConvert.SerializeObject((object)(T)data, Formatting.None);
-                await this._textStream.Send(str, cancel);
+                await this._textStream.Send(str, cancel).ConfigureAwait(false);
                 str = (string)null;
             }
             catch (Exception ex)

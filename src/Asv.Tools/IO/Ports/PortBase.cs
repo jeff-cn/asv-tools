@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Reactive.Linq;
@@ -11,13 +12,12 @@ namespace Asv.Tools
 {
     public abstract class PortBase : IPort
     {
-        private readonly IDiagnosticSource _diag;
-        private readonly CancellationTokenSource _disposedCancel = new CancellationTokenSource();
+        private readonly CancellationTokenSource _disposedCancel = new();
         private int _isEvaluating;
-        private readonly RxValue<Exception> _portErrorStream = new RxValue<Exception>();
-        private readonly RxValue<PortState> _portStateStream = new RxValue<PortState>();
-        private readonly RxValue<bool> _enableStream = new RxValue<bool>();
-        private readonly Subject<byte[]> _outputData = new Subject<byte[]>();
+        private readonly RxValue<Exception> _portErrorStream = new();
+        private readonly RxValue<PortState> _portStateStream = new();
+        private readonly RxValue<bool> _enableStream = new();
+        private readonly Subject<byte[]> _outputData = new();
         private long _rxBytes;
         private long _txBytes;
         public IRxValue<bool> IsEnabled => _enableStream;
@@ -30,15 +30,21 @@ namespace Asv.Tools
         private int _errCnt;
         private DateTime _lastSuccess;
         private int _isDisposed;
-        private static readonly Meter Meter = new Meter("Asv.Tools.Ports");
-        private readonly ObservableCounter<int> _probeError;
-        private readonly Counter<long> _probeTx;
 
+        #region Metrics
+
+        protected static readonly Meter Metric = new("Asv.Tools.IO");
+        protected KeyValuePair<string, object> MetricProbeTag;
+        private static readonly Counter<long> _probeTx = Metric.CreateCounter<long>("tx", "bytes", "Transmit rate");
+        private static readonly Counter<long> _probeRx = Metric.CreateCounter<long>("rx", "bytes", "Received rate");
+        private ObservableCounter<int> _probeError;
+        
+
+        #endregion
 
         protected PortBase()
         {
-            _probeError = Meter.CreateObservableCounter("err",()=> _errCnt, "items","Connection errors");
-            _probeTx = Meter.CreateCounter<long>("tx","bytes", "Transmit bytes");
+            _probeError = Metric.CreateObservableCounter("err", () => new Measurement<int>(_errCnt,MetricProbeTag) , "items", "Connection errors");
 
             State.Where(_ => _ == PortState.Connected).Subscribe(_ =>
             {
@@ -51,6 +57,7 @@ namespace Asv.Tools
             });
             _enableStream.Where(_ => _).Subscribe(_ => Task.Factory.StartNew(TryConnect), _disposedCancel.Token);
 
+            
             Observable.Timer(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(30)).Subscribe(_ =>
             {
                 if (State.Value == PortState.Connected)
@@ -71,7 +78,7 @@ namespace Asv.Tools
             try
             {
                 await InternalSend(data, count, cancel).ConfigureAwait(false);
-                _probeTx.Add(count);
+                _probeTx.Add(count,MetricProbeTag);
                 Interlocked.Add(ref _txBytes, count);
                 return true;
             }
@@ -122,11 +129,12 @@ namespace Asv.Tools
             try
             {
                 if (!_enableStream.Value) return;
+
                 if (_disposedCancel.IsCancellationRequested) return;
                 _portStateStream.OnNext(PortState.Connecting);
+                MetricProbeTag = new KeyValuePair<string, object>("cs", ToString());
                 InternalStart();
                 _portStateStream.OnNext(PortState.Connected);
-                
             }
             catch (Exception e)
             {
@@ -150,10 +158,11 @@ namespace Asv.Tools
             {
                 Interlocked.Add(ref _rxBytes, data.Length);
                 _outputData.OnNext(data);
+                _probeRx.Add(data.Length, MetricProbeTag);
             }
             catch (Exception ex)
             {
-                
+                // ignored
             }
             finally
             {
@@ -179,7 +188,6 @@ namespace Asv.Tools
         {
             if (Interlocked.CompareExchange(ref _isDisposed,1,0) != 0) return;
             Disable();
-            _diag.Dispose();
             _portErrorStream.Dispose();
             _portStateStream.Dispose();
             _enableStream.Dispose();
@@ -190,6 +198,7 @@ namespace Asv.Tools
 
         protected virtual void InternalDisposeOnce()
         {
+
         }
     }
 }

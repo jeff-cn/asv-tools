@@ -27,11 +27,10 @@ namespace Asv.Tools.Serial
         protected override async Task InternalSend(byte[] data, int count, CancellationToken cancel)
         {
             if (_serial == null) return;
-            using (await _sync.LockAsync())
+            using (await _sync.LockAsync(cancel).ConfigureAwait(false))
             {
-                if (_serial == null) return;
-                if (!_serial.IsOpen) return;
-                await _serial.BaseStream.WriteAsync(data, 0, count, cancel);
+                if (_serial is not { IsOpen: true }) return;
+                await _serial.BaseStream.WriteAsync(data, 0, count, cancel).ConfigureAwait(false);
             }
         }
 
@@ -73,7 +72,7 @@ namespace Asv.Tools.Serial
 
         private void TryReadData(long l)
         {
-            if (Interlocked.CompareExchange(ref _isReading,1,0) !=0) return;
+            if (Interlocked.CompareExchange(ref _isReading,1,0) != 0) return;
             try
             {
                 byte[] data;
