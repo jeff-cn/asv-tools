@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace Asv.Tools
 {
+
+
+
+    
     public class Diagnostic : IDiagnostic,IDisposable
     {
 
