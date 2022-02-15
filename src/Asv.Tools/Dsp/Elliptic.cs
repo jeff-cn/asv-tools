@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Asv.Tools.Dsp
 {
@@ -37,4 +38,6 @@ namespace Asv.Tools.Dsp
             return sumNum;
         }
     }
+
+    
 }
