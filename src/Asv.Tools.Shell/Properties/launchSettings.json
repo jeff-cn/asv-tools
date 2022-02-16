@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Asv.Tools.Shell": {
+      "commandName": "Project",
+      "commandLineArgs": "benchmark-fft"
+    }
+  }
+}

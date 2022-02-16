@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Asv.Tools.Test
 {
-    public class UnitTest1
+    public class SpanBitHelperTest2
     {
         public const double Fraction1 = .00000001;
         public const double Offset1 = 0;
