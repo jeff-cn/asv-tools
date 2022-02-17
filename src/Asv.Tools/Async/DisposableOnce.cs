@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace Asv.Gbas.Server
+namespace Asv.Tools
 {
     public abstract class DisposableOnce : IDisposable
     {
