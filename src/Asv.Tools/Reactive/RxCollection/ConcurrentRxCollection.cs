@@ -8,14 +8,16 @@ namespace Asv.Tools
 {
     public class ConcurrentRxCollection<TModel> : IRxCollection<TModel>, IDisposable
     {
-        private readonly SynchronizedList<TModel> _items = new SynchronizedList<TModel>(new List<TModel>());
-        private readonly Subject<TModel> _addSubject = new Subject<TModel>();
-        private readonly Subject<TModel> _remSubject = new Subject<TModel>();
+        private readonly SynchronizedList<TModel> _items = new(new List<TModel>());
+        private readonly Subject<TModel> _addSubject = new();
+        private readonly Subject<TModel> _remSubject = new();
 
         public IEnumerator<TModel> GetEnumerator()
         {
             return _items.GetEnumerator();
         }
+
+        public int Count => _items.Count;
 
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -30,11 +32,27 @@ namespace Asv.Tools
             }
         }
 
+        public TModel this[int index]
+        {
+            get => _items[index];
+            set => _items[index] = value;
+        }
+
         public void Clear()
         {
             var itemsToDelete = _items.ToArray();
             foreach (var item in itemsToDelete)
             {
+                Remove(item);
+            }
+        }
+
+        public void Clear(Action<TModel> callbackForEach)
+        {
+            var itemsToDelete = _items.ToArray();
+            foreach (var item in itemsToDelete)
+            {
+                callbackForEach(item);
                 Remove(item);
             }
         }
