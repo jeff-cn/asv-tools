@@ -18,14 +18,14 @@ namespace Asv.Tools
             buffer = bitIndex % 8.0 == 0 ? buffer.Slice((int)(bitIndex / 8)) : buffer.Slice((int)(bitIndex / 8) + 1);
         }
     
-        public uint GetByteSize()
+        public int GetByteSize()
         {
             var bitSize = GetBitSize();
             var size = (bitSize / 8);
-            return bitSize % 8.0 == 0 ? size : size + 1U;
+            return bitSize % 8.0 == 0 ? size : size + 1;
         }
     
-        public abstract uint GetBitSize();
+        public abstract int GetBitSize();
         public abstract void Deserialize(ref ReadOnlySpan<byte> buffer, ref uint bitPosition);
         public abstract void Serialize(ref Span<byte> buffer, ref uint bitPosition);
     

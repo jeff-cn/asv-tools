@@ -4,7 +4,7 @@ namespace Asv.Tools
 {
     public delegate T DeserializeDelegate<out T>(ref ReadOnlySpan<byte> data);
     public delegate void SerializeDelegate<in T>(ref Span<byte> data, T value);
-    public delegate uint SerializeSizeDelegate<in T>(T value);
+    public delegate int SerializeSizeDelegate<in T>(T value);
 
     public static class SerializeDelegateHelper
     {
@@ -19,7 +19,7 @@ namespace Asv.Tools
             value.Serialize(ref data);
         }
 
-        public static uint SerializeSize<T>(T value) where T : ISizedSpanSerializable, new()
+        public static int SerializeSize<T>(T value) where T : ISizedSpanSerializable, new()
         {
             return value.GetByteSize();
         }

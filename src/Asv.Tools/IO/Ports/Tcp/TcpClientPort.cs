@@ -41,17 +41,18 @@ namespace Asv.Tools.Tcp
             tcp.Connect(_cfg.Host,_cfg.Port);
             _tcp = tcp;
             _stop = new CancellationTokenSource();
-            var recvThread = new Thread(ListenAsync) { IsBackground = true, Priority = ThreadPriority.Lowest };
+            var recvThread = new Thread(ListenAsync) { IsBackground = true, Priority = ThreadPriority.Normal };
             _stop.Token.Register(() =>
             {
                 try
                 {
-                    recvThread.Abort();
+                    recvThread.Interrupt();
                     _tcp.Close();
                     _tcp.Dispose();
                 }
                 catch (Exception e)
                 {
+                    Debug.Assert(false);
                     // ignore
                 }
             });
@@ -63,7 +64,7 @@ namespace Asv.Tools.Tcp
         {
             try
             {
-                while (true)
+                while (_stop.IsCancellationRequested == false)
                 {
                     if (_cfg.ReconnectTimeout != 0)
                     {
@@ -93,6 +94,7 @@ namespace Asv.Tools.Tcp
             }
             catch (ThreadAbortException e)
             {
+                Debug.Assert(false);
                 //ignore
             }
             catch (Exception e)
