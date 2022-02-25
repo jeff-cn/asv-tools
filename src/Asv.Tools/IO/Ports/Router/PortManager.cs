@@ -73,6 +73,8 @@ namespace Asv.Tools
         private readonly List<PortWrapper> _ports = new List<PortWrapper>();
         private readonly Subject<Unit> _configChangedSubject = new Subject<Unit>();
         private readonly Subject<byte[]> _onRecv = new Subject<byte[]>();
+        private long _rxBytes;
+        private long _txBytes;
 
         public PortManager()
         {
@@ -109,6 +111,7 @@ namespace Asv.Tools
 
         private void OnRecv(PortWrapper sender, byte[] data,CancellationToken cancel)
         {
+            Interlocked.Add(ref _rxBytes, data.Length);
             IEnumerable<PortWrapper> ports;
             lock (_sync)
             {
@@ -213,6 +216,7 @@ namespace Asv.Tools
 
         public async Task<bool> Send(byte[] data, int count, CancellationToken cancel)
         {
+            Interlocked.Add(ref _txBytes, count);
             PortWrapper[] ports;
             lock (_sync)
             {
@@ -221,5 +225,8 @@ namespace Asv.Tools
             var res = await Task.WhenAll(ports.Select(_ => _.Port.Send(data, count, cancel))).ConfigureAwait(false);
             return res.Any();
         }
+
+        public long RxBytes => Interlocked.Read(ref _rxBytes);
+        public long TxBytes => Interlocked.Read(ref _txBytes);
     }
 }

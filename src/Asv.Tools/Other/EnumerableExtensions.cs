@@ -9,6 +9,67 @@ namespace Asv.Tools
     /// </summary>
     public static class EnumerableExtensions
     {
+
+        /// <summary>
+        /// Split the elements of a sequence into chunks of size at most <paramref name="size"/>.
+        /// </summary>
+        /// <remarks>
+        /// Every chunk except the last will be of size <paramref name="size"/>.
+        /// The last chunk will contain the remaining elements and may be of a smaller size.
+        /// </remarks>
+        /// <param name="source">
+        /// An <see cref="IEnumerable{T}"/> whose elements to chunk.
+        /// </param>
+        /// <param name="size">
+        /// Maximum size of each chunk.
+        /// </param>
+        /// <typeparam name="TSource">
+        /// The type of the elements of source.
+        /// </typeparam>
+        /// <returns>
+        /// An <see cref="IEnumerable{T}"/> that contains the elements the input sequence split into chunks of size <paramref name="size"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="source"/> is null.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="size"/> is below 1.
+        /// </exception>
+        public static IEnumerable<TSource[]> Chunked<TSource>(this IEnumerable<TSource> source, int size)
+        {
+            return ChunkIterator(source, size);
+        }
+
+        private static IEnumerable<TSource[]> ChunkIterator<TSource>(IEnumerable<TSource> source, int size)
+        {
+            if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size));
+            using IEnumerator<TSource> e = source.GetEnumerator();
+            while (e.MoveNext())
+            {
+                TSource[] chunk = new TSource[size];
+                chunk[0] = e.Current;
+
+                int i = 1;
+                for (; i < chunk.Length && e.MoveNext(); i++)
+                {
+                    chunk[i] = e.Current;
+                }
+
+                if (i == chunk.Length)
+                {
+                    yield return chunk;
+                }
+                else
+                {
+                    Array.Resize(ref chunk, i);
+                    yield return chunk;
+                    yield break;
+                }
+            }
+        }
+
+
+
         public static void SyncCollection<T>(this IEnumerable<T> exist, IEnumerable<T> actual, Action<T> deleteCallback, Action<T> addCallback,IEqualityComparer<T> comparer) 
         {
             var toDelete = exist.Except(actual,comparer).ToArray();

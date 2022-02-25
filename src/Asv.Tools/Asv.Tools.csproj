@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net461;net5.0;net6.0</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-      <LangVersion>latest</LangVersion>
+      <LangVersion>9.0</LangVersion>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
