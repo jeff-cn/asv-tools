@@ -1128,10 +1128,10 @@ namespace Asv.Tools
             return (int)(zigzagged >> 1) ^ -(int)(zigzagged & 1);
         }
 
-        private static float Interpolate(float min, float max, float frac) =>
+        public static float Interpolate(float min, float max, float frac) =>
             min + ((max - min) * Clamp01(frac));
 
-        private static float Fraction(float min, float max, float val) =>
+        public static float Fraction(float min, float max, float val) =>
             (min == max) ? 0f : Clamp01((val - min) / (max - min));
 
         private static float Clamp01(float val) => val < 0f ? 0f : (val > 1f ? 1f : val);
