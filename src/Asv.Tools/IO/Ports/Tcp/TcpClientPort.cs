@@ -37,9 +37,9 @@ namespace Asv.Tools.Tcp
 
         protected override void InternalStart()
         {
-            var tcp = new TcpClient();
-            tcp.Connect(_cfg.Host,_cfg.Port);
-            _tcp = tcp;
+            _tcp?.Dispose();
+            _tcp = new TcpClient();
+            _tcp.Connect(_cfg.Host,_cfg.Port);
             _stop = new CancellationTokenSource();
             var recvThread = new Thread(ListenAsync) { IsBackground = true, Priority = ThreadPriority.Normal };
             _stop.Token.Register(() =>
@@ -64,7 +64,7 @@ namespace Asv.Tools.Tcp
         {
             try
             {
-                while (_stop.IsCancellationRequested == false)
+                while (_stop?.IsCancellationRequested == false)
                 {
                     if (_cfg.ReconnectTimeout != 0)
                     {

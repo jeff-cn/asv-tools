@@ -1,0 +1,124 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:buttons="clr-namespace:Asv.Tools.Avalonia">
+  <Design.PreviewWith>
+    <buttons:StatusButton Title="Title" IconName="Drone" StatusText="Status" BottomRightStatus="BotRight" Classes="Error" TopRightStatus="TopRight" />
+  </Design.PreviewWith>
+    <Styles.Resources>
+        <SolidColorBrush x:Key="WarningBrush">Orange</SolidColorBrush>
+        <SolidColorBrush x:Key="ErrorBrush">Red</SolidColorBrush>
+        <SolidColorBrush x:Key="SuccessBrush">Green</SolidColorBrush>
+        <SolidColorBrush x:Key="UnknownBrush">Gray</SolidColorBrush>
+    </Styles.Resources>
+    
+    <!-- Success -->
+    <Style Selector="buttons|StatusButton.Success /template/ Button#PART_Button">
+        <Setter Property="BorderBrush" Value="{StaticResource SuccessBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Success /template/ TextBlock#PART_StatusText,
+           buttons|StatusButton.Success /template/ TextBlock#PART_TitleText">
+        <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Success /template/ avalonia|MaterialIcon#PART_Icon">
+        <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Success /template/ Border#PART_TopRightBorder,
+           buttons|StatusButton.Success /template/ Border#PART_BottomRightBorder">
+        <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
+    </Style>
+    <!-- Error -->
+    <Style Selector="buttons|StatusButton.Error /template/ Button#PART_Button">
+        <Setter Property="BorderBrush" Value="{StaticResource ErrorBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Error /template/ TextBlock#PART_StatusText,
+           buttons|StatusButton.Error /template/ TextBlock#PART_TitleText">
+        <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Error /template/ avalonia|MaterialIcon#PART_Icon">
+        <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Error /template/ Border#PART_TopRightBorder,
+           buttons|StatusButton.Error /template/ Border#PART_BottomRightBorder">
+        <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Error">
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    <!-- Warning -->
+    <Style Selector="buttons|StatusButton.Warning /template/ Button#PART_Button">
+        <Setter Property="BorderBrush" Value="{StaticResource WarningBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Warning /template/ TextBlock#PART_StatusText,
+           buttons|StatusButton.Warning /template/ TextBlock#PART_TitleText">
+        <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Warning /template/ avalonia|MaterialIcon#PART_Icon">
+        <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Warning /template/ Border#PART_TopRightBorder,
+           buttons|StatusButton.Warning /template/ Border#PART_BottomRightBorder">
+        <Setter Property="Background" Value="{StaticResource WarningBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Warning">
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+            </Transitions>
+        </Setter>
+    </Style>
+    <!-- Unknown -->
+    <Style Selector="buttons|StatusButton.Unknown /template/ Button#PART_Button">
+        <Setter Property="BorderBrush" Value="{StaticResource UnknownBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Unknown /template/ TextBlock#PART_StatusText,
+           buttons|StatusButton.Unknown /template/ TextBlock#PART_TitleText">
+        <Setter Property="Foreground" Value="{StaticResource UnknownBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Unknown /template/ avalonia|MaterialIcon#PART_Icon">
+        <Setter Property="Foreground" Value="{StaticResource UnknownBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Unknown /template/ Border#PART_TopRightBorder,
+           buttons|StatusButton.Unknown /template/ Border#PART_BottomRightBorder">
+        <Setter Property="Background" Value="{StaticResource UnknownBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Unknown">
+        <Setter Property="Transitions">
+            <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="buttons|StatusButton">
+    <Setter Property="Height" Value="60"/>
+    
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="Template">
+      <ControlTemplate>
+          <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*,Auto" Margin="5">
+              <Button HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" Name="PART_Button" Classes="Outline"  Grid.Column="0" Margin="5" Padding="5,5,15,5">
+                  <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                      <avalonia:MaterialIcon Name="PART_Icon" Width="25" Height="25" Margin="0,0,5,0" Kind="{TemplateBinding IconName}"/>
+                      <StackPanel>
+                          <TextBlock Name="PART_StatusText" FontSize="14" VerticalAlignment="Center" Text="{TemplateBinding StatusText}"/>
+                          <TextBlock Name="PART_TitleText" FontSize="8" VerticalAlignment="Center" Text="{TemplateBinding Title}"/>
+                      </StackPanel>
+                  </StackPanel>
+              </Button>
+              <Border Name="PART_TopRightBorder" Grid.Column="1" Margin="-20,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="3" >
+                  <TextBlock FontSize="10" Margin="5,0" Text="{TemplateBinding TopRightStatus}"/>
+              </Border>
+              <Border Name="PART_BottomRightBorder" Grid.Column="1" Margin="-20,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="3" >
+                  <TextBlock FontSize="10" Margin="5,0" Text="{TemplateBinding BottomRightStatus}"/>
+              </Border>
+          </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

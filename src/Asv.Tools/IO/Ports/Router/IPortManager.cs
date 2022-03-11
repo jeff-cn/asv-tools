@@ -1,5 +1,6 @@
 using System;
 using System.Reactive;
+using DynamicData;
 
 namespace Asv.Tools
 {
@@ -26,8 +27,6 @@ namespace Asv.Tools
         Exception LastException { get; }
         string Description { get; }
     }
-
-    
 
     public class PortSettings
     {

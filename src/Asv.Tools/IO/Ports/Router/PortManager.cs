@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using DynamicData;
 
 namespace Asv.Tools
 {
@@ -70,6 +71,7 @@ namespace Asv.Tools
     public class PortManager:IPortManager
     {
         private readonly object _sync = new object();
+        private readonly SourceList<IPortInfo> _items = new();
         private readonly List<PortWrapper> _ports = new List<PortWrapper>();
         private readonly Subject<Unit> _configChangedSubject = new Subject<Unit>();
         private readonly Subject<byte[]> _onRecv = new Subject<byte[]>();
@@ -104,7 +106,9 @@ namespace Asv.Tools
                 {
                     port.Disable();
                 }
-                _ports.Add(new PortWrapper(port, Guid.NewGuid().ToString(), settings, OnRecv));
+
+                var wrapper = new PortWrapper(port, Guid.NewGuid().ToString(), settings, OnRecv);
+                _ports.Add(wrapper);
             }
             _configChangedSubject.OnNext(Unit.Default);
         }
@@ -173,6 +177,7 @@ namespace Asv.Tools
                     Add(port);
                 }
             }
+            _configChangedSubject.OnNext(Unit.Default);
         }
 
         public bool Remove(string portId)
@@ -183,8 +188,9 @@ namespace Asv.Tools
                 if (item == null) return false;
                 item.Dispose();
                 _ports.Remove(item);
-                return true;
             }
+            _configChangedSubject.OnNext(Unit.Default);
+            return true;
         }
 
         public IObservable<Unit> OnConfigChanged => _configChangedSubject;

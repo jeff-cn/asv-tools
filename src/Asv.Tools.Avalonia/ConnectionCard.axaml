@@ -1,0 +1,111 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Asv.Tools.Avalonia"
+        xmlns:styles="clr-namespace:Material.Styles;assembly=Material.Styles"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+  <Design.PreviewWith>
+    <controls:ConnectionCard Title="Title" SubTitle="Sub title string" StatusText="tcp://127.0.0.1:7341" IsConnectionEnabled="True" TxText="123.456" RxText="123.456" />
+  </Design.PreviewWith>
+    <Styles.Resources>
+        <SolidColorBrush x:Key="WarningBrush">Orange</SolidColorBrush>
+        <SolidColorBrush x:Key="ErrorBrush">Red</SolidColorBrush>
+        <SolidColorBrush x:Key="SuccessBrush">Green</SolidColorBrush>
+        <SolidColorBrush x:Key="UnknownBrush">Gray</SolidColorBrush>
+    </Styles.Resources>
+
+    <!-- Success -->
+    <Style Selector="controls|ConnectionCard.Success /template/ avalonia|MaterialIcon#PART_Icon">
+        <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Success /template/ ProgressBar#PART_Progress">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Success /template/ TextBlock#PART_StatusText">
+        <Setter Property="IsVisible" Value="True"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Success /template/ TextBlock#PART_ErrorText">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+    <!-- Error -->
+    <Style Selector="controls|ConnectionCard.Error /template/ avalonia|MaterialIcon#PART_Icon">
+        <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Error /template/ ProgressBar#PART_Progress">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Error /template/ TextBlock#PART_StatusText">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Error /template/ TextBlock#PART_ErrorText">
+        <Setter Property="IsVisible" Value="True"/>
+    </Style>
+    <!-- Warning -->
+    <Style Selector="controls|ConnectionCard.Warning /template/ avalonia|MaterialIcon#PART_Icon">
+        <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Warning /template/ ProgressBar#PART_Progress">
+        <Setter Property="IsVisible" Value="True"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Warning /template/ TextBlock#PART_StatusText">
+        <Setter Property="IsVisible" Value="True"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Warning /template/ TextBlock#PART_ErrorText">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+    <!-- Unknown -->
+    <Style Selector="controls|ConnectionCard.Unknown /template/ avalonia|MaterialIcon#PART_Icon">
+        <Setter Property="Foreground" Value="{StaticResource UnknownBrush}"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Unknown /template/ ProgressBar#PART_Progress">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Unknown /template/ TextBlock#PART_StatusText">
+        <Setter Property="IsVisible" Value="True"/>
+    </Style>
+    <Style Selector="controls|ConnectionCard.Unknown /template/ TextBlock#PART_ErrorText">
+        <Setter Property="IsVisible" Value="False"/>
+    </Style>
+
+  <Style Selector="controls|ConnectionCard">
+    <!-- Set Defaults -->
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="Template">
+        <ControlTemplate>
+            <styles:Card Width="300" Height="250" Margin="5" Padding="4" VerticalAlignment="Top">
+                <Grid ColumnDefinitions="*,*" RowDefinitions="50,5,*,80,Auto" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+                    <Grid Grid.ColumnSpan="2" Grid.Row="0" DockPanel.Dock="Top" ColumnDefinitions="35,*,Auto">
+                        <avalonia:MaterialIcon Name="PART_Icon" Margin="0,0,10,0" Width="45" Height="45" Kind="{TemplateBinding IconName}"/>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Classes="Headline6" Text="{TemplateBinding Title}" />
+                            <TextBlock Classes="Body2" Text="{TemplateBinding SubTitle}" />
+                        </StackPanel>
+                        <ToggleSwitch VerticalAlignment="Center" Grid.Column="2" Classes="Flat" IsChecked="{TemplateBinding IsConnectionEnabled}" Command="{TemplateBinding SwitchEnable}" />
+                    </Grid>
+                    <ProgressBar Name="PART_Progress" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" IsIndeterminate="True" />
+                    <TextBlock Name="PART_StatusText" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Margin="0,12,0,0" TextWrapping="Wrap" Text="{TemplateBinding StatusText}"/>
+                    <TextBlock Name="PART_ErrorText" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Margin="0,12,0,0" TextWrapping="Wrap" Text="{TemplateBinding ErrorText}"/>
+
+                    <StackPanel Grid.Column="0" Grid.Row="3" Margin="10,5" >
+                        <avalonia:MaterialIcon Margin="0,0,5,0" Width="35" Height="35" Foreground="{StaticResource SystemAccentColorDark1}" Kind="ArrowDownBold"/>
+                        <TextBlock TextAlignment="Center" FontSize="12" Text="Rx"/>
+                        <TextBlock TextAlignment="Center" FontSize="20" Text="{TemplateBinding RxText}"/>
+                        <TextBlock TextAlignment="Center" FontSize="8" Text="k\b"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Grid.Row="3" Margin="10,5" >
+                        <avalonia:MaterialIcon Margin="0,0,5,0" Width="35" Height="35" Foreground="{StaticResource SystemAccentColorLight1}" Kind="ArrowUpBold"/>
+                        <TextBlock TextAlignment="Center" FontSize="12" Text="Tx"/>
+                        <TextBlock TextAlignment="Center" FontSize="20" Text="{TemplateBinding TxText}"/>
+                        <TextBlock TextAlignment="Center" FontSize="8" Text="k\b"/>
+                    </StackPanel>
+
+                    <Button HorizontalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Classes="Flat" Foreground="Red" Content="REMOVE" Command="{TemplateBinding Remove}" />
+                    <Grid Grid.ColumnSpan="2" Grid.Column="0" ColumnDefinitions="*,*" Grid.Row="3">
+                    </Grid>
+
+                </Grid>
+            </styles:Card>
+        </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

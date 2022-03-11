@@ -17,15 +17,17 @@ namespace Asv.Tools
     public class JsonOneFileConfiguration : IConfiguration
     {
         private readonly string _fileName;
-        private readonly Dictionary<string, JToken> _values = new Dictionary<string, JToken>();
-        private readonly ReaderWriterLockSlim _rw = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private readonly Dictionary<string, JToken> _values = new();
+        private readonly ReaderWriterLockSlim _rw = new(LockRecursionPolicy.SupportsRecursion);
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly Subject<Unit> _onNeedToSave = new Subject<Unit>();
+        private readonly Subject<Unit> _onNeedToSave = new();
         private readonly IDisposable _saveSubscribe;
 
 
         public JsonOneFileConfiguration(string fileName, bool createIfNotExist, TimeSpan? flushToFileDelayMs)
         {
+            _fileName = fileName;
+
             if (flushToFileDelayMs == null)
             {
                 Logger.Debug($"{fileName} create:{createIfNotExist} flush: No, write immediately ");
@@ -51,7 +53,7 @@ namespace Asv.Tools
                 Directory.CreateDirectory(dir);
             }
             
-            _fileName = fileName;
+            
             if (File.Exists(fileName) == false)
             {
                 if (createIfNotExist)
@@ -85,11 +87,8 @@ namespace Asv.Tools
             try
             {
                 var content = JsonConvert.SerializeObject(_values, Formatting.Indented, new StringEnumConverter());
-                var tmpFileName = Path.GetRandomFileName();
-                File.WriteAllText(tmpFileName, content);
                 File.Delete(_fileName);
-                File.Move(tmpFileName, _fileName);
-                File.Delete(tmpFileName);
+                File.WriteAllText(_fileName, content);
                 Logger.Trace("Flush configuration to file");
             }
             catch (Exception e)
