@@ -26,6 +26,7 @@ namespace Asv.Tools
         PortState State { get; }
         Exception LastException { get; }
         string Description { get; }
+        string Status { get; }
     }
 
     public class PortSettings

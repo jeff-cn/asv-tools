@@ -46,6 +46,7 @@ namespace Asv.Tools
         public string Id { get; }
         public PortSettings Settings { get; }
         public string Description { get; set; }
+        public string Status { get; }
         public long RxAcc { get; }
         public long TxAcc { get; }
         public PortState State { get; set; }

@@ -111,7 +111,20 @@ namespace Asv.Tools.Tcp
 
         public override string ToString()
         {
-            return _cfg.ToString();
+            try
+            {
+                return $"TCP\\IP Client      {_tcp?.Client?.LocalEndPoint}:\n" +
+                       $"Reconnect timeout   {_cfg.ReconnectTimeout} ms\n" +
+                       $"Remote server       {_cfg.Host}:{_cfg.Host}";
+            }
+            catch (Exception e)
+            {
+                return $"TCP\\IP Client      \n" +
+                       $"Reconnect timeout   {_cfg.ReconnectTimeout} ms\n" +
+                       $"Remote server       {_cfg.Host}:{_cfg.Host}";
+                Debug.Assert(false);
+            }
+            
         }
 
     }

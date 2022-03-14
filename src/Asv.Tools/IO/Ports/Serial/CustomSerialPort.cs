@@ -97,7 +97,8 @@ namespace Asv.Tools.Serial
 
         public override string ToString()
         {
-            return _config.ToString();
+            return $"Serial '{_config.PortName}'\n" +
+                   $"Options: {_config.BoundRate} baud {_config.DataBits}-{_config.Parity:G}-{_config.StopBits:G}";
         }
     }
 }

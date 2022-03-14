@@ -102,7 +102,7 @@ namespace Asv.Tools
 
         public override string ToString()
         {
-            return _config.ToString();
+            return $"TCP_C {_config.LocalHost}:{_config.LocalPort}\n Server IP:{_config.RemoteHost}:{_config.RemotePort}";
         }
     }
 }

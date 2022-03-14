@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DynamicData;
 using NLog;
 
 namespace Asv.Tools.Tcp
@@ -95,36 +96,37 @@ namespace Asv.Tools.Tcp
 
         protected override void InternalStart()
         {
-            _rw.EnterWriteLock();
-            _clients.Clear();
-            _rw.ExitWriteLock();
-
-            var tcp = new TcpListener(IPAddress.Parse(_cfg.Host),_cfg.Port);
-            tcp.Start();
-            _tcp = tcp;
+            _tcp = new TcpListener(IPAddress.Parse(_cfg.Host), _cfg.Port);
+            _tcp.Start();
             _stop = new CancellationTokenSource();
             var recvConnectionThread = new Thread(RecvConnectionCallback) { IsBackground = true, Priority = ThreadPriority.Lowest };
             var recvDataThread = new Thread(RecvDataCallback) { IsBackground = true, Priority = ThreadPriority.Lowest };
+            
             _stop.Token.Register(() =>
             {
                 try
                 {
-                    _tcp.Stop();
                     _rw.EnterWriteLock();
                     foreach (var client in _clients.ToArray())
                     {
-                        client.Dispose();
+                        client.Close();
                     }
-                    _clients.Clear();
-                    _rw.ExitWriteLock();
 
-                    recvDataThread.Abort();
-                    recvConnectionThread.Abort();
+                    _clients.Clear();
+                    _tcp.Stop();
+                    
+
+                    // recvDataThread.Interrupt();
+                    // recvConnectionThread.Interrupt();
                 }
                 catch (Exception e)
                 {
                     Debug.Assert(false);
                     // ignore
+                }
+                finally
+                {
+                    _rw.ExitWriteLock();
                 }
             });
             recvDataThread.Start();
@@ -136,7 +138,7 @@ namespace Asv.Tools.Tcp
         {
             try
             {
-                while (true)
+                while (_stop?.IsCancellationRequested == false)
                 {
                     try
                     {
@@ -173,7 +175,7 @@ namespace Asv.Tools.Tcp
         {
             try
             {
-                while (true)
+                while (_stop?.IsCancellationRequested == false)
                 {
                     _rw.EnterReadLock();
                     var clients = _clients.ToArray();
@@ -254,7 +256,29 @@ namespace Asv.Tools.Tcp
 
         public override string ToString()
         {
-            return _cfg.ToString();
+            var count = 0;
+            string message;
+            try
+            {
+                _rw.EnterReadLock();
+                count = _clients.Count;
+                message = string.Join("\n", _clients.Select(_ => $"   - {_.Client.RemoteEndPoint}"));
+            }
+            catch (Exception e)
+            {
+                message = e.ToString();
+                Debug.Assert(false);
+            }
+            finally
+            {
+                _rw.ExitReadLock();
+            }
+
+            
+            return $"TCP\\IP Server      {_cfg.Host}:{_cfg.Port} \n" +
+                   $"Reconnect timeout: {_cfg.ReconnectTimeout:N0} ms\n" +
+                   $"Clients [{count}]:\n" +
+                   $"{message}";
         }
     }
 }
