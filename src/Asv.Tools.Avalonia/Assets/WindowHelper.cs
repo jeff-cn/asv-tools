@@ -14,12 +14,26 @@ namespace Asv.Tools.Avalonia
 
         public static readonly AttachedProperty<bool> DoubleTappedWindowStateProperty = AvaloniaProperty.RegisterAttached<WindowHelper, IControl, bool>("DoubleTappedWindowState");
 
+        public static readonly AttachedProperty<bool> IgnoreDragProperty = AvaloniaProperty.RegisterAttached<WindowHelper, IControl, bool>("IgnoreDrag");
 
         static WindowHelper()
         {
             EnableDragProperty.Changed.Subscribe(OnChangedEnableDrag);
             DoubleTappedWindowStateProperty.Changed.Subscribe(OnChangedDoubleClickWindowState);
         }
+
+        #region IgnoreDragProperty
+
+        public static void SetIgnoreDrag(AvaloniaObject element, bool commandValue)
+        {
+            element.SetValue(IgnoreDragProperty, commandValue);
+        }
+        public static bool GetIgnoreDrag(AvaloniaObject element)
+        {
+            return element.GetValue(IgnoreDragProperty);
+        }
+
+        #endregion
 
         #region DoubleTappedWindowStateProperty
 
@@ -41,6 +55,10 @@ namespace Asv.Tools.Avalonia
         private static void DoubleTappedHandler(object? sender, RoutedEventArgs e)
         {
             if (sender is not IVisual uiElement) return;
+            if (uiElement is AvaloniaObject avalonia)
+            {
+                if (GetIgnoreDrag(avalonia)) return;
+            }
             var parent = uiElement;
             var avoidInfiniteLoop = 0;
             // Search up the visual tree to find the first parent window.
@@ -112,7 +130,6 @@ namespace Asv.Tools.Avalonia
             }
             var window = parent as Window;
             window.BeginMoveDrag(e);
-
         }
 
         /// <summary>

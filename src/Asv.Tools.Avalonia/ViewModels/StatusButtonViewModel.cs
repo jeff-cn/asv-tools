@@ -1,42 +1,43 @@
+using System.Windows.Input;
+using Material.Icons;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Asv.Tools.Avalonia
 {
-
-
-    public class StatusButtonViewModel:ViewModelBase
+    public class StatusButtonViewModel:ViewModelBase,IActivatableViewModel
     {
-        private string _statusText;
-        private string _topRightStatus;
-        private string _bottomRightStatus;
-        private StatusEnum _status;
-
         public StatusButtonViewModel()
         {
-           
+            
         }
 
-        public string StatusText
+        public StatusButtonViewModel(string id)
         {
-            get => _statusText;
-            set => this.RaiseAndSetIfChanged(ref _statusText, value);
-        }
-        public string TopRightStatus
-        {
-            get => _topRightStatus;
-            set => this.RaiseAndSetIfChanged(ref _topRightStatus, value);
+            Id = id;
         }
 
-        public string BottomRightStatus
-        {
-            get => _bottomRightStatus;
-            set => this.RaiseAndSetIfChanged(ref _bottomRightStatus, value);
-        }
+        public ViewModelActivator Activator { get; } = new();
 
-        public StatusEnum Status
-        {
-            get => _status;
-            set => this.RaiseAndSetIfChanged(ref _status, value);
-        }
+        public string Id { get; }
+
+        [Reactive]
+        public MaterialIconKind Icon { get; set; }
+        [Reactive]
+        public string StatusText { get; set; }
+        [Reactive]
+        public string TopRightStatus { get; set; }
+        [Reactive]
+        public string BottomRightStatus { get; set; }
+        [Reactive]
+        public StatusEnum Status { get; set; }
+        [Reactive]
+        public ICommand Command { get; set; }
+        [Reactive]
+        public object CommandParameter { get; set; }
+        [Reactive]
+        public string Title { get; set; }
+
+        
     }
 }

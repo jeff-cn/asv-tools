@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Material.Icons;
@@ -28,6 +29,19 @@ namespace Asv.Tools.Avalonia
             set => SetValue(StatusProperty, value);
         }
 
+        public static readonly StyledProperty<ICommand> CommandProperty = AvaloniaProperty.Register<StatusButton, ICommand>(nameof(Command));
+        public ICommand Command
+        {
+            get => GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
+        }
+
+        public static readonly StyledProperty<object> CommandParameterProperty = AvaloniaProperty.Register<StatusButton, object>(nameof(CommandParameter));
+        public object CommandParameter
+        {
+            get => GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
+        }
 
         public static readonly StyledProperty<string> StatusTextProperty = AvaloniaProperty.Register<StatusButton, string>(nameof(StatusText));
         public string StatusText
@@ -58,11 +72,11 @@ namespace Asv.Tools.Avalonia
             set => SetValue(BottomRightStatusProperty, value);
         }
 
-        public static readonly StyledProperty<MaterialIconKind> IconNameProperty = AvaloniaProperty.Register<StatusButton, MaterialIconKind>(nameof(IconName));
-        public MaterialIconKind IconName
+        public static readonly StyledProperty<MaterialIconKind> IconProperty = AvaloniaProperty.Register<StatusButton, MaterialIconKind>(nameof(Icon));
+        public MaterialIconKind Icon
         {
-            get => (MaterialIconKind)GetValue(IconNameProperty);
-            set => SetValue(IconNameProperty, value);
+            get => (MaterialIconKind)GetValue(IconProperty);
+            set => SetValue(IconProperty, value);
         }
     }
 
