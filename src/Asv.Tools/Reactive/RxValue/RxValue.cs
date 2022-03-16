@@ -3,9 +3,9 @@ using System.Reactive.Subjects;
 
 namespace Asv.Tools
 {
-    public class RxValue<TValue> :IObserver<TValue>, IRxEditableValue<TValue>, IRxValue<TValue>,IDisposable
+    public class RxValue<TValue> : DisposableOnce, IRxEditableValue<TValue>,IDisposable
     {
-        private readonly Subject<TValue> _subject = new Subject<TValue>();
+        private readonly Subject<TValue> _subject = new();
         private TValue _value;
 
         public TValue Value 
@@ -18,7 +18,7 @@ namespace Asv.Tools
             }
         }
 
-        public virtual void Dispose()
+        protected override void InternalDisposeOnce()
         {
             _subject.OnCompleted();
             _subject.Dispose();
