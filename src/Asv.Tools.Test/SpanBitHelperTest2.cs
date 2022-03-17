@@ -1,5 +1,4 @@
 using System;
-using System.IO.Packaging;
 using System.Security.Cryptography.X509Certificates;
 using FluentAssertions;
 using Xunit;
