@@ -7,7 +7,7 @@ namespace Asv.Tools
     {
         private const int Disposed = 1;
         private const int NotDisposed = 0;
-        private int _disposeFlag;
+        private volatile int _disposeFlag;
 
         #region Disposing
 

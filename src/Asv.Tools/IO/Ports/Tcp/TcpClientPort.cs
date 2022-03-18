@@ -13,6 +13,7 @@ namespace Asv.Tools.Tcp
         private TcpClient _tcp;
         private CancellationTokenSource _stop;
         private DateTime _lastData;
+        private static int _counter;
 
         public TcpClientPort(TcpPortConfig cfg)
         {
@@ -29,6 +30,8 @@ namespace Asv.Tools.Tcp
 
         protected override void InternalStop()
         {
+            _tcp?.Close();
+            _tcp?.Dispose();
             _stop?.Cancel(false);
             _stop?.Dispose();
             _stop = null;
@@ -37,11 +40,13 @@ namespace Asv.Tools.Tcp
 
         protected override void InternalStart()
         {
+            _counter++;
+            _tcp?.Close();
             _tcp?.Dispose();
             _tcp = new TcpClient();
             _tcp.Connect(_cfg.Host,_cfg.Port);
             _stop = new CancellationTokenSource();
-            var recvThread = new Thread(ListenAsync) { IsBackground = true, Priority = ThreadPriority.Normal };
+            var recvThread = new Thread(ListenAsync) { Name = "TCP_C"+_counter,IsBackground = true, Priority = ThreadPriority.Normal };
             _stop.Token.Register(() =>
             {
                 try
@@ -56,15 +61,16 @@ namespace Asv.Tools.Tcp
                     // ignore
                 }
             });
-            recvThread.Start();
+            recvThread.Start(_stop);
 
         }
 
         private void ListenAsync(object obj)
         {
+            var cancellationTokenSource = (CancellationTokenSource)obj;
             try
             {
-                while (_stop?.IsCancellationRequested == false)
+                while (cancellationTokenSource.IsCancellationRequested == false)
                 {
                     if (_cfg.ReconnectTimeout != 0)
                     {
@@ -79,7 +85,7 @@ namespace Asv.Tools.Tcp
                         var buff = new byte[_tcp.Available];
                         var readed = _tcp.GetStream().Read(buff, 0, buff.Length);
                         Debug.Assert(readed == buff.Length);
-                        InternalOnData(buff);
+                        if (readed != 0) InternalOnData(buff);
                     }
                     else
                     {
@@ -115,13 +121,13 @@ namespace Asv.Tools.Tcp
             {
                 return $"TCP\\IP Client      {_tcp?.Client?.LocalEndPoint}:\n" +
                        $"Reconnect timeout   {_cfg.ReconnectTimeout} ms\n" +
-                       $"Remote server       {_cfg.Host}:{_cfg.Host}";
+                       $"Remote server       {_cfg.Host}:{_cfg.Port}";
             }
             catch (Exception e)
             {
                 return $"TCP\\IP Client      \n" +
                        $"Reconnect timeout   {_cfg.ReconnectTimeout} ms\n" +
-                       $"Remote server       {_cfg.Host}:{_cfg.Host}";
+                       $"Remote server       {_cfg.Host}:{_cfg.Port}";
                 Debug.Assert(false);
             }
             
