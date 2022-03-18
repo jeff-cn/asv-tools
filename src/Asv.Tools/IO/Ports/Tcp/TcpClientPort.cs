@@ -51,9 +51,9 @@ namespace Asv.Tools.Tcp
             {
                 try
                 {
+                    _tcp?.Close();
+                    _tcp?.Dispose();
                     recvThread.Interrupt();
-                    _tcp.Close();
-                    _tcp.Dispose();
                 }
                 catch (Exception e)
                 {
