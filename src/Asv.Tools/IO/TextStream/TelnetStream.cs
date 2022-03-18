@@ -25,18 +25,31 @@ namespace Asv.Tools
         private readonly Subject<string> _output = new Subject<string>();
         private readonly Subject<Exception> _onErrorSubject = new Subject<Exception>();
         private readonly byte[] _buffer;
-        private readonly IDataStream _input;
+        private readonly TcpClientPort _input;
+        private readonly RxValue<PortState> _onPortState = new RxValue<PortState>();
+        
 
         public TelnetStream(TelnetConfig config)
         {
-            _cancel.Token.Register((Action)(() => _output.Dispose()));
             _config = config ?? new TelnetConfig();
             _buffer = new byte[_config.MaxMessageSize];
             _input = ConnectionStringConvert(_config.ConnectionString);
+            _input.State.Subscribe(_onPortState, _cancel.Token);
+            _onPortState.OnNext(_input.State.Value);
             _input.SelectMany<byte[], byte>((Func<byte[], IEnumerable<byte>>)(_ => (IEnumerable<byte>)_)).Subscribe<byte>(new Action<byte>(this.OnData), this._cancel.Token);
+            _cancel.Token.Register((Action)(() =>
+            {
+                _onPortState.OnNext(PortState.Disabled);
+                _onPortState.OnCompleted();
+                _onPortState.Dispose();
+                _output.Dispose();
+                _onErrorSubject.OnCompleted();
+                _onErrorSubject.Dispose();
+                _input?.Dispose();
+            }));
         }
 
-        private static IDataStream ConnectionStringConvert(string connString)
+        private static TcpClientPort ConnectionStringConvert(string connString)
         {
             var p = (TcpClientPort)PortFactory.Create(connString);
             p.Enable();
@@ -95,6 +108,7 @@ namespace Asv.Tools
             return _output.Subscribe(observer);
         }
 
+        public IRxValue<PortState> OnPortState => _onPortState;
         public IObservable<Exception> OnError => (IObservable<Exception>)_onErrorSubject;
 
         public async Task Send(string value, CancellationToken cancel)

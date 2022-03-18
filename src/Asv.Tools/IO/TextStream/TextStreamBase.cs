@@ -13,6 +13,7 @@ namespace Asv.Tools
         private bool _sync = false;
         private int _readIndex = 0;
         private readonly Subject<string> _output = new Subject<string>();
+        private readonly RxValue<PortState> _onPortState = new RxValue<PortState>();
         private readonly Subject<Exception> _onErrorSubject = new Subject<Exception>();
         private readonly byte[] _buffer;
         private readonly TextReaderBaseConfig _config;
@@ -25,6 +26,12 @@ namespace Asv.Tools
             this._buffer = new byte[this._config.MaxMessageSize];
             this._input = strm;
             this._input.SelectMany<byte[], byte>((Func<byte[], IEnumerable<byte>>)(_ => (IEnumerable<byte>)_)).Subscribe<byte>(new Action<byte>(this.OnData), this._cancel.Token);
+            if (_input is IPort port)
+            {
+                port.State.Subscribe(_onPortState, _cancel.Token);
+                _onPortState.OnNext(port.State.Value);
+            }
+            else _onPortState.OnNext(PortState.Connected);
         }
 
         private void OnData(byte data)
@@ -69,6 +76,8 @@ namespace Asv.Tools
         {
             return this._output.Subscribe(observer);
         }
+
+        public IRxValue<PortState> OnPortState => _onPortState;
 
         public IObservable<Exception> OnError
         {
