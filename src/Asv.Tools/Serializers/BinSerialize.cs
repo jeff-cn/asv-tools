@@ -493,16 +493,17 @@ namespace Asv.Tools
             // Write amount of bytes will follow.
             var byteCount = uft8.GetByteCount(charPointer, charCount);
             WritePackedUnsignedInteger(ref span, (uint)byteCount);
-
-            fixed (byte* spanPointer = span)
+            if (charCount != 0)
             {
-                // Write chars as utf8.
-                var writtenBytes = uft8.GetBytes(charPointer, charCount, spanPointer, span.Length);
-                Debug.Assert(byteCount == writtenBytes, "Written bytes did not match encodings expected size");
+                fixed (byte* spanPointer = span)
+                {
+                    // Write chars as utf8.
+                    var writtenBytes = uft8.GetBytes(charPointer, charCount, spanPointer, span.Length);
+                    Debug.Assert(byteCount == writtenBytes, "Written bytes did not match encodings expected size");
+                }
+                // 'Advance' the span.
+                span = span.Slice(byteCount);
             }
-
-            // 'Advance' the span.
-            span = span.Slice(byteCount);
         }
 
         /// <summary>
@@ -780,6 +781,8 @@ namespace Asv.Tools
 
             // Read how many bytes will follow.
             var byteCount = (int)ReadPackedUnsignedInteger(ref span);
+
+            if (byteCount == 0) return string.Empty;
 
             // Check if the span contains the entire string.
             if (span.Length < byteCount)
