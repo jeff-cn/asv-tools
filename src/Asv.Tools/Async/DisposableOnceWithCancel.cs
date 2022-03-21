@@ -23,7 +23,8 @@ public abstract class DisposableOnceWithCancel : DisposableOnce
 
     protected override void InternalDisposeOnce()
     {
-        _cancel.Cancel(false);
+        if (_cancel.Token.CanBeCanceled)
+            _cancel.Cancel(false);
         _cancel.Dispose();
         _dispose?.Dispose();
     }
