@@ -30,6 +30,8 @@ namespace Asv.Tools
 
         public override PortType PortType => PortType.Udp;
 
+        public override string PortLogName => _config.ToString();
+
         protected override Task InternalSend(byte[] data, int count, CancellationToken cancel)
         {
             if (_udp?.Client == null || _udp.Client.Connected == false) return Task.CompletedTask;

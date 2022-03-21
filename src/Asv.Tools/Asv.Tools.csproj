@@ -64,10 +64,6 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="NLog\" />
-  </ItemGroup>
-
   
 
 </Project>

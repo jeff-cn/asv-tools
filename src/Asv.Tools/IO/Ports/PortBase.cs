@@ -62,7 +62,7 @@ namespace Asv.Tools
             {
                 if (State.Value == PortState.Connected)
                 {
-                    _logger.Info($"Port {this}: work {DateTime.Now - _lastSuccess:g}; rx:{_rxBytes / 1024:F0} KiB; tx:{_rxBytes / 1024:F0} KiB; conn err:{_errCnt};");
+                    _logger.Info($"Port {PortLogName}: work {DateTime.Now - _lastSuccess:g}; rx:{_rxBytes / 1024:F0} KiB; tx:{_rxBytes / 1024:F0} KiB; conn err:{_errCnt};");
                 }
                 else
                 {
@@ -70,6 +70,8 @@ namespace Asv.Tools
                 }
             }, _disposedCancel.Token);
         }
+
+        public abstract string PortLogName { get; }
 
         public async Task<bool> Send(byte[] data, int count, CancellationToken cancel)
         {

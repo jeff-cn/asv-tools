@@ -22,6 +22,8 @@ namespace Asv.Tools.Tcp
 
         public override PortType PortType { get; } = PortType.Tcp;
 
+        public override string PortLogName => _cfg.ToString();
+
         protected override Task InternalSend(byte[] data, int count, CancellationToken cancel)
         {
             if (_tcp == null || _tcp.Connected == false) return Task.CompletedTask;
