@@ -65,6 +65,8 @@ namespace Asv.Tools.Tcp
 
         public override PortType PortType { get; } = PortType.Tcp;
 
+        public override string PortLogName => _cfg.ToString();
+
         protected override Task InternalSend(byte[] data, int count, CancellationToken cancel)
         {
             _rw.EnterReadLock();

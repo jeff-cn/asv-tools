@@ -45,10 +45,11 @@ namespace Asv.Tools.Store
             _store.Write(_id,bson);
         }
 
-        public override void Dispose()
+        protected override void InternalDisposeOnce()
         {
             _subscribe.Dispose();
-            base.Dispose();
+            base.InternalDisposeOnce();
         }
+
     }
 }

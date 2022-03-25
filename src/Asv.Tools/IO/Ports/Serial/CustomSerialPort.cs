@@ -22,7 +22,9 @@ namespace Asv.Tools.Serial
         }
 
         public override PortType PortType => PortType.Serial;
-        
+
+
+        public override string PortLogName => _config.ToString();
 
         protected override async Task InternalSend(byte[] data, int count, CancellationToken cancel)
         {
