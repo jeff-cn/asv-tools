@@ -104,7 +104,7 @@ namespace Asv.Tools
 
         public override string ToString()
         {
-            return $"TCP_C {_config.LocalHost}:{_config.LocalPort}\n Server IP:{_config.RemoteHost}:{_config.RemotePort}";
+            return $"UDP {_config.LocalHost}:{_config.LocalPort}\n Remote IP:{_config.RemoteHost}:{_config.RemotePort}";
         }
     }
 }
