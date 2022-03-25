@@ -35,14 +35,12 @@ namespace Asv.Tools.Tcp
             _stop?.Cancel(false);
             _stop?.Dispose();
             _stop = null;
-
         }
 
         protected override void InternalStart()
         {
             _counter++;
-            _tcp?.Close();
-            _tcp?.Dispose();
+            InternalStop();
             _tcp = new TcpClient();
             _tcp.Connect(_cfg.Host,_cfg.Port);
             _stop = new CancellationTokenSource();
@@ -65,7 +63,7 @@ namespace Asv.Tools.Tcp
 
         }
 
-        private void ListenAsync(object obj)
+        private async void ListenAsync(object obj)
         {
             var cancellationTokenSource = (CancellationTokenSource)obj;
             try
@@ -89,7 +87,7 @@ namespace Asv.Tools.Tcp
                     }
                     else
                     {
-                        Thread.Sleep(30);
+                         await Task.Delay(30, cancellationTokenSource.Token).ConfigureAwait(false);
                     }
                 }
             }
