@@ -402,6 +402,7 @@ namespace Asv.Tools
         /// <returns>Number of bytes it will take.</returns>
         public static int GetSizeForString(string val)
         {
+            if (val.IsNullOrWhiteSpace()) return GetSizeForPackedUnsignedInteger(0);
             fixed (char* charPointer = val)
             {
                 return GetSizeForString(charPointer, val.Length);
