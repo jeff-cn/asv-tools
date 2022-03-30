@@ -51,7 +51,9 @@ namespace Asv.Tools
 
         public IDisposable Subscribe(IObserver<TValue> observer)
         {
-            return _subject.Subscribe(observer);
+            var result = _subject.Subscribe(observer);
+            if (_value != null) observer.OnNext(_value);
+            return result;
         }
 
         public override string ToString()

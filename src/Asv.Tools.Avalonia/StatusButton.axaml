@@ -95,7 +95,7 @@
     </Style>
 
     <Style Selector="buttons|StatusButton">
-    <Setter Property="Height" Value="60"/>
+    <Setter Property="Height" Value="65"/>
     
     <Setter Property="VerticalAlignment" Value="Center"/>
     <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -106,15 +106,15 @@
                   <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
                       <avalonia:MaterialIcon Name="PART_Icon" Width="25" Height="25" Margin="0,0,5,0" Kind="{TemplateBinding Icon}"/>
                       <StackPanel>
-                          <TextBlock Name="PART_StatusText" FontSize="14" VerticalAlignment="Center" Text="{TemplateBinding StatusText}"/>
-                          <TextBlock Name="PART_TitleText" FontSize="10" VerticalAlignment="Center" Text="{TemplateBinding Title}"/>
+                          <TextBlock FontWeight="Bold" Name="PART_StatusText" FontSize="14" VerticalAlignment="Center" Text="{TemplateBinding StatusText}"/>
+                          <TextBlock FontWeight="Bold" FontStyle="Italic" Name="PART_TitleText" FontSize="10" VerticalAlignment="Center" Text="{TemplateBinding Title}"/>
                       </StackPanel>
                   </StackPanel>
               </Button>
-              <Border Name="PART_TopRightBorder" Grid.Column="1" Margin="-20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="3" >
-                  <TextBlock FontSize="10" Margin="5,0" Text="{TemplateBinding TopRightStatus}"/>
+              <Border Name="PART_TopRightBorder" Grid.Column="1" Margin="-50,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="3" >
+                  <TextBlock  FontSize="10" Margin="5,0" Text="{TemplateBinding TopRightStatus}"/>
               </Border>
-              <Border Name="PART_BottomRightBorder" Grid.Column="1" Margin="-20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" CornerRadius="3" >
+              <Border Name="PART_BottomRightBorder" Grid.Column="1" Margin="-50,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" CornerRadius="3" >
                   <TextBlock FontSize="10" Margin="5,0" Text="{TemplateBinding BottomRightStatus}"/>
               </Border>
           </Grid>
