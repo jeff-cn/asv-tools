@@ -1,4 +1,5 @@
 using System;
+using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
 namespace Asv.Tools
@@ -51,6 +52,7 @@ namespace Asv.Tools
 
         public IDisposable Subscribe(IObserver<TValue> observer)
         {
+            if (_subject.IsDisposed) return Disposable.Empty;
             var result = _subject.Subscribe(observer);
             if (_value != null) observer.OnNext(_value);
             return result;
