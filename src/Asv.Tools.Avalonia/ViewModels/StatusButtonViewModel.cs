@@ -30,6 +30,8 @@ namespace Asv.Tools.Avalonia
         [Reactive]
         public string BottomRightStatus { get; set; }
         [Reactive]
+        public StatusEnum SubStatus { get; set; }
+        [Reactive]
         public StatusEnum Status { get; set; }
         [Reactive]
         public ICommand Command { get; set; }

@@ -1,5 +1,7 @@
+using System;
 using System.Windows.Input;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Material.Icons;
 
@@ -9,18 +11,90 @@ namespace Asv.Tools.Avalonia
     {
         public StatusButton()
         {
-            
+            Status = StatusEnum.Error;
+            SubStatus = StatusEnum.Error;
+        }
+
+        public static readonly StyledProperty<StatusEnum> SubStatusProperty = AvaloniaProperty.Register<StatusButton, StatusEnum>(nameof(SubStatus), defaultValue: StatusEnum.Warning, notifying: WhenSubStatusChanged);
+
+        private static void WhenSubStatusChanged(IAvaloniaObject source, bool beforeChanged)
+        {
+            if (source is not StatusButton btn) return;
+            var value = source.GetValue(SubStatusProperty);
+            if (beforeChanged) return;
+            switch (value)
+            {
+                case StatusEnum.Unknown:
+                    btn.PseudoClasses.Add(":Unknown");
+                    btn.PseudoClasses.Remove(":Warning");
+                    btn.PseudoClasses.Remove(":Error");
+                    btn.PseudoClasses.Remove(":Success");
+                    break;
+                case StatusEnum.Warning:
+                    btn.PseudoClasses.Remove(":Unknown");
+                    btn.PseudoClasses.Add(":Warning");
+                    btn.PseudoClasses.Remove(":Error");
+                    btn.PseudoClasses.Remove(":Success");
+                    break;
+                case StatusEnum.Error:
+                    btn.PseudoClasses.Remove(":Unknown");
+                    btn.PseudoClasses.Remove(":Warning");
+                    btn.PseudoClasses.Add(":Error");
+                    btn.PseudoClasses.Remove(":Success");
+                    break;
+                case StatusEnum.Success:
+                    btn.PseudoClasses.Remove(":Unknown");
+                    btn.PseudoClasses.Remove(":Warning");
+                    btn.PseudoClasses.Remove(":Error");
+                    btn.PseudoClasses.Add(":Success");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public StatusEnum SubStatus
+        {
+            get => GetValue(SubStatusProperty);
+            set => SetValue(SubStatusProperty, value);
         }
 
         public static readonly StyledProperty<StatusEnum> StatusProperty = AvaloniaProperty.Register<StatusButton, StatusEnum>(nameof(Status),defaultValue:StatusEnum.Warning, notifying:WhenStatusChanged);
 
         private static void WhenStatusChanged(IAvaloniaObject source, bool beforeChanged)
         {
-            if (source is not StyledElement btn) return;
+            if (source is not StatusButton btn) return;
             var value = source.GetValue(StatusProperty);
             if (beforeChanged) return;
-            btn.Classes.Clear();
-            btn.Classes.Set(value.ToString(), true);
+            switch (value)
+            {
+                case StatusEnum.Unknown:
+                    btn.Classes.Add("Unknown");
+                    btn.Classes.Remove("Warning");
+                    btn.Classes.Remove("Error");
+                    btn.Classes.Remove("Success");
+                    break;
+                case StatusEnum.Warning:
+                    btn.Classes.Remove("Unknown");
+                    btn.Classes.Add("Warning");
+                    btn.Classes.Remove("Error");
+                    btn.Classes.Remove("Success");
+                    break;
+                case StatusEnum.Error:
+                    btn.Classes.Remove("Unknown");
+                    btn.Classes.Remove("Warning");
+                    btn.Classes.Add("Error");
+                    btn.Classes.Remove("Success");
+                    break;
+                case StatusEnum.Success:
+                    btn.Classes.Remove("Unknown");
+                    btn.Classes.Remove("Warning");
+                    btn.Classes.Remove("Error");
+                    btn.Classes.Add("Success");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public StatusEnum Status

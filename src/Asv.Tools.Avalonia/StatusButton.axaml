@@ -16,10 +16,14 @@
     <Style Selector="buttons|StatusButton.Success /template/ Button#PART_Button">
         <Setter Property="BorderBrush" Value="{StaticResource SuccessBrush}"/>
     </Style>
-    <Style Selector="buttons|StatusButton.Success /template/ TextBlock#PART_StatusText,
+    <Style Selector="buttons|StatusButton:Success /template/ TextBlock#PART_StatusText,
            buttons|StatusButton.Success /template/ TextBlock#PART_TitleText">
         <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
     </Style>
+    <!-- <Style Selector="buttons|StatusButton.Success /template/ TextBlock#PART_StatusText, -->
+    <!--        buttons|StatusButton.Success /template/ TextBlock#PART_TitleText"> -->
+    <!--     <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/> -->
+    <!-- </Style> -->
     <Style Selector="buttons|StatusButton.Success /template/ avalonia|MaterialIcon#PART_Icon">
         <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
     </Style>
@@ -31,8 +35,10 @@
     <Style Selector="buttons|StatusButton.Error /template/ Button#PART_Button">
         <Setter Property="BorderBrush" Value="{StaticResource ErrorBrush}"/>
     </Style>
-    <Style Selector="buttons|StatusButton.Error /template/ TextBlock#PART_StatusText,
-           buttons|StatusButton.Error /template/ TextBlock#PART_TitleText">
+    <Style Selector="buttons|StatusButton:Error /template/ TextBlock#PART_StatusText">
+        <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Error /template/ TextBlock#PART_TitleText">
         <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
     </Style>
     <Style Selector="buttons|StatusButton.Error /template/ avalonia|MaterialIcon#PART_Icon">
@@ -45,7 +51,7 @@
     <Style Selector="buttons|StatusButton.Error">
         <Setter Property="Transitions">
             <Transitions>
-                <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+                <DoubleTransition Property="Opacity" Duration="0:0:1"/>
             </Transitions>
         </Setter>
     </Style>
@@ -53,8 +59,10 @@
     <Style Selector="buttons|StatusButton.Warning /template/ Button#PART_Button">
         <Setter Property="BorderBrush" Value="{StaticResource WarningBrush}"/>
     </Style>
-    <Style Selector="buttons|StatusButton.Warning /template/ TextBlock#PART_StatusText,
-           buttons|StatusButton.Warning /template/ TextBlock#PART_TitleText">
+    <Style Selector="buttons|StatusButton:Warning /template/ TextBlock#PART_StatusText">
+        <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Warning /template/ TextBlock#PART_TitleText">
         <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
     </Style>
     <Style Selector="buttons|StatusButton.Warning /template/ avalonia|MaterialIcon#PART_Icon">
@@ -67,7 +75,7 @@
     <Style Selector="buttons|StatusButton.Warning">
         <Setter Property="Transitions">
             <Transitions>
-                <DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+                <DoubleTransition Property="Opacity" Duration="0:0:3"/>
             </Transitions>
         </Setter>
     </Style>
@@ -75,8 +83,10 @@
     <Style Selector="buttons|StatusButton.Unknown /template/ Button#PART_Button">
         <Setter Property="BorderBrush" Value="{StaticResource UnknownBrush}"/>
     </Style>
-    <Style Selector="buttons|StatusButton.Unknown /template/ TextBlock#PART_StatusText,
-           buttons|StatusButton.Unknown /template/ TextBlock#PART_TitleText">
+    <Style Selector="buttons|StatusButton:Unknown /template/ TextBlock#PART_StatusText">
+        <Setter Property="Foreground" Value="{StaticResource UnknownBrush}"/>
+    </Style>
+    <Style Selector="buttons|StatusButton.Unknown /template/ TextBlock#PART_TitleText">
         <Setter Property="Foreground" Value="{StaticResource UnknownBrush}"/>
     </Style>
     <Style Selector="buttons|StatusButton.Unknown /template/ avalonia|MaterialIcon#PART_Icon">
