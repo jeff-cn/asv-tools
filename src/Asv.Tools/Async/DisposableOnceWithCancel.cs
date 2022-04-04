@@ -5,16 +5,39 @@ using Asv.Tools;
 
 public abstract class DisposableOnceWithCancel : DisposableOnce
 {
-    private readonly CancellationTokenSource _cancel = new();
+    private CancellationTokenSource _cancel;
     private CompositeDisposable _dispose;
+    private readonly object _sync1 = new();
+    private readonly object _sync2 = new();
 
-    protected CancellationToken DisposeCancel => _cancel.Token;
+    protected CancellationToken DisposeCancel
+    {
+        get
+        {
+            if (_cancel != null)
+            {
+                return IsDisposed ? CancellationToken.None : _cancel.Token;
+            }
+
+            lock (_sync2)
+            {
+                if (_cancel != null)
+                {
+                    return IsDisposed ? CancellationToken.None : _cancel.Token;
+                }
+                _cancel = new();
+                return _cancel.Token;
+            }
+
+        }
+    }
+
     protected CompositeDisposable Disposable
     {
         get
         {
             if (_dispose != null) return _dispose;
-            lock (_cancel)
+            lock (_sync1)
             {
                 return _dispose ??= new CompositeDisposable();
             }
@@ -23,9 +46,9 @@ public abstract class DisposableOnceWithCancel : DisposableOnce
 
     protected override void InternalDisposeOnce()
     {
-        if (_cancel.Token.CanBeCanceled)
+        if (_cancel?.Token.CanBeCanceled == true)
             _cancel.Cancel(false);
-        _cancel.Dispose();
+        _cancel?.Dispose();
         _dispose?.Dispose();
     }
 }

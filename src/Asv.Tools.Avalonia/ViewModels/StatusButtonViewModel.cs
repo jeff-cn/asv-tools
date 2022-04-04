@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Input;
 using Material.Icons;
 using ReactiveUI;
@@ -21,6 +22,7 @@ namespace Asv.Tools.Avalonia
 
         public string Id { get; }
 
+        public int Order { get; set; }
         [Reactive]
         public MaterialIconKind Icon { get; set; }
         [Reactive]
