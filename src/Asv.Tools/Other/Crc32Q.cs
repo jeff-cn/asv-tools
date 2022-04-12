@@ -1,5 +1,3 @@
-using System;
-
 namespace Asv.Tools
 {
     public static class Crc32Q
