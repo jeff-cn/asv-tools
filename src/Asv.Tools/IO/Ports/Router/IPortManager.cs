@@ -1,6 +1,5 @@
 using System;
 using System.Reactive;
-using DynamicData;
 
 namespace Asv.Tools
 {
