@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>net461;net5.0</TargetFrameworks>
@@ -9,6 +9,7 @@
     <ItemGroup>
         <PackageReference Include="DeepEqual" Version="2.0.0" />
         <PackageReference Include="FluentAssertions" Version="6.4.0" />
+        <PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
     </ItemGroup>
 

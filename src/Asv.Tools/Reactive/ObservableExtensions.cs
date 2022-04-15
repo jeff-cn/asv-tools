@@ -43,7 +43,7 @@ namespace Asv.Tools
                         {
                             o.OnNext(v);
                         }
-                        catch
+                        catch(Exception ex)
                         {
                             Debug.Assert(false, "Exception ignored");
                             // ignored
