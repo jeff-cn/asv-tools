@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Asv.Tools
 {
-    public class SessionSettings:IEqualityComparer<SessionSettings>
+    public class SessionSettings:IEqualityComparer<SessionSettings>, ISizedSpanSerializable
     {
         private string _name;
 
@@ -31,6 +32,42 @@ namespace Asv.Tools
         }
 
         public HashSet<string> Tags { get; set; }
+
+
+        public virtual void Deserialize(ref ReadOnlySpan<byte> buffer)
+        {
+            Name = BinSerialize.ReadString(ref buffer);
+            var count = BinSerialize.ReadByte(ref buffer);
+            Tags = new HashSet<string>();
+            for (var i = 0; i < count; i++)
+            {
+                Tags.Add(BinSerialize.ReadString(ref buffer));
+            }
+        }
+
+        public virtual void Serialize(ref Span<byte> buffer)
+        {
+            if (Tags.Count > byte.MaxValue)
+                throw new ArgumentOutOfRangeException(nameof(Tags));
+            BinSerialize.WriteString(ref buffer, Name);
+            if (Tags == null)
+            {
+                BinSerialize.WriteByte(ref buffer, 0);
+                return;
+            }
+            BinSerialize.WriteByte(ref buffer, (byte)Tags.Count);
+            foreach (var tag in Tags)
+            {
+                BinSerialize.WriteString(ref buffer, tag);
+            }
+        }
+
+        public virtual int GetByteSize()
+        {
+            return BinSerialize.GetSizeForString(Name) +
+                   sizeof(byte) +
+                   (Tags?.Sum(BinSerialize.GetSizeForString) ?? 0);
+        }
 
         public bool Equals(SessionSettings x, SessionSettings y)
         {

@@ -7,24 +7,22 @@ namespace Asv.Tools
     {
         
 
-        private string _name;
-
         internal SessionRecordSettings()
         {
 
         }
 
-        public SessionRecordSettings(ushort id,string name,ushort offset)
+        public SessionRecordSettings(uint id,string name,ushort offset)
         {
             if (offset <= 0) throw new ArgumentOutOfRangeException(nameof(offset));
-            if (string.IsNullOrEmpty(name)) throw new ArgumentException("Value cannot be null or empty.", nameof(name));
             Id = id;
             Name = name;
             Offset = offset;
         }
 
-        public ushort Id { get; set; }
+        public uint Id { get; set; }
 
+        private string _name;
         public string Name
         {
             get => _name;
@@ -35,14 +33,14 @@ namespace Asv.Tools
 
         public virtual void Deserialize(ref ReadOnlySpan<byte> buffer)
         {
-            Id = BinSerialize.ReadUShort(ref buffer);
+            Id = BinSerialize.ReadPackedUnsignedInteger(ref buffer);
             Name = BinSerialize.ReadString(ref buffer);
             Offset = BinSerialize.ReadUShort(ref buffer);
         }
 
         public virtual void Serialize(ref Span<byte> buffer)
         {
-            BinSerialize.WriteUShort(ref buffer, Id);
+            BinSerialize.WritePackedUnsignedInteger(ref buffer, Id);
             BinSerialize.WriteString(ref buffer, Name);
             BinSerialize.WriteUShort(ref buffer, Offset);
         }

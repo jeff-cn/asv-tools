@@ -21,7 +21,7 @@ namespace Asv.Tools.Test
         {
             var rootFolder = Path.Combine(Path.GetTempPath(),Path.GetRandomFileName());
             var svc = new ChunkFileStore(rootFolder);
-            var metadata = svc.StartRecording(new SessionSettings("rec1", "tag1", "tag2"), new[]
+            var metadata = svc.Start(new SessionSettings("rec1", "tag1", "tag2"), new[]
             {
                 new SessionRecordSettings(0,"BlaBla",256)
             });
@@ -29,12 +29,12 @@ namespace Asv.Tools.Test
             for (uint i = 0; i < 1000; i++)
             {
                 var value = i;
-                svc.AppendRecord(0, (ref Span<byte> data) =>
+                svc.Append(0, (ref Span<byte> data) =>
                 {
                     BinSerialize.WritePackedUnsignedInteger(ref data,value);
                 });
             };
-            svc.StopRecording();
+            svc.Stop();
 
             var session = svc.GetSessions();
             Assert.NotNull(session);

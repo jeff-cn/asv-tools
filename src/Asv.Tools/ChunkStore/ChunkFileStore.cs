@@ -18,7 +18,7 @@ namespace Asv.Tools
         private readonly string _rootFolder;
         private readonly object _sync = new();
         private string _recordFolderPath;
-        private readonly Dictionary<ushort, (SessionRecordMetadata, FileStream)> _files = new();
+        private readonly Dictionary<uint, (SessionRecordMetadata, FileStream)> _files = new();
 
         public ChunkFileStore(string rootFolder)
         {
@@ -29,14 +29,14 @@ namespace Asv.Tools
             }
         }
 
-        public SessionMetadata StartRecording(SessionSettings settings,IEnumerable<SessionRecordSettings> records)
+        public SessionInfo Start(SessionSettings settings,IEnumerable<SessionRecordSettings> records)
         {
             CheckNotStarted();
             lock (_sync)
             {
                 CheckNotStarted();
                 var id = Guid.NewGuid();
-                var metadata = new SessionMetadata()
+                var metadata = new SessionInfo()
                 {
                     Id = id,
                     Name = settings.Name,
@@ -80,17 +80,18 @@ namespace Asv.Tools
                 }
                 File.WriteAllText(Path.Combine(_recordFolderPath,MetadataFileName), JsonConvert.SerializeObject(metadata));
                 IsStarted = true;
-                return metadata;
+                return Current = metadata;
             }
         }
 
-        public void StopRecording()
+        public void Stop()
         {
             if (IsStarted == false) return;
             lock (_sync)
             {
                 if (IsStarted == false) return;
                 IsStarted = false;
+                Current = null;
                 foreach (var item in _files.Values)
                 {
                     item.Item2.Flush();
@@ -111,10 +112,10 @@ namespace Asv.Tools
                 }
             }
         }
-        public SessionMetadata ReadMetadata(Guid sessionId)
+        public SessionInfo ReadMetadata(Guid sessionId)
         {
             var metadataFile = GetMetadataFileName(sessionId);
-            return File.Exists(metadataFile) ? JsonConvert.DeserializeObject<SessionMetadata>(File.ReadAllText(metadataFile)): null;
+            return File.Exists(metadataFile) ? JsonConvert.DeserializeObject<SessionInfo>(File.ReadAllText(metadataFile)): null;
         }
 
 
@@ -154,8 +155,9 @@ namespace Asv.Tools
 
 
         public bool IsStarted { get; private set; }
+        public SessionInfo Current { get; set; }
 
-        public void AppendRecord(ushort id, RecordCallback writeCallback)
+        public void Append(ushort id, RecordCallback writeCallback)
         {
             CheckIsStarted();
             lock (_sync)
@@ -245,14 +247,14 @@ namespace Asv.Tools
             return Path.Combine(_rootFolder, id.ToString());
         }
 
-        private string GetRecordFileName(Guid sessionId,ushort id)
+        private string GetRecordFileName(Guid sessionId,uint id)
         {
             return Path.Combine(GetSessionFolderName(sessionId), $"{id}.rtt");
         }
 
         public void Dispose()
         {
-            StopRecording();
+            Stop();
         }
     }
 
