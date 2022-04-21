@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DynamicData;
 
 namespace Asv.Tools
@@ -29,6 +30,12 @@ namespace Asv.Tools
         protected override int InternalGetItemsSize(byte arg)
         {
             return sizeof(byte);
+        }
+
+        public override string ToString()
+        {
+            if (Items == null) return "[null]";
+            return $"BYTE[{Items.Count}]";
         }
     }
 }

@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Asv.Tools
 {
-    public class UintBitArray
+    public class UintBitArray:IEquatable<UintBitArray>
     {
         public int Size { get; }
 
@@ -25,7 +26,7 @@ namespace Asv.Tools
 
         public UintBitArray(uint value, int size)
         {
-            Value = value;
+            _value = value;
             Size = size;
             if (size > 32)
                 throw new ArgumentOutOfRangeException(nameof(size), "Size must be less then 32 bit");
@@ -33,7 +34,7 @@ namespace Asv.Tools
 
         public UintBitArray(IEnumerable<bool> toArray)
         {
-            Value = 0;
+            _value = 0;
             var index = 0;
             foreach (var b in toArray)
             {
@@ -45,11 +46,7 @@ namespace Asv.Tools
                 throw new ArgumentOutOfRangeException(nameof(Size), "Size must be less then 32 bit");
         }
 
-        public uint Value
-        {
-            get => _value;
-            set => _value = value;
-        }
+        public uint Value => _value;
 
 
         public bool this[int index]
@@ -81,6 +78,42 @@ namespace Asv.Tools
                 bitfield &= BitmaskXor[bitIndex];
         }
 
+        public override string ToString()
+        {
+            return Convert.ToString(Value, 2).PadLeft(Size, '0');
+        }
 
+        public bool Equals(UintBitArray other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return _value == other._value && Size == other.Size;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((UintBitArray)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((int)_value * 397) ^ Size;
+            }
+        }
+
+        public static bool operator ==(UintBitArray left, UintBitArray right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(UintBitArray left, UintBitArray right)
+        {
+            return !Equals(left, right);
+        }
     }
 }

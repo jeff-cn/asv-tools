@@ -4,6 +4,16 @@ namespace Asv.Tools
 {
     public class SpanPacketIntegerType : ISizedSpanSerializable
     {
+        public SpanPacketIntegerType()
+        {
+            
+        }
+
+        public SpanPacketIntegerType(int value)
+        {
+            Value = value;
+        }
+
         public int Value { get; set; }
 
         public void Deserialize(ref ReadOnlySpan<byte> buffer)

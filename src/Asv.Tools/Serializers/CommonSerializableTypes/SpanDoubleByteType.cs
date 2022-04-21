@@ -34,7 +34,7 @@ namespace Asv.Tools
 
         public override string ToString()
         {
-            return $"{Value1}:{Value2}";
+            return $"({Value1},{Value2})";
         }
     }
 }
