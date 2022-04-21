@@ -12,7 +12,7 @@ namespace Asv.Tools.Test
             output?.Invoke($"----------------------------------------------------------------------------------------------------------------");
         }
 
-        public static bool TestType<T>(T type, Action<string> output = null, string comment = null)
+        public static void TestType<T>(T type, Action<string> output = null, string comment = null)
             where T : ISizedSpanSerializable, new()
         {
             var arr = new byte[type.GetByteSize()];
@@ -24,7 +24,7 @@ namespace Asv.Tools.Test
             var result = type.WithDeepEqual(compare).Compare();
             output?.Invoke(
                 $"{(result ? "OK" : "ERR"),-4} | {typeof(T).Name,-25} | {type,-50} | {type.GetByteSize(),-3} | {comment??string.Empty}");
-            return result;
+            type.WithDeepEqual(compare).Assert();
         }
 
     }

@@ -24,21 +24,17 @@ namespace Asv.Tools.Test
             SpanTestHelper.SerializeDeserializeTestBegin(_output.WriteLine);
             var data = new byte[256];
             new Random().NextBytes(data);
-            var testResult = new List<bool>
-            {
-                SpanTestHelper.TestType(new SpanVoidType(), _output.WriteLine),
-                SpanTestHelper.TestType(new SpanBoolType(true), _output.WriteLine),
-                SpanTestHelper.TestType(new SpanByteArrayType(data), _output.WriteLine),
-                SpanTestHelper.TestType(new SpanByteType(byte.MaxValue), _output.WriteLine),
-                SpanTestHelper.TestType(new SpanByteType(byte.MinValue), _output.WriteLine),
-                SpanTestHelper.TestType(new SpanDoubleByteType(byte.MinValue, byte.MaxValue), _output.WriteLine),
-                SpanTestHelper.TestType(new SpanPacketUnsignedIntegerType(uint.MaxValue), _output.WriteLine),
-                SpanTestHelper.TestType(new SpanPacketIntegerType(int.MaxValue), _output.WriteLine),
-                SpanTestHelper.TestType(new SpanStringType("asdasd ASDSAD 984984"), _output.WriteLine)
-            };
+            SpanTestHelper.TestType(new SpanVoidType(), _output.WriteLine);
+            SpanTestHelper.TestType(new SpanBoolType(true), _output.WriteLine);
+            SpanTestHelper.TestType(new SpanByteArrayType(data), _output.WriteLine);
+            SpanTestHelper.TestType(new SpanByteType(byte.MaxValue), _output.WriteLine);
+            SpanTestHelper.TestType(new SpanByteType(byte.MinValue), _output.WriteLine);
+            SpanTestHelper.TestType(new SpanDoubleByteType(byte.MinValue, byte.MaxValue), _output.WriteLine);
+            SpanTestHelper.TestType(new SpanPacketUnsignedIntegerType(uint.MaxValue), _output.WriteLine);
+            SpanTestHelper.TestType(new SpanPacketIntegerType(int.MaxValue), _output.WriteLine);
+            SpanTestHelper.TestType(new SpanStringType("asdasd ASDSAD 984984"), _output.WriteLine);
 
 
-            Assert.True(testResult.All(_=>_));
         }
     }
 }
