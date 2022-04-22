@@ -41,7 +41,7 @@ namespace Asv.Tools.Test
             Assert.True(session.Any());
             Assert.Equal(session.First(),metadata.Id);
 
-            var readedMetadata = svc.ReadMetadata(metadata.Id);
+            var readedMetadata = svc.GetSessionInfo(metadata.Id);
             readedMetadata.WithDeepEqual(metadata).Assert();
 
             for (uint i = 0; i < 1000; i++)

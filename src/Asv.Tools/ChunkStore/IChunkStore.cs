@@ -27,14 +27,15 @@ namespace Asv.Tools
     public interface IChunkStore:IDisposable
     {
         bool IsStarted { get; }
-        SessionInfo Current { get; set; }
-        SessionInfo Start(SessionSettings settings, IEnumerable<SessionRecordSettings> records);
-        void Append(ushort id, RecordCallback writeCallback);
+        SessionMetadata Current { get; set; }
+        SessionMetadata Start(SessionSettings settings, IEnumerable<SessionRecordSettings> records);
+        void Append(uint recordId, RecordCallback writeCallback);
         void Stop();
         IEnumerable<Guid> GetSessions();
-        SessionInfo ReadMetadata(Guid sessionId);
-        SessionRecordMetadata ReadRecordMetadata(Guid sessionId, ushort recordId);
-        void ReadRecord(Guid sessionId, ushort recordId, uint index, RecordReadCallback readCallback);
+        SessionInfo GetSessionInfo(Guid sessionId);
+        IEnumerable<uint> GetRecordsIds(Guid sessionId);
+        SessionRecordInfo GetRecordInfo(Guid sessionId, uint recordId);
+        void ReadRecord(Guid sessionId, uint recordId, uint index, RecordReadCallback readCallback);
 
     }
 }

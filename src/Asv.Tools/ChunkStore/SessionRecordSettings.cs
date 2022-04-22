@@ -5,8 +5,6 @@ namespace Asv.Tools
 {
     public class SessionRecordSettings: ISizedSpanSerializable,IEquatable<SessionRecordSettings>
     {
-        
-
         internal SessionRecordSettings()
         {
 

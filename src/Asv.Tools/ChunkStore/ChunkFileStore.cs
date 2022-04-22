@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using NLog;
 
@@ -15,6 +16,7 @@ namespace Asv.Tools
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private const string MetadataFileName = "_info.json";
+        private const string RecordFileExt = "rtt";
         private readonly string _rootFolder;
         private readonly object _sync = new();
         private string _recordFolderPath;
@@ -29,18 +31,17 @@ namespace Asv.Tools
             }
         }
 
-        public SessionInfo Start(SessionSettings settings,IEnumerable<SessionRecordSettings> records)
+        public SessionMetadata Start(SessionSettings settings,IEnumerable<SessionRecordSettings> records)
         {
             CheckNotStarted();
             lock (_sync)
             {
                 CheckNotStarted();
                 var id = Guid.NewGuid();
-                var metadata = new SessionInfo()
+                var metadata = new SessionMetadata()
                 {
                     Id = id,
-                    Name = settings.Name,
-                    Tags = settings.Tags,
+                    Settings = settings,
                 };
                 _recordFolderPath = GetSessionFolderName(id);
                 if (Directory.Exists(_recordFolderPath))
@@ -48,14 +49,14 @@ namespace Asv.Tools
                     Logger.Warn($"Directory for new recording already exist {_recordFolderPath}. Remove all data.");
                     Directory.Delete(_recordFolderPath);
                 }
+                var cnt = 0U;
                 Directory.CreateDirectory(_recordFolderPath);
                 foreach (var rec in records)
                 {
+                    ++cnt;
                     var recordMetadata = new SessionRecordMetadata
                     {
-                        Id = rec.Id,
-                        Offset = rec.Offset,
-                        Name = rec.Name,
+                        Settings = new SessionRecordSettings(rec.Id,rec.Name,rec.Offset)
                     };
                     var file = File.OpenWrite(GetRecordFileName(id, rec.Id));
                     var metadataArr = ArrayPool<byte>.Shared.Rent(SessionRecordMetadata.MetadataFileOffset);
@@ -78,6 +79,7 @@ namespace Asv.Tools
                     file.Write(metadataArr,0, SessionRecordMetadata.MetadataFileOffset);
                     _files.Add(rec.Id, (recordMetadata, file));
                 }
+
                 File.WriteAllText(Path.Combine(_recordFolderPath,MetadataFileName), JsonConvert.SerializeObject(metadata));
                 IsStarted = true;
                 return Current = metadata;
@@ -112,21 +114,40 @@ namespace Asv.Tools
                 }
             }
         }
-        public SessionInfo ReadMetadata(Guid sessionId)
+
+        public SessionInfo GetSessionInfo(Guid sessionId)
         {
             var metadataFile = GetMetadataFileName(sessionId);
-            return File.Exists(metadataFile) ? JsonConvert.DeserializeObject<SessionInfo>(File.ReadAllText(metadataFile)): null;
+            var metadata = File.Exists(metadataFile) ? JsonConvert.DeserializeObject<SessionMetadata>(File.ReadAllText(metadataFile)): null;
+            return new SessionInfo
+            {
+                Metadata = metadata,
+                RecordsCount = (uint)Directory.EnumerateFiles(GetSessionFolderName(sessionId), $"*.{RecordFileExt}").Count()
+            };
         }
 
+        public IEnumerable<uint> GetRecordsIds(Guid sessionId)
+        {
+            foreach (var filePath in Directory.EnumerateFiles(GetSessionFolderName(sessionId),$"*.{RecordFileExt}"))
+            {
+                yield return uint.Parse(Path.GetFileNameWithoutExtension(Path.GetFileName(filePath)));
+            }
+        }
 
-        public SessionRecordMetadata ReadRecordMetadata(Guid sessionId, ushort recordId)
+        public SessionRecordInfo GetRecordInfo(Guid sessionId, uint recordId)
         {
             CheckNotStarted();
             lock (_sync)
             {
                 CheckNotStarted();
                 using var file = File.OpenRead(GetRecordFileName(sessionId, recordId));
-                return InternalReadRecordMetadata(file);
+                var metadata = InternalReadRecordMetadata(file);
+                return new SessionRecordInfo
+                {
+                    SizeInBytes = (uint)file.Length,
+                    Count = (uint)((file.Length - SessionRecordMetadata.MetadataFileOffset)/ metadata.Settings.Offset),
+                    Metadata = metadata,
+                };
             }
         }
 
@@ -153,22 +174,21 @@ namespace Asv.Tools
             }
         }
 
-
         public bool IsStarted { get; private set; }
-        public SessionInfo Current { get; set; }
+        public SessionMetadata Current { get; set; }
 
-        public void Append(ushort id, RecordCallback writeCallback)
+        public void Append(uint recordId, RecordCallback writeCallback)
         {
             CheckIsStarted();
             lock (_sync)
             {
                 CheckIsStarted();
 
-                var file = _files[id];
-                var data = ArrayPool<byte>.Shared.Rent(file.Item1.Offset);
+                var file = _files[recordId];
+                var data = ArrayPool<byte>.Shared.Rent(file.Item1.Settings.Offset);
                 try
                 {
-                    var span = new Span<byte>(data, 0, file.Item1.Offset);
+                    var span = new Span<byte>(data, 0, file.Item1.Settings.Offset);
                     writeCallback(ref span);
                     if (span.IsEmpty == false)
                     {
@@ -178,12 +198,12 @@ namespace Asv.Tools
                         }
                     }
                     file.Item2.Position = file.Item2.Length;
-                    file.Item2.Write(data,0, file.Item1.Offset);
+                    file.Item2.Write(data,0, file.Item1.Settings.Offset);
                     file.Item2.Flush();
                 }
                 catch (Exception e)
                 {
-                    Logger.Error($"Error to append record {id}:{e.Message}");
+                    Logger.Error($"Error to append record {recordId}:{e.Message}");
                 }
                 finally
                 {
@@ -218,12 +238,12 @@ namespace Asv.Tools
                 
                 using var file = File.OpenRead(GetRecordFileName(sessionId, recordId));
                 var recordMetadata = InternalReadRecordMetadata(file);
-                var recordDataArray = ArrayPool<byte>.Shared.Rent(recordMetadata.Offset);
+                var recordDataArray = ArrayPool<byte>.Shared.Rent(recordMetadata.Settings.Offset);
                 try
                 {
-                    file.Position = recordMetadata.Offset * index + SessionRecordMetadata.MetadataFileOffset;
-                    var read = file.Read(recordDataArray, 0, recordMetadata.Offset);
-                    if (read != recordMetadata.Offset)
+                    file.Position = recordMetadata.Settings.Offset * index + SessionRecordMetadata.MetadataFileOffset;
+                    var read = file.Read(recordDataArray, 0, recordMetadata.Settings.Offset);
+                    if (read != recordMetadata.Settings.Offset)
                     {
                         throw new Exception($"Error to read record {recordId} data");
                     }
@@ -249,7 +269,7 @@ namespace Asv.Tools
 
         private string GetRecordFileName(Guid sessionId,uint id)
         {
-            return Path.Combine(GetSessionFolderName(sessionId), $"{id}.rtt");
+            return Path.Combine(GetSessionFolderName(sessionId), $"{id}.{RecordFileExt}");
         }
 
         public void Dispose()

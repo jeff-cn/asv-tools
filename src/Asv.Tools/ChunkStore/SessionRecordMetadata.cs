@@ -2,23 +2,25 @@ using System;
 
 namespace Asv.Tools
 {
-    public class SessionRecordMetadata: SessionRecordSettings, ISizedSpanSerializable
+    public class SessionRecordMetadata: ISizedSpanSerializable
     {
         public const int MetadataFileOffset = 256;
 
-        public override void Deserialize(ref ReadOnlySpan<byte> buffer)
+        public SessionRecordSettings Settings { get; set; }
+
+        public void Deserialize(ref ReadOnlySpan<byte> buffer)
         {
-            base.Deserialize(ref buffer);
+            Settings.Deserialize(ref buffer);
         }
 
-        public override void Serialize(ref Span<byte> buffer)
+        public void Serialize(ref Span<byte> buffer)
         {
-            base.Serialize(ref buffer);
+            Settings.Serialize(ref buffer);
         }
 
-        public override int GetByteSize()
+        public int GetByteSize()
         {
-            return base.GetByteSize();
+            return Settings.GetByteSize();
         }
     }
 }

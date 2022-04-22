@@ -2,25 +2,26 @@ using System;
 
 namespace Asv.Tools
 {
-    public class SessionInfo: SessionSettings
+    public class SessionInfo:ISizedSpanSerializable
     {
-        public Guid Id { get; set; }
+        public SessionMetadata Metadata { get; set; }
+        public uint RecordsCount { get; set; }
 
-        public override void Deserialize(ref ReadOnlySpan<byte> buffer)
+        public void Deserialize(ref ReadOnlySpan<byte> buffer)
         {
-            base.Deserialize(ref buffer);
-            Id = new Guid(BinSerialize.ReadBlock(ref buffer, 16));
+            Metadata.Deserialize(ref buffer);
+            RecordsCount = BinSerialize.ReadPackedUnsignedInteger(ref buffer);
         }
 
-        public override void Serialize(ref Span<byte> buffer)
+        public void Serialize(ref Span<byte> buffer)
         {
-            base.Serialize(ref buffer);
-            BinSerialize.WriteBlock(ref buffer,new ReadOnlySpan<byte>(Id.ToByteArray()));
+            Metadata.Serialize(ref buffer);
+            BinSerialize.WritePackedUnsignedInteger(ref buffer, RecordsCount);
         }
 
-        public override int GetByteSize()
+        public int GetByteSize()
         {
-            return base.GetByteSize() + 16 /* size of GUID */;
+            return Metadata.GetByteSize() + BinSerialize.GetSizeForPackedUnsignedInteger(RecordsCount);
         }
     }
 }
