@@ -229,7 +229,7 @@ namespace Asv.Tools
         }
 
 
-        public void ReadRecord(Guid sessionId, ushort recordId, uint index, RecordReadCallback readCallback)
+        public void ReadRecord(Guid sessionId, uint recordId, uint index, RecordReadCallback readCallback)
         {
             CheckNotStarted();
             lock (_sync)
