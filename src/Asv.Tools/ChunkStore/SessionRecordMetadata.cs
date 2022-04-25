@@ -10,6 +10,7 @@ namespace Asv.Tools
 
         public void Deserialize(ref ReadOnlySpan<byte> buffer)
         {
+            Settings ??= new SessionRecordSettings();
             Settings.Deserialize(ref buffer);
         }
 

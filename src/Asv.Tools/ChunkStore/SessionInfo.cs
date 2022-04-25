@@ -9,6 +9,7 @@ namespace Asv.Tools
 
         public void Deserialize(ref ReadOnlySpan<byte> buffer)
         {
+            Metadata ??= new SessionMetadata();
             Metadata.Deserialize(ref buffer);
             RecordsCount = BinSerialize.ReadPackedUnsignedInteger(ref buffer);
         }

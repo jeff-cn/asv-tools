@@ -9,6 +9,7 @@ namespace Asv.Tools
 
         public void Deserialize(ref ReadOnlySpan<byte> buffer)
         {
+            Settings ??= new SessionSettings();
             Settings.Deserialize(ref buffer);
             Id = new Guid(BinSerialize.ReadBlock(ref buffer, 16));
         }
