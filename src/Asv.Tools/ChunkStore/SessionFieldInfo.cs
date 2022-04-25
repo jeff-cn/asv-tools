@@ -2,7 +2,7 @@ using System;
 
 namespace Asv.Tools
 {
-    public class SessionRecordInfo:ISizedSpanSerializable
+    public class SessionFieldInfo:ISizedSpanSerializable
     {
         public SessionRecordMetadata Metadata { get; set; }
         public uint SizeInBytes { get; set; }

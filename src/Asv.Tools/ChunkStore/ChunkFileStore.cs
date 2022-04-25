@@ -8,9 +8,9 @@ using NLog;
 
 namespace Asv.Tools
 {
-    public delegate void RecordCallback(ref Span<byte> data);
+    public delegate void FieldWriteCallback(ref Span<byte> data);
 
-    public delegate void RecordReadCallback(ref ReadOnlySpan<byte> data);
+    public delegate void FieldReadCallback(ref ReadOnlySpan<byte> data);
 
     public class ChunkFileStore: IChunkStore
     {
@@ -31,7 +31,7 @@ namespace Asv.Tools
             }
         }
 
-        public SessionMetadata Start(SessionSettings settings,IEnumerable<SessionRecordSettings> records)
+        public SessionMetadata Start(SessionSettings settings,IEnumerable<SessionFieldSettings> records)
         {
             CheckNotStarted();
             lock (_sync)
@@ -56,7 +56,7 @@ namespace Asv.Tools
                     ++cnt;
                     var recordMetadata = new SessionRecordMetadata
                     {
-                        Settings = new SessionRecordSettings(rec.Id,rec.Name,rec.Offset)
+                        Settings = new SessionFieldSettings(rec.Id,rec.Name,rec.Offset)
                     };
                     var file = File.OpenWrite(GetRecordFileName(id, rec.Id));
                     var metadataArr = ArrayPool<byte>.Shared.Rent(SessionRecordMetadata.MetadataFileOffset);
@@ -122,11 +122,11 @@ namespace Asv.Tools
             return new SessionInfo
             {
                 Metadata = metadata,
-                RecordsCount = (uint)Directory.EnumerateFiles(GetSessionFolderName(sessionId), $"*.{RecordFileExt}").Count()
+                FieldsCount = (uint)Directory.EnumerateFiles(GetSessionFolderName(sessionId), $"*.{RecordFileExt}").Count()
             };
         }
 
-        public IEnumerable<uint> GetRecordsIds(Guid sessionId)
+        public IEnumerable<uint> GetFieldsIds(Guid sessionId)
         {
             foreach (var filePath in Directory.EnumerateFiles(GetSessionFolderName(sessionId),$"*.{RecordFileExt}"))
             {
@@ -134,7 +134,7 @@ namespace Asv.Tools
             }
         }
 
-        public SessionRecordInfo GetRecordInfo(Guid sessionId, uint recordId)
+        public SessionFieldInfo GetFieldInfo(Guid sessionId, uint recordId)
         {
             CheckNotStarted();
             lock (_sync)
@@ -142,7 +142,7 @@ namespace Asv.Tools
                 CheckNotStarted();
                 using var file = File.OpenRead(GetRecordFileName(sessionId, recordId));
                 var metadata = InternalReadRecordMetadata(file);
-                return new SessionRecordInfo
+                return new SessionFieldInfo
                 {
                     SizeInBytes = (uint)file.Length,
                     Count = (uint)((file.Length - SessionRecordMetadata.MetadataFileOffset)/ metadata.Settings.Offset),
@@ -177,19 +177,19 @@ namespace Asv.Tools
         public bool IsStarted { get; private set; }
         public SessionMetadata Current { get; set; }
 
-        public void Append(uint recordId, RecordCallback writeCallback)
+        public uint Append(uint fieldId, FieldWriteCallback writeWriteCallback)
         {
             CheckIsStarted();
             lock (_sync)
             {
                 CheckIsStarted();
 
-                var file = _files[recordId];
+                var file = _files[fieldId];
                 var data = ArrayPool<byte>.Shared.Rent(file.Item1.Settings.Offset);
                 try
                 {
                     var span = new Span<byte>(data, 0, file.Item1.Settings.Offset);
-                    writeCallback(ref span);
+                    writeWriteCallback(ref span);
                     if (span.IsEmpty == false)
                     {
                         for (var i = 0; i < span.Length; i++)
@@ -200,10 +200,12 @@ namespace Asv.Tools
                     file.Item2.Position = file.Item2.Length;
                     file.Item2.Write(data,0, file.Item1.Settings.Offset);
                     file.Item2.Flush();
+                    return (uint)((file.Item2.Position - SessionRecordMetadata.MetadataFileOffset) / file.Item1.Settings.Offset);
                 }
                 catch (Exception e)
                 {
-                    Logger.Error($"Error to append record {recordId}:{e.Message}");
+                    Logger.Error($"Error to append record {fieldId}:{e.Message}");
+                    throw;
                 }
                 finally
                 {
@@ -229,7 +231,7 @@ namespace Asv.Tools
         }
 
 
-        public void ReadRecord(Guid sessionId, uint recordId, uint index, RecordReadCallback readCallback)
+        public void ReadRecord(Guid sessionId, uint recordId, uint index, FieldReadCallback readCallback)
         {
             CheckNotStarted();
             lock (_sync)

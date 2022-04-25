@@ -23,7 +23,7 @@ namespace Asv.Tools.Test
             var svc = new ChunkFileStore(rootFolder);
             var metadata = svc.Start(new SessionSettings("rec1", "tag1", "tag2"), new[]
             {
-                new SessionRecordSettings(0,"BlaBla",256)
+                new SessionFieldSettings(0,"BlaBla",256)
             });
 
             for (uint i = 0; i < 1000; i++)

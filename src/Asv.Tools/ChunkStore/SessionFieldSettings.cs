@@ -3,14 +3,14 @@ using System.Text.RegularExpressions;
 
 namespace Asv.Tools
 {
-    public class SessionRecordSettings: ISizedSpanSerializable,IEquatable<SessionRecordSettings>
+    public class SessionFieldSettings: ISizedSpanSerializable,IEquatable<SessionFieldSettings>
     {
-        internal SessionRecordSettings()
+        internal SessionFieldSettings()
         {
 
         }
 
-        public SessionRecordSettings(uint id,string name,ushort offset)
+        public SessionFieldSettings(uint id,string name,ushort offset)
         {
             if (offset <= 0) throw new ArgumentOutOfRangeException(nameof(offset));
             Id = id;
@@ -48,7 +48,7 @@ namespace Asv.Tools
             return sizeof(ushort) * 2 + BinSerialize.GetSizeForString(Name);
         }
 
-        public bool Equals(SessionRecordSettings other)
+        public bool Equals(SessionFieldSettings other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -60,7 +60,7 @@ namespace Asv.Tools
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((SessionRecordSettings)obj);
+            return Equals((SessionFieldSettings)obj);
         }
 
         public override int GetHashCode()
@@ -74,12 +74,12 @@ namespace Asv.Tools
             }
         }
 
-        public static bool operator ==(SessionRecordSettings left, SessionRecordSettings right)
+        public static bool operator ==(SessionFieldSettings left, SessionFieldSettings right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(SessionRecordSettings left, SessionRecordSettings right)
+        public static bool operator !=(SessionFieldSettings left, SessionFieldSettings right)
         {
             return !Equals(left, right);
         }

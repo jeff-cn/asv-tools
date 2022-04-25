@@ -28,14 +28,14 @@ namespace Asv.Tools
     {
         bool IsStarted { get; }
         SessionMetadata Current { get; set; }
-        SessionMetadata Start(SessionSettings settings, IEnumerable<SessionRecordSettings> records);
-        void Append(uint recordId, RecordCallback writeCallback);
+        SessionMetadata Start(SessionSettings settings, IEnumerable<SessionFieldSettings> records);
+        uint Append(uint fieldId, FieldWriteCallback writeWriteCallback);
         void Stop();
         IEnumerable<Guid> GetSessions();
         SessionInfo GetSessionInfo(Guid sessionId);
-        IEnumerable<uint> GetRecordsIds(Guid sessionId);
-        SessionRecordInfo GetRecordInfo(Guid sessionId, uint recordId);
-        void ReadRecord(Guid sessionId, uint recordId, uint index, RecordReadCallback readCallback);
+        IEnumerable<uint> GetFieldsIds(Guid sessionId);
+        SessionFieldInfo GetFieldInfo(Guid sessionId, uint recordId);
+        void ReadRecord(Guid sessionId, uint recordId, uint index, FieldReadCallback readCallback);
 
     }
 }
