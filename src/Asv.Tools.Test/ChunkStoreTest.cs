@@ -5,14 +5,32 @@ using System.Linq;
 using DeepEqual.Syntax;
 using Newtonsoft.Json;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Asv.Tools.Test
 {
     public class ChunkStoreTest
     {
+        private readonly ITestOutputHelper _output;
+
+        public ChunkStoreTest(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         [Fact]
         public void ArgumentsValidation()
         {
+            SpanTestHelper.SerializeDeserializeTestBegin(_output.WriteLine);
+            SpanTestHelper.TestType(new SessionId(Guid.NewGuid()), _output.WriteLine);
+            SpanTestHelper.TestType(new SessionSettings("Name1","Tag1", "Tag2", "Tag3"), _output.WriteLine);
+            SpanTestHelper.TestType(new SessionMetadata(new SessionId(Guid.NewGuid()), new SessionSettings("Name1", "Tag1", "Tag2", "Tag3")), _output.WriteLine);
+            SpanTestHelper.TestType(new SessionInfo(new SessionMetadata(new SessionId(Guid.NewGuid()), new SessionSettings("Name1", "Tag1", "Tag2", "Tag3")), UInt32.MaxValue), _output.WriteLine);
+
+            SpanTestHelper.TestType(new SessionFieldSettings(UInt32.MaxValue,"Name1",ushort.MaxValue), _output.WriteLine);
+            SpanTestHelper.TestType(new SessionRecordMetadata(new SessionFieldSettings(UInt32.MaxValue, "Name1", ushort.MaxValue)), _output.WriteLine);
+            SpanTestHelper.TestType(new SessionFieldInfo(new SessionRecordMetadata(new SessionFieldSettings(UInt32.MaxValue, "Name1", ushort.MaxValue)), UInt32.MaxValue, UInt32.MaxValue), _output.WriteLine);
+
 
         }
 
@@ -39,15 +57,15 @@ namespace Asv.Tools.Test
             var session = svc.GetSessions();
             Assert.NotNull(session);
             Assert.True(session.Any());
-            Assert.Equal(session.First(),metadata.Id);
+            Assert.Equal(session.First(), new SessionId(metadata.SessionId.Guid));
 
-            var readedMetadata = svc.GetSessionInfo(metadata.Id);
+            var readedMetadata = svc.GetSessionInfo(metadata.SessionId);
             readedMetadata.WithDeepEqual(metadata).Assert();
 
             for (uint i = 0; i < 1000; i++)
             {
                 uint value = 0;
-                svc.ReadRecord(metadata.Id,0,i, (ref ReadOnlySpan<byte> data) =>
+                svc.ReadRecord(metadata.SessionId,0,i, (ref ReadOnlySpan<byte> data) =>
                 {
                     value = BinSerialize.ReadPackedUnsignedInteger(ref data);
                 });

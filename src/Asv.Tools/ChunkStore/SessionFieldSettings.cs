@@ -5,7 +5,7 @@ namespace Asv.Tools
 {
     public class SessionFieldSettings: ISizedSpanSerializable,IEquatable<SessionFieldSettings>
     {
-        internal SessionFieldSettings()
+        public SessionFieldSettings()
         {
 
         }
@@ -45,7 +45,12 @@ namespace Asv.Tools
 
         public virtual int GetByteSize()
         {
-            return sizeof(ushort) * 2 + BinSerialize.GetSizeForString(Name);
+            return BinSerialize.GetSizeForPackedUnsignedInteger(Id) + BinSerialize.GetSizeForString(Name) + sizeof(ushort);
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}[{Id}] offset={Offset}";
         }
 
         public bool Equals(SessionFieldSettings other)

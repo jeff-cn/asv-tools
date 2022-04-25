@@ -40,10 +40,10 @@ namespace Asv.Tools
                 var id = Guid.NewGuid();
                 var metadata = new SessionMetadata()
                 {
-                    Id = id,
+                    SessionId = new SessionId(id),
                     Settings = settings,
                 };
-                _recordFolderPath = GetSessionFolderName(id);
+                _recordFolderPath = GetSessionFolderName(metadata.SessionId);
                 if (Directory.Exists(_recordFolderPath))
                 {
                     Logger.Warn($"Directory for new recording already exist {_recordFolderPath}. Remove all data.");
@@ -58,7 +58,7 @@ namespace Asv.Tools
                     {
                         Settings = new SessionFieldSettings(rec.Id,rec.Name,rec.Offset)
                     };
-                    var file = File.OpenWrite(GetRecordFileName(id, rec.Id));
+                    var file = File.OpenWrite(GetRecordFileName(metadata.SessionId, rec.Id));
                     var metadataArr = ArrayPool<byte>.Shared.Rent(SessionRecordMetadata.MetadataFileOffset);
                     var span = new Span<byte>(metadataArr,0, SessionRecordMetadata.MetadataFileOffset);
                     try
@@ -103,19 +103,19 @@ namespace Asv.Tools
             }
         }
 
-        public IEnumerable<Guid> GetSessions()
+        public IEnumerable<SessionId> GetSessions()
         {
             foreach (var dir in Directory.EnumerateDirectories(_rootFolder))
             {
                 var path = Path.GetFileName(dir);
                 if (Guid.TryParse(path, out var guid))
                 {
-                    yield return guid;
+                    yield return new SessionId(guid);
                 }
             }
         }
 
-        public SessionInfo GetSessionInfo(Guid sessionId)
+        public SessionInfo GetSessionInfo(SessionId sessionId)
         {
             var metadataFile = GetMetadataFileName(sessionId);
             var metadata = File.Exists(metadataFile) ? JsonConvert.DeserializeObject<SessionMetadata>(File.ReadAllText(metadataFile)): null;
@@ -126,7 +126,7 @@ namespace Asv.Tools
             };
         }
 
-        public IEnumerable<uint> GetFieldsIds(Guid sessionId)
+        public IEnumerable<uint> GetFieldsIds(SessionId sessionId)
         {
             foreach (var filePath in Directory.EnumerateFiles(GetSessionFolderName(sessionId),$"*.{RecordFileExt}"))
             {
@@ -134,7 +134,7 @@ namespace Asv.Tools
             }
         }
 
-        public SessionFieldInfo GetFieldInfo(Guid sessionId, uint recordId)
+        public SessionFieldInfo GetFieldInfo(SessionId sessionId, uint recordId)
         {
             CheckNotStarted();
             lock (_sync)
@@ -231,7 +231,7 @@ namespace Asv.Tools
         }
 
 
-        public void ReadRecord(Guid sessionId, uint recordId, uint index, FieldReadCallback readCallback)
+        public bool ReadRecord(SessionId sessionId, uint recordId, uint index, FieldReadCallback readCallback)
         {
             CheckNotStarted();
             lock (_sync)
@@ -243,14 +243,17 @@ namespace Asv.Tools
                 var recordDataArray = ArrayPool<byte>.Shared.Rent(recordMetadata.Settings.Offset);
                 try
                 {
-                    file.Position = recordMetadata.Settings.Offset * index + SessionRecordMetadata.MetadataFileOffset;
+                    var position = SessionRecordMetadata.MetadataFileOffset + recordMetadata.Settings.Offset * index;
+                    if (position >= file.Length) return false;
+                    file.Position = position;
                     var read = file.Read(recordDataArray, 0, recordMetadata.Settings.Offset);
                     if (read != recordMetadata.Settings.Offset)
                     {
                         throw new Exception($"Error to read record {recordId} data");
                     }
-                    var recordDataSpan = new ReadOnlySpan<byte>(recordDataArray, 0, SessionRecordMetadata.MetadataFileOffset);
+                    var recordDataSpan = new ReadOnlySpan<byte>(recordDataArray, 0, recordMetadata.Settings.Offset);
                     readCallback(ref recordDataSpan);
+                    return true;
                 }
                 finally
                 {
@@ -259,17 +262,17 @@ namespace Asv.Tools
             }
         }
 
-        private string GetMetadataFileName(Guid sessionId)
+        private string GetMetadataFileName(SessionId sessionId)
         {
             return Path.Combine(GetSessionFolderName(sessionId), MetadataFileName);
         }
 
-        private string GetSessionFolderName(Guid id)
+        private string GetSessionFolderName(SessionId id)
         {
-            return Path.Combine(_rootFolder, id.ToString());
+            return Path.Combine(_rootFolder, id.Guid.ToString());
         }
 
-        private string GetRecordFileName(Guid sessionId,uint id)
+        private string GetRecordFileName(SessionId sessionId,uint id)
         {
             return Path.Combine(GetSessionFolderName(sessionId), $"{id}.{RecordFileExt}");
         }

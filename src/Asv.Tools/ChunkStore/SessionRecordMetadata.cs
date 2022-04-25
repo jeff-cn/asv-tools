@@ -6,6 +6,16 @@ namespace Asv.Tools
     {
         public const int MetadataFileOffset = 256;
 
+        public SessionRecordMetadata()
+        {
+            
+        }
+
+        public SessionRecordMetadata(SessionFieldSettings settings)
+        {
+            Settings = settings;
+        }
+
         public SessionFieldSettings Settings { get; set; }
 
         public void Deserialize(ref ReadOnlySpan<byte> buffer)
@@ -22,6 +32,11 @@ namespace Asv.Tools
         public int GetByteSize()
         {
             return Settings.GetByteSize();
+        }
+
+        public override string ToString()
+        {
+            return $"{Settings}";
         }
     }
 }

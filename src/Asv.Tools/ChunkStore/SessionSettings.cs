@@ -69,6 +69,11 @@ namespace Asv.Tools
                    (Tags?.Sum(BinSerialize.GetSizeForString) ?? 0);
         }
 
+        public override string ToString()
+        {
+            return $"{Name}[{string.Join("|", Tags)}]";
+        }
+
         public bool Equals(SessionSettings x, SessionSettings y)
         {
             if (ReferenceEquals(x, y)) return true;

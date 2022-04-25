@@ -24,6 +24,7 @@ namespace Asv.Tools
         }
     }
 
+
     public interface IChunkStore:IDisposable
     {
         bool IsStarted { get; }
@@ -31,11 +32,11 @@ namespace Asv.Tools
         SessionMetadata Start(SessionSettings settings, IEnumerable<SessionFieldSettings> records);
         uint Append(uint fieldId, FieldWriteCallback writeWriteCallback);
         void Stop();
-        IEnumerable<Guid> GetSessions();
-        SessionInfo GetSessionInfo(Guid sessionId);
-        IEnumerable<uint> GetFieldsIds(Guid sessionId);
-        SessionFieldInfo GetFieldInfo(Guid sessionId, uint recordId);
-        void ReadRecord(Guid sessionId, uint recordId, uint index, FieldReadCallback readCallback);
+        IEnumerable<SessionId> GetSessions();
+        SessionInfo GetSessionInfo(SessionId sessionId);
+        IEnumerable<uint> GetFieldsIds(SessionId sessionId);
+        SessionFieldInfo GetFieldInfo(SessionId sessionId, uint recordId);
+        bool ReadRecord(SessionId sessionId, uint recordId, uint index, FieldReadCallback readCallback);
 
     }
 }

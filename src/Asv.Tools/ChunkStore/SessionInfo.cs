@@ -4,6 +4,17 @@ namespace Asv.Tools
 {
     public class SessionInfo:ISizedSpanSerializable
     {
+        public SessionInfo()
+        {
+            
+        }
+
+        public SessionInfo(SessionMetadata metadata, uint fieldsCount)
+        {
+            Metadata = metadata;
+            FieldsCount = fieldsCount;
+        }
+
         public SessionMetadata Metadata { get; set; }
         public uint FieldsCount { get; set; }
 
@@ -23,6 +34,11 @@ namespace Asv.Tools
         public int GetByteSize()
         {
             return Metadata.GetByteSize() + BinSerialize.GetSizeForPackedUnsignedInteger(FieldsCount);
+        }
+
+        public override string ToString()
+        {
+            return $"{Metadata} count={FieldsCount}";
         }
     }
 }
