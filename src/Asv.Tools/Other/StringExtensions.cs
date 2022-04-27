@@ -15,6 +15,9 @@ namespace Asv.Tools
     /// </summary>
     public static class StringExtensions
     {
+        
+
+
         public static string ByteArrayToString(this byte[] buff, uint startBitIndex, uint bitLength, params int[] printLength)
         {
             var sb = new StringBuilder();

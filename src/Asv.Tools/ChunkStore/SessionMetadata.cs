@@ -14,12 +14,13 @@ namespace Asv.Tools
             SessionId = sessionId;
             Settings = settings;
         }
-
         public SessionId SessionId { get; set; }
         public SessionSettings Settings { get; set; }
 
-       
-
+        public override string ToString()
+        {
+            return $"id:{SessionId}, {Settings}";
+        }
         public void Deserialize(ref ReadOnlySpan<byte> buffer)
         {
             Settings ??= new SessionSettings();
@@ -39,9 +40,6 @@ namespace Asv.Tools
             return Settings.GetByteSize() + SessionId.GetByteSize();
         }
 
-        public override string ToString()
-        {
-            return $"[{SessionId}] {Settings}";
-        }
+       
     }
 }

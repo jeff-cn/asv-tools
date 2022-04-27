@@ -33,6 +33,10 @@ namespace Asv.Tools
 
         public HashSet<string> Tags { get; set; }
 
+        public override string ToString()
+        {
+            return $"name:{Name},tags:[{string.Join("|", Tags)}]";
+        }
 
         public virtual void Deserialize(ref ReadOnlySpan<byte> buffer)
         {
@@ -69,10 +73,7 @@ namespace Asv.Tools
                    (Tags?.Sum(BinSerialize.GetSizeForString) ?? 0);
         }
 
-        public override string ToString()
-        {
-            return $"{Name}[{string.Join("|", Tags)}]";
-        }
+        
 
         public bool Equals(SessionSettings x, SessionSettings y)
         {
