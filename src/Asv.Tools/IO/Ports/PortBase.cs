@@ -58,7 +58,7 @@ namespace Asv.Tools
             _enableStream.Where(_ => _).Subscribe(_ => Task.Factory.StartNew(TryConnect), _disposedCancel.Token);
 
             
-            Observable.Timer(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(30)).Subscribe(_ =>
+            Observable.Timer(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(60)).Subscribe(_ =>
             {
                 if (State.Value == PortState.Connected)
                 {
@@ -66,7 +66,7 @@ namespace Asv.Tools
                 }
                 else
                 {
-                    _logger.Info($"Port error {this}: {Error.Value?.Message}");
+                    _logger.Info($"Port error {PortLogName}: {Error.Value?.Message}");
                 }
             }, _disposedCancel.Token);
         }
