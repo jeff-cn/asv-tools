@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Asv.Mavlink
+namespace Asv.Tools
 {
     public class MathEx
     {
@@ -47,6 +47,57 @@ namespace Asv.Mavlink
                 }
             }
             return upper;
+        }
+
+        public static void LeastSquaresMethod(double[] x, double[] y, out double a, out double b)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+
+            var length = Math.Min(x.Length, y.Length);
+            if (length == 0)
+            {
+                a = 0;
+                b = 0;
+                return;
+            }
+
+            double sumx = 0;
+            double sumy = 0;
+            double sumx2 = 0;
+            double sumxy = 0;
+            for (var i = 0; i < length; i++)
+            {
+                sumx += x[i];
+                sumy += y[i];
+                sumx2 += x[i] * x[i];
+                sumxy += x[i] * y[i];
+            }
+            a = (length * sumxy - sumx * sumy) / (length * sumx2 - sumx * sumx);
+            b = (sumy - a * sumx) / length;
+        }
+
+        public static void SingleLeastSquaresMethod(double[] x, double[] y, out double a)
+        {
+            if (x == null) throw new ArgumentNullException(nameof(x));
+            if (y == null) throw new ArgumentNullException(nameof(y));
+
+            var length = Math.Min(x.Length, y.Length);
+            if (length == 0)
+            {
+                a = 0;
+                return;
+            }
+
+            double sumx2 = 0;
+            double sumxy = 0;
+
+            for (var i = 0; i < length; i++)
+            {
+                sumx2 += x[i] * x[i];
+                sumxy += x[i] * y[i];
+            }
+            a = sumxy / sumx2;
         }
 
 

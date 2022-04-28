@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <PackageReference Include="DynamicData" Version="7.6.5" />
+    <PackageReference Include="Geodesy" Version="4.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NLog" Version="5.0.0-rc2" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.0" />
