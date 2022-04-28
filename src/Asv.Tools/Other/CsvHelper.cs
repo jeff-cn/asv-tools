@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Asv.Tools.Csv
+namespace Asv.Tools
 {
     public class CsvColumn<T>
     {

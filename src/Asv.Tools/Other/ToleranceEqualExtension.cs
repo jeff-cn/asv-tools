@@ -1,5 +1,6 @@
 using System;
-namespace Asv.Mavlink
+
+namespace Asv.Tools
 {
     public static class ToleranceEqualExtension
     {

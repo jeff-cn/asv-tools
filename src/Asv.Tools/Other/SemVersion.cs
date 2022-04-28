@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Text.RegularExpressions;
 
-namespace Asv.Avialab.Core
+namespace Asv.Tools
 {
     /// <summary>
     /// A semantic version implementation.
