@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Asv.Mavlink
+namespace Asv.Tools
 {
     public class PiecewiseLinearFunction:IEnumerable<KeyValuePair<double,double>>
     {
