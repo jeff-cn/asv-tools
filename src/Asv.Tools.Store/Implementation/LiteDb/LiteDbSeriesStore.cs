@@ -8,9 +8,9 @@ namespace Asv.Tools.Store
     {
         protected const string XName = "_id";
 
-        private readonly LiteCollection<SeriesPoint<TXValue, TYValue>> _coll;
+        private readonly ILiteCollection<SeriesPoint<TXValue, TYValue>> _coll;
 
-        public LiteDbSeriesStore(string name, LiteCollection<SeriesPoint<TXValue, TYValue>> collection)
+        public LiteDbSeriesStore(string name, ILiteCollection<SeriesPoint<TXValue, TYValue>> collection)
         {
             Name = name;
             _coll = collection;
@@ -28,19 +28,15 @@ namespace Asv.Tools.Store
 
         public IEnumerable<SeriesPoint<TXValue, TYValue>> Read(SeriesQuery<TXValue> query)
         {
-            var list = new List<Query>();
+            var q = Query.All(XName, Query.Ascending);
             if (query.From.HasValue)
             {
-                list.Add(Query.GTE(XName, new BsonValue(query.From.Value)));
+                q.Where.Add(Query.GTE(XName, new BsonValue(query.From.Value)));
             }
             if (query.To.HasValue)
             {
-                list.Add(Query.LTE(XName, new BsonValue(query.To.Value)));
+                q.Where.Add(Query.LTE(XName, new BsonValue(query.To.Value)));
             }
-          
-            list.Add(Query.All(XName, Query.Ascending));
-
-            var q = list.Count == 1 ? list.First() : Query.And(list.ToArray());
 
             return _coll.Find(q, query.Skip, query.Take);
         }
@@ -52,7 +48,7 @@ namespace Asv.Tools.Store
 
         public void ClearAll()
         {
-            _coll.Delete(_ => true);
+            _coll.DeleteAll();
         }
 
         public string Name { get; }
@@ -60,9 +56,9 @@ namespace Asv.Tools.Store
 
     public class LiteDbIntSeriesStore<TYValue> : LiteDbSeriesStore<int, TYValue>
     {
-        private readonly LiteCollection<SeriesPoint<int, TYValue>> _collection;
+        private readonly ILiteCollection<SeriesPoint<int, TYValue>> _collection;
 
-        public LiteDbIntSeriesStore(string name, LiteCollection<SeriesPoint<int, TYValue>> collection) : base(name, collection)
+        public LiteDbIntSeriesStore(string name, ILiteCollection<SeriesPoint<int, TYValue>> collection) : base(name, collection)
         {
             _collection = collection;
         }
@@ -80,9 +76,9 @@ namespace Asv.Tools.Store
 
     public class LiteDbDoubleSeriesStore<TYValue> : LiteDbSeriesStore<double, TYValue>
     {
-        private readonly LiteCollection<SeriesPoint<double, TYValue>> _collection;
+        private readonly ILiteCollection<SeriesPoint<double, TYValue>> _collection;
 
-        public LiteDbDoubleSeriesStore(string name, LiteCollection<SeriesPoint<double, TYValue>> collection) : base(name,collection)
+        public LiteDbDoubleSeriesStore(string name, ILiteCollection<SeriesPoint<double, TYValue>> collection) : base(name,collection)
         {
             _collection = collection;
         }

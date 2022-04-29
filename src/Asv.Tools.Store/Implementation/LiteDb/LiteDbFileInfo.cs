@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,11 +9,11 @@ namespace Asv.Tools.Store
 {
     public class LiteDbFileInfo:IFileInfo
     {
-        private readonly LiteFileInfo _info;
+        private readonly LiteFileInfo<string> _info;
         private readonly string _gridName;
         private const char IdSeparator = '/';
 
-        public LiteDbFileInfo(LiteFileInfo info)
+        public LiteDbFileInfo(LiteFileInfo<string> info)
         {
             if (info == null) throw new ArgumentNullException(nameof(info));
             _info = info;
@@ -46,9 +46,9 @@ namespace Asv.Tools.Store
     public class LiteDbFileGrid:IFileGrid
     {
         private static readonly Regex FileNameRegex = new Regex(@"^[\w,\s-]+\.[A-Za-z]{3}$", RegexOptions.Compiled);
-        private readonly LiteStorage _fileGrid;
+        private readonly ILiteStorage<string> _fileGrid;
 
-        public LiteDbFileGrid(string name, LiteStorage fileGrid)
+        public LiteDbFileGrid(string name, ILiteStorage<string> fileGrid)
         {
             if (fileGrid == null) throw new ArgumentNullException(nameof(fileGrid));
             if (string.IsNullOrEmpty(name)) throw new ArgumentException("Value cannot be null or empty.", nameof(name));

@@ -6,9 +6,9 @@ namespace Asv.Tools.Store
 {
     public class LiteDbTextStore : ITextStore
     {
-        private readonly LiteCollection<TextMessage> _coll;
+        private readonly ILiteCollection<TextMessage> _coll;
 
-        public LiteDbTextStore(LiteCollection<TextMessage> coll)
+        public LiteDbTextStore(ILiteCollection<TextMessage> coll)
         {
             _coll = coll;
             _coll.EnsureIndex(_ => _.IntTag);
@@ -24,34 +24,32 @@ namespace Asv.Tools.Store
 
         private static Query Convert(TextMessageQuery query)
         {
-            var list = new List<Query>();
+            var q = Query.All(nameof(TextMessage.Date), query.OrderAscending ? Query.Ascending : Query.Descending);
+            
             if (query.Begin.HasValue)
             {
-                list.Add(Query.GTE(nameof(TextMessageQuery.Begin), query.Begin.Value));
+                q.Where.Add(Query.GTE(nameof(TextMessageQuery.Begin), query.Begin.Value));
             }
             if (query.End.HasValue)
             {
-                list.Add(Query.LTE(nameof(TextMessageQuery.Begin), query.End.Value));
+                q.Where.Add(Query.LTE(nameof(TextMessageQuery.Begin), query.End.Value));
             }
             if (query.IntTags != null && query.IntTags.Length > 0)
             {
                 var qq = query.IntTags.Select(_ => Query.EQ(nameof(TextMessage.IntTag), _)).ToArray();
-                list.Add(qq.Length == 1 ? qq.First() : Query.Or(qq));
+                q.Where.Add(qq.Length == 1 ? qq.First() : Query.Or(qq));
             }
 
             if (query.StrTags != null && query.StrTags.Length > 0)
             {
-                list.Add(Query.Or(query.StrTags.Select(_ => Query.EQ(nameof(TextMessage.StrTag), _)).ToArray()));
+                q.Where.Add(Query.Or(query.StrTags.Select(_ => Query.EQ(nameof(TextMessage.StrTag), _)).ToArray()));
             }
 
             if (!query.Search.IsNullOrWhiteSpace())
             {
-                list.Add(Query.Contains(nameof(TextMessage.Text), query.Search));
+                q.Where.Add(Query.Contains(nameof(TextMessage.Text), query.Search));
             }
 
-            list.Add(Query.All(nameof(TextMessage.Date), query.OrderAscending ? Query.Ascending : Query.Descending));
-
-            var q = list.Count == 1 ? list.First() : Query.And(list.ToArray());
             return q;
         }
 
@@ -67,7 +65,7 @@ namespace Asv.Tools.Store
 
         public void ClearAll()
         {
-            _coll.Delete(_ => true);
+            _coll.DeleteAll();
         }
 
         public int Count()

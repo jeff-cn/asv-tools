@@ -7,9 +7,9 @@ namespace Asv.Tools.Store
 {
     public class LiteDbSimpleSeries<TRecord, TKey>:ISimpleSeries<TRecord>
     {
-        private readonly LiteCollection<TRecord> _collection;
+        private readonly ILiteCollection<TRecord> _collection;
 
-        public LiteDbSimpleSeries(string name, LiteCollection<TRecord> collection, Expression<Func<TRecord, TKey>> property)
+        public LiteDbSimpleSeries(string name, ILiteCollection<TRecord> collection, Expression<Func<TRecord, TKey>> property)
         {
             _collection = collection;
             BsonMapper.Global.Entity<TRecord>().Id(property);
@@ -32,7 +32,7 @@ namespace Asv.Tools.Store
 
         public void ClearAll()
         {
-            _collection.Delete(_ => true);
+            _collection.DeleteAll();
         }
 
         public void Dispose()

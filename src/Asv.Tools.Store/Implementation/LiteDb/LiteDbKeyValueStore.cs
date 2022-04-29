@@ -6,9 +6,9 @@ namespace Asv.Tools.Store
 {
     public class LiteDbKeyValueStore : IKeyValueStore
     {
-        private readonly LiteCollection<BsonDocument> _coll;
+        private readonly ILiteCollection<BsonDocument> _coll;
 
-        public LiteDbKeyValueStore(string name, LiteCollection<BsonDocument> coll)
+        public LiteDbKeyValueStore(string name, ILiteCollection<BsonDocument> coll)
         {
             Name = name;
             _coll = coll;
