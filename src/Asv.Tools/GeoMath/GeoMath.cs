@@ -1,8 +1,7 @@
 using System;
-using Asv.Tools;
 using Geodesy;
 
-namespace Asv.Mavlink
+namespace Asv.Tools
 {
     public static class GeoMath
     {
