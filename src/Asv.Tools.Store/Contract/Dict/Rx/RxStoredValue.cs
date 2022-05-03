@@ -9,20 +9,17 @@ namespace Asv.Tools.Store
         private readonly IKeyValueStore _store;
         private readonly string _id;
         private readonly IDisposable _subscribe;
+        private bool _internalChange;
 
         protected RxStoredValue(IKeyValueStore store, string id, T defaultValue, TimeSpan? saveDelay = null)
         {
             _store = store;
             _id = id;
-            if (saveDelay == null)
-            {
-                _subscribe = this.Subscribe(WriteValue);
-            }
-            else
-            {
-                _subscribe = this.Throttle(saveDelay.Value).Subscribe(WriteValue);
-            }
+
+            _internalChange = true;
+            _subscribe = saveDelay == null ? this.Subscribe(WriteValue) : this.Throttle(saveDelay.Value).Subscribe(WriteValue);
             OnNext(ReadValue(defaultValue));
+            _internalChange = false;
         }
 
         private T ReadValue(T defaultValue)
@@ -41,6 +38,7 @@ namespace Asv.Tools.Store
 
         private void WriteValue(T value)
         {
+            if (_internalChange) return;
             var bson = ConvertToBson(value);
             _store.Write(_id,bson);
         }
