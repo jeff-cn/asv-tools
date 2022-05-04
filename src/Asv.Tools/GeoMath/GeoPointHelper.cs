@@ -14,9 +14,9 @@ namespace Asv.Tools
             return GeoMath.Azimuth(a.Latitude, a.Longitude, b.Latitude, b.Longitude);
         }
 
-        public static GeoPoint RadialPoint(this GeoPoint point, double distance, double radial)
+        public static GeoPoint RadialPoint(this GeoPoint point, double distance, double radialDeg)
         {
-            var a = GeoMath.RadialPoint(point.Latitude, point.Longitude, distance, radial);
+            var a = GeoMath.RadialPoint(point.Latitude, point.Longitude, distance, radialDeg);
             if (point.Altitude.HasValue)
             {
                 a = a.SetAltitude(point.Altitude.Value);

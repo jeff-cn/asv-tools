@@ -176,6 +176,8 @@ namespace Asv.Tools
         /// </summary>
         public static GeoPoint IntersectionLineAndPerpendicularFromPoint(GeoPoint lineX, GeoPoint lineY, GeoPoint p)
         {
+            if (lineX.Equals(lineY)) return p; // если прямая задана одинаковыми точками
+
             var azimuth = DegreesToRadians(lineX.Azimuth(lineY) - lineX.Azimuth(p));
             var d = Distance(lineX, p);
             var h = Math.Abs(d * Math.Cos(azimuth));
@@ -210,7 +212,7 @@ namespace Asv.Tools
         /// <param name="latitude">The latitude of the center point.</param>
         /// <param name="longitude">The longitude of the center point.</param>
         /// <param name="distance">The distance in meters.</param>
-        /// <param name="radial">
+        /// <param name="radialDeg">
         /// The radial in degrees, measures clockwise from north.
         /// </param>
         /// <returns>
@@ -218,11 +220,11 @@ namespace Asv.Tools
         /// calculated point.
         /// </returns>
         /// <remarks>The antemeridian is not considered.</remarks>
-        public static GeoPoint RadialPoint(double latitude, double longitude, double distance, double radial)
+        public static GeoPoint RadialPoint(double latitude, double longitude, double distance, double radialDeg)
         {
-            radial = !double.IsNaN(radial) ? radial : 0;
+            radialDeg = !double.IsNaN(radialDeg) ? radialDeg : 0;
             var coordinates = Calculator.CalculateEndingGlobalCoordinates(
-                new GlobalCoordinates(new Angle(latitude), new Angle(longitude)), new Angle(radial), distance);
+                new GlobalCoordinates(new Angle(latitude), new Angle(longitude)), new Angle(radialDeg), distance);
 
             return new GeoPoint(coordinates.Latitude.Degrees, coordinates.Longitude.Degrees);
         }
