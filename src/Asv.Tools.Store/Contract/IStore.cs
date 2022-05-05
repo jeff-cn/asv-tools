@@ -28,5 +28,8 @@ namespace Asv.Tools.Store
         IEnumerable<string> RecordSeries { get; }
         
         ISimpleSeries<TRecord> GetRecordSeries<TRecord, TKey>(string name, Expression<Func<TRecord, TKey>> keyMapper);
+
+        IEnumerable<string> DynamicTables { get; }
+        IDynamicTablesStore GetDynamicTables(string name);
     }
 }

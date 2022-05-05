@@ -13,14 +13,15 @@ namespace Asv.Tools.Store
         public const string DoublePrefix = "r_";
         public const string IntPrefix = "n_";
         public const string SimpleSeriesPrefix = "s_";
+        public const string DynamicTablePrefix = "t_";
+        public const string DynamicTableSubPrefix = "tt_";
 
         private readonly LiteDatabase _db;
         private readonly string _sourceName;
 
         public LiteDbFileStore(LiteDatabase db,string sourceName)
         {
-            if (db == null) throw new ArgumentNullException(nameof(db));
-            _db = db;
+            _db = db ?? throw new ArgumentNullException(nameof(db));
             _sourceName = sourceName;
         }
 
@@ -80,6 +81,13 @@ namespace Asv.Tools.Store
         public ISimpleSeries<TRecord> GetRecordSeries<TRecord, TKey>(string name, Expression<Func<TRecord, TKey>> keyMapper)
         {
             return new LiteDbSimpleSeries<TRecord,TKey>(name, _db.GetCollection<TRecord>(ConvertCollectionName(name, SimpleSeriesPrefix)),keyMapper);
+        }
+
+        public IEnumerable<string> DynamicTables => _db.GetCollectionNames().Select(_ => ConvertBackCollectionName(_, DynamicTablePrefix)).IgnoreNulls();
+
+        public IDynamicTablesStore GetDynamicTables(string name)
+        {
+            return new LiteDbDynamicTablesStore(name, _db, ConvertCollectionName(name, SimpleSeriesPrefix), DynamicTableSubPrefix);
         }
     }
 
