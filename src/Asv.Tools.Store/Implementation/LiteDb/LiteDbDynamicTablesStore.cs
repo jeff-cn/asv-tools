@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DynamicData;
 using LiteDB;
 
@@ -23,6 +24,17 @@ namespace Asv.Tools.Store
         public int Count { get; }
     }
 
+    public class DynamicTableStatistic : IDynamicTableStatistic
+    {
+        public DynamicTableStatistic(int rowCount, int columnCount)
+        {
+            RowCount = rowCount;
+            ColumnCount = columnCount;
+        }
+
+        public int RowCount { get; }
+        public int ColumnCount { get; }
+    }
 
     public class LiteDbDynamicTablesStore:IDynamicTablesStore
     {
@@ -94,6 +106,16 @@ namespace Asv.Tools.Store
                 doc[column] = value;
                 tableColl.Update(doc);
             }
+        }
+
+        public IDynamicTableStatistic GetTableStatistic(Guid tableId)
+        {
+            var coll = _indexColl.FindOne(_ => _.TableId == tableId);
+            if (coll == null) return null;
+            var subCollection = _db.GetCollection(GetSubCollectionName(coll.Id), BsonAutoId.Int32);
+            var first = subCollection.FindAll().FirstOrDefault();
+            var count = (first == null) ? 0 : (first.Count - 1);
+            return new DynamicTableStatistic(subCollection.Count(), count);
         }
 
         private ILiteCollection<BsonDocument> GetCollection(Guid sessionId)
