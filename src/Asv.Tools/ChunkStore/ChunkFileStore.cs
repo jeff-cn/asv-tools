@@ -118,12 +118,21 @@ namespace Asv.Tools
         public SessionInfo GetSessionInfo(SessionId sessionId)
         {
             var metadataFile = GetMetadataFileName(sessionId);
+            var created = new FileInfo(metadataFile).CreationTime;
             var metadata = File.Exists(metadataFile) ? JsonConvert.DeserializeObject<SessionMetadata>(File.ReadAllText(metadataFile)): null;
-            return new SessionInfo
+            var files = Directory.EnumerateFiles(GetSessionFolderName(sessionId), $"*.{RecordFileExt}");
+            var enumerable = files as string[] ?? files.ToArray();
+            var itemsCount = 0U;
+            if (enumerable.Length > 0)
             {
-                Metadata = metadata,
-                FieldsCount = (uint)Directory.EnumerateFiles(GetSessionFolderName(sessionId), $"*.{RecordFileExt}").Count()
-            };
+                var fieldId = GetFieldsIds(sessionId).First();
+                var info = GetFieldInfo(sessionId, fieldId);
+                itemsCount = info.Count;
+            }
+            var totalSize = enumerable.Select(_ => new FileInfo(_).Length - SessionRecordMetadata.MetadataFileOffset).Sum();
+
+            return new SessionInfo(metadata, (uint)enumerable.Length, itemsCount, (uint)totalSize, created);
+
         }
 
         public IEnumerable<uint> GetFieldsIds(SessionId sessionId)

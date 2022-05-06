@@ -25,7 +25,7 @@ namespace Asv.Tools.Test
             SpanTestHelper.TestType(new SessionId(Guid.NewGuid()), _output.WriteLine);
             SpanTestHelper.TestType(new SessionSettings("Name1","Tag1", "Tag2", "Tag3"), _output.WriteLine);
             SpanTestHelper.TestType(new SessionMetadata(new SessionId(Guid.NewGuid()), new SessionSettings("Name1", "Tag1", "Tag2", "Tag3")), _output.WriteLine);
-            SpanTestHelper.TestType(new SessionInfo(new SessionMetadata(new SessionId(Guid.NewGuid()), new SessionSettings("Name1", "Tag1", "Tag2", "Tag3")), UInt32.MaxValue), _output.WriteLine);
+            SpanTestHelper.TestType(new SessionInfo(new SessionMetadata(new SessionId(Guid.NewGuid()), new SessionSettings("Name1", "Tag1", "Tag2", "Tag3")), UInt32.MaxValue,UInt32.MinValue, UInt32.MaxValue,DateTime.Now), _output.WriteLine);
 
             SpanTestHelper.TestType(new SessionFieldSettings(UInt32.MaxValue,"Name1",ushort.MaxValue), _output.WriteLine);
             SpanTestHelper.TestType(new SessionRecordMetadata(new SessionFieldSettings(UInt32.MaxValue, "Name1", ushort.MaxValue)), _output.WriteLine);
