@@ -24,7 +24,7 @@ namespace Asv.Tools.Store
     public interface IDynamicTablesStore
     {
         string Name { get; }
-        IObservableCache<IDynamicTableInfo,Guid> Tables { get; }
+        IEnumerable<IDynamicTableInfo> Tables { get; }
 
         IColumnStatistic GetColumnStatistic(Guid tableId, string groupName, string columnName);
         bool TryGetCell(Guid tableId, string groupName, string columnName, int rowIndex, out double value);

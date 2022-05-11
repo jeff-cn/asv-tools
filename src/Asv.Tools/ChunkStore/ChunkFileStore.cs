@@ -129,7 +129,7 @@ namespace Asv.Tools
                 var info = GetFieldInfo(sessionId, fieldId);
                 itemsCount = info.Count;
             }
-            var totalSize = enumerable.Select(_ => new FileInfo(_).Length - SessionRecordMetadata.MetadataFileOffset).Sum();
+            var totalSize = enumerable.Select(_ => (int)(new FileInfo(_).Length - SessionRecordMetadata.MetadataFileOffset)).Sum();
 
             return new SessionInfo(metadata, (uint)enumerable.Length, itemsCount, (uint)totalSize, created);
 

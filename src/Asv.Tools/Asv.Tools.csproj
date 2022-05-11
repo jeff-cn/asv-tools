@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net461;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net461;net6.0</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
       <LangVersion>9.0</LangVersion>
     <Platforms>AnyCPU</Platforms>
@@ -32,12 +32,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DynamicData" Version="7.7.1" />
+    <PackageReference Include="DynamicData" Version="7.7.14" />
     <PackageReference Include="Geodesy" Version="4.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NLog" Version="5.0.0-rc2" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.0" />
     <PackageReference Include="System.IO.Ports" Version="6.0.0" />
+    
     <PackageReference Include="System.Memory" Version="4.5.4" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
