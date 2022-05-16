@@ -67,7 +67,7 @@ namespace Asv.Tools
             using var linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(cancel);
             linkedCancel.CancelAfter(_requestTimeout);
             var tcs = new TaskCompletionSource<JObject>();
-            linkedCancel.Token.Register(tcs.SetCanceled);
+            using var c1 = linkedCancel.Token.Register(tcs.SetCanceled);
             using var subscribe = this.FirstAsync(responseFilter).Subscribe(tcs.SetResult);
             await SendText(request, linkedCancel.Token).ConfigureAwait(false);
             return  await tcs.Task.ConfigureAwait(false);
@@ -91,7 +91,7 @@ namespace Asv.Tools
             using CancellationTokenSource linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(cancel);
             linkedCancel.CancelAfter(_requestTimeout);
             var tcs = new TaskCompletionSource<JObject>();
-            linkedCancel.Token.Register(tcs.SetCanceled);
+            using var c1 = linkedCancel.Token.Register(tcs.SetCanceled);
             using var subscribe = this.FirstAsync(responseFilter).Subscribe(tcs.SetResult);
             await Send(request, linkedCancel.Token).ConfigureAwait(false);
             return await tcs.Task.ConfigureAwait(false);

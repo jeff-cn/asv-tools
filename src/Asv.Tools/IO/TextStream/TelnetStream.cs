@@ -113,10 +113,10 @@ namespace Asv.Tools
 
         public async Task Send(string value, CancellationToken cancel)
         {
-            var linkedCancel = (CancellationTokenSource)null;
+            
             try
             {
-                linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(cancel, _cancel.Token);
+                using var  linkedCancel = CancellationTokenSource.CreateLinkedTokenSource(cancel, _cancel.Token);
                 var data = _config.DefaultEncoding.GetBytes(value + _endBytes[0] + _endBytes[1]);
                 await _input.Send(data, data.Length, linkedCancel.Token).ConfigureAwait(false);
             }
@@ -124,10 +124,6 @@ namespace Asv.Tools
             {
                 _onErrorSubject.OnNext(new Exception(string.Format("Error to send text stream data '{0}':{1}", (object)value, (object)ex.Message), ex));
                 throw;
-            }
-            finally
-            {
-                linkedCancel?.Dispose();
             }
         }
     }
