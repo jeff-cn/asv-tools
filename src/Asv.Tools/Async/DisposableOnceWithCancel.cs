@@ -1,54 +1,73 @@
+using System;
 using System.Reactive.Disposables;
 using System.Threading;
-using Asv.Tools;
 
-
-public abstract class DisposableOnceWithCancel : DisposableOnce
+namespace Asv.Tools
 {
-    private CancellationTokenSource _cancel;
-    private CompositeDisposable _dispose;
-    private readonly object _sync1 = new();
-    private readonly object _sync2 = new();
-
-    protected CancellationToken DisposeCancel
+    public abstract class DisposableOnceWithCancel : DisposableOnce
     {
-        get
-        {
-            if (_cancel != null)
-            {
-                return IsDisposed ? CancellationToken.None : _cancel.Token;
-            }
+        private CancellationTokenSource _cancel;
+        private CompositeDisposable _dispose;
+        private readonly object _sync1 = new();
+        private readonly object _sync2 = new();
 
-            lock (_sync2)
+        protected CancellationToken DisposeCancel
+        {
+            get
             {
                 if (_cancel != null)
                 {
                     return IsDisposed ? CancellationToken.None : _cancel.Token;
                 }
-                _cancel = new();
-                return _cancel.Token;
+
+                lock (_sync2)
+                {
+                    if (_cancel != null)
+                    {
+                        return IsDisposed ? CancellationToken.None : _cancel.Token;
+                    }
+                    _cancel = new();
+                    return _cancel.Token;
+                }
+
             }
-
         }
-    }
 
-    protected CompositeDisposable Disposable
-    {
-        get
+        protected T AddToDispose<T>(T value)
+            where T:IDisposable
         {
-            if (_dispose != null) return _dispose;
-            lock (_sync1)
+            Disposable.Add(value);
+            return value;
+        }
+
+        protected CompositeDisposable Disposable
+        {
+            get
             {
-                return _dispose ??= new CompositeDisposable();
+                if (_dispose != null) return _dispose;
+                lock (_sync1)
+                {
+                    return _dispose ??= new CompositeDisposable();
+                }
             }
+        }
+
+        protected override void InternalDisposeOnce()
+        {
+            if (_cancel?.Token.CanBeCanceled == true)
+                _cancel.Cancel(false);
+            _cancel?.Dispose();
+            _dispose?.Dispose();
         }
     }
 
-    protected override void InternalDisposeOnce()
+    public static class DisposableHelper
     {
-        if (_cancel?.Token.CanBeCanceled == true)
-            _cancel.Cancel(false);
-        _cancel?.Dispose();
-        _dispose?.Dispose();
+        public static T DisposeItWith<T>(this T src, CompositeDisposable disposable)
+            where T:IDisposable
+        {
+            disposable.Add(src);
+            return src;
+        }
     }
 }
