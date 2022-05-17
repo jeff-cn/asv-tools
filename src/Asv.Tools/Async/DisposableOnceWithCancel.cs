@@ -60,14 +60,4 @@ namespace Asv.Tools
             _dispose?.Dispose();
         }
     }
-
-    public static class DisposableHelper
-    {
-        public static T DisposeItWith<T>(this T src, CompositeDisposable disposable)
-            where T:IDisposable
-        {
-            disposable.Add(src);
-            return src;
-        }
-    }
 }
