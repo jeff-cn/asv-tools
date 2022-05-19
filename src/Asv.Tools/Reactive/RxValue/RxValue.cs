@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 
 namespace Asv.Tools
 {
-    public class RxValue<TValue> : DisposableOnce, IRxEditableValue<TValue>,IDisposable
+    public class RxValue<TValue> : DisposableOnce, IRxEditableValue<TValue>
     {
         private readonly Subject<TValue> _subject = new();
         private TValue _value;

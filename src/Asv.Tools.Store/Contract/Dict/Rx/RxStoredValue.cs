@@ -18,8 +18,8 @@ namespace Asv.Tools.Store
 
             _internalChange = true;
             _subscribe = saveDelay == null ? this.Subscribe(WriteValue) : this.Throttle(saveDelay.Value).Subscribe(WriteValue);
-            OnNext(ReadValue(defaultValue));
             _internalChange = false;
+            OnNext(ReadValue(defaultValue));
         }
 
         private T ReadValue(T defaultValue)
