@@ -63,32 +63,24 @@ namespace Asv.Tools.Store
         public string Name { get; }
         public IEnumerable<IDynamicTableInfo> Tables => _indexColl.FindAll();
 
-        public IColumnStatistic GetColumnStatistic(Guid tableId, string groupName, string columnName)
+        public IColumnStatistic GetColumnStatistic(Guid tableId, string columnName)
         {
             var tableColl = GetCollection(tableId);
             return new ColumnStatistic(tableColl.Count());
         }
 
-        public bool TryReadDoubleCell(Guid tableId, string groupName, string columnName, int rowIndex, out double value)
+        public bool TryReadCell(Guid tableId, string columnName, int rowIndex, out BsonValue value)
         {
+            if (string.IsNullOrWhiteSpace(columnName))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(columnName));
             var doc = TryGetBsonRaw(tableId, rowIndex);
             if (doc == null)
             {
-                value = double.NaN;
+                value = BsonValue.Null;
                 return false;
             }
-            return TryGetDouble(doc,groupName, columnName, out value);
-        }
-
-        public bool TryReadEnumCell<T>(Guid tableId, string groupName, string columnName, int rowIndex, out T value) where T : Enum
-        {
-            var doc = TryGetBsonRaw(tableId, rowIndex);
-            if (doc == null)
-            {
-                value = default;
-                return false;
-            }
-            return TryGetEnum(doc, groupName, columnName, out value);
+            value = doc[columnName];
+            return !value.IsNull;
         }
 
         private BsonDocument TryGetBsonRaw(Guid tableId, int rowIndex)
@@ -99,38 +91,19 @@ namespace Asv.Tools.Store
 
         private string GetSubCollectionName(int id) => $"{_subCollPrefix}{id:000}";
 
-        public void UpsetDoubleCell(Guid tableId, string groupName, string columnName, int rowIndex, double value)
+        public void UpsetCell(Guid tableId, string columnName, int rowIndex, BsonValue value)
         {
             var tableColl = GetCollection(tableId);
             var doc = tableColl.FindById(rowIndex);
-            
             if (doc == null)
             {
-                doc = new BsonDocument { {IdColumnName, rowIndex }};
-                WriteDoubleCell(doc,groupName,columnName,value);
+                doc = new BsonDocument { { IdColumnName, rowIndex },{ columnName , value } };
+                
                 tableColl.Insert(doc);
             }
             else
             {
-                WriteDoubleCell(doc, groupName, columnName, value);
-                tableColl.Update(doc);
-            }
-        }
-
-        public void UpsetEnumCell<T>(Guid tableId, string groupName, string columnName, int rowIndex, T value) where T : Enum
-        {
-            var tableColl = GetCollection(tableId);
-            var doc = tableColl.FindById(rowIndex);
-
-            if (doc == null)
-            {
-                doc = new BsonDocument { {IdColumnName, rowIndex } };
-                WriteEnumCell(doc, groupName, columnName, value);
-                tableColl.Insert(doc);
-            }
-            else
-            {
-                WriteEnumCell(doc, groupName, columnName, value);
+                doc[columnName] = value;
                 tableColl.Update(doc);
             }
         }
@@ -145,7 +118,7 @@ namespace Asv.Tools.Store
             return new DynamicTableStatistic(subCollection.Count(), count);
         }
 
-        public int ObserveAll(Guid tableId, Action<IDynamicTablesRawObserver> callback)
+        public int ObserveAll(Guid tableId, Action<IDynamicTableRawObserver> callback)
         {
             var coll = _indexColl.FindOne(_ => _.TableId == tableId);
             if (coll == null) return 0;
@@ -154,9 +127,9 @@ namespace Asv.Tools.Store
             foreach (var doc in subCollection.FindAll())
             {
                 count++;
-                var editor = new DynamicTablesRawObserver(doc, tableId);
+                var editor = new DynamicTableRawObserver(doc, tableId);
                 callback(editor);
-                if (editor.IdEdited)
+                if (editor.IsEdited)
                 {
                     subCollection.Update(doc);
                 }
@@ -164,14 +137,14 @@ namespace Asv.Tools.Store
             return count;
         }
 
-        public void AddRaw(Guid tableId, Action<IDynamicTablesRawObserver> callback)
+        public void AddRaw(Guid tableId, Action<IDynamicTableRawObserver> callback)
         {
             var tableColl = GetCollection(tableId);
             var id = tableColl.Insert(new BsonDocument());
             var doc = tableColl.FindById(id);
-            var editor = new DynamicTablesRawObserver(doc, tableId);
+            var editor = new DynamicTableRawObserver(doc, tableId);
             callback(editor);
-            if (editor.IdEdited)
+            if (editor.IsEdited)
             {
                 tableColl.Update(doc);
             }
@@ -204,52 +177,13 @@ namespace Asv.Tools.Store
             return _indexCache.AddOrUpdate(sessionId, _ => subCollection, (guid, collection) => subCollection);
         }
 
-        internal static bool TryGetDouble(BsonDocument doc, string groupName, string columnName, out double value)
-        {
-            var fieldKey = CreateColumnName(groupName, columnName);
-            var val = doc[fieldKey];
-            if (val.IsNull)
-            {
-                value = double.NaN;
-                return false;
-            }
-            value = val;
-            return true;
-        }
-
-        private static string CreateColumnName(string groupName, string columnName) => $"{groupName}.{columnName}";
-
-        public static bool TryGetEnum<T>(BsonDocument doc, string groupName, string columnName, out T value)
-            where T : Enum
-        {
-            var fieldKey = CreateColumnName(groupName, columnName);
-            var val = doc[fieldKey];
-            if (val.IsNull)
-            {
-                value = default;
-                return false;
-            }
-
-            value = (T)Enum.Parse(typeof(T), val.AsString, true);
-            return true;
-        }
-
-        public static void WriteDoubleCell(BsonDocument doc, string groupName, string columnName, double value)
-        {
-            doc[CreateColumnName(groupName, columnName)] = value;
-        }
-
-        public static void WriteEnumCell<T>(BsonDocument doc, string groupName, string columnName, T value) where T : Enum
-        {
-            doc[CreateColumnName(groupName, columnName)] = value.ToString();
-        }
     }
 
-    public class DynamicTablesRawObserver : IDynamicTablesRawObserver
+    public class DynamicTableRawObserver : IDynamicTableRawObserver
     {
         private readonly BsonDocument _doc;
 
-        public DynamicTablesRawObserver(BsonDocument doc, Guid tableId)
+        public DynamicTableRawObserver(BsonDocument doc, Guid tableId)
         {
             TableId = tableId;
             _doc = doc;
@@ -260,29 +194,17 @@ namespace Asv.Tools.Store
 
         public IEnumerable<string> Columns => _doc.Keys;
 
-        internal bool IdEdited { get; private set; }
+        internal bool IsEdited { get; private set; }
 
-        public bool TryReadDoubleCell(string groupName, string columnName, out double value)
+        public bool TryReadCell(string columnName, out BsonValue value)
         {
-            return LiteDbDynamicTablesStore.TryGetDouble(_doc, groupName, columnName, out value);
+            value = _doc[columnName];
+            return !value.IsNull;
         }
-
-        public bool TryReadEnumCell<T>(string groupName, string columnName, out T value) where T : Enum
+        public void WriteCell(string columnName, BsonValue value)
         {
-            return LiteDbDynamicTablesStore.TryGetEnum(_doc, groupName, columnName, out value);
-        }
-
-        public void WriteDoubleCell(string groupName, string columnName, double value)
-        {
-            LiteDbDynamicTablesStore.WriteDoubleCell(_doc, groupName, columnName, value);
-            IdEdited = true;
-        }
-
-        public void WriteEnumCell<T>(string groupName, string columnName, T value)
-            where T : Enum
-        {
-            LiteDbDynamicTablesStore.WriteEnumCell(_doc, groupName, columnName, value);
-            IdEdited = true;
+            _doc[columnName] = value;
+            IsEdited = true;
         }
     }
 }

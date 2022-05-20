@@ -9,7 +9,7 @@ namespace Asv.Tools.Store
         private readonly IKeyValueStore _store;
         private readonly string _id;
         private readonly IDisposable _subscribe;
-        private bool _internalChange;
+        private readonly bool _internalChange;
 
         protected RxStoredValue(IKeyValueStore store, string id, T defaultValue, TimeSpan? saveDelay = null)
         {

@@ -27,30 +27,88 @@ namespace Asv.Tools.Store
         string Name { get; }
         IEnumerable<IDynamicTableInfo> Tables { get; }
 
-        IColumnStatistic GetColumnStatistic(Guid tableId, string groupName, string columnName);
-        bool TryReadDoubleCell(Guid tableId, string groupName, string columnName, int rowIndex, out double value);
-        bool TryReadEnumCell<T>(Guid tableId, string groupName, string columnName, int rowIndex, out T value)
-            where T:Enum;
-        void UpsetDoubleCell(Guid tableId, string groupName, string columnName, int rowIndex, double value);
-        void UpsetEnumCell<T>(Guid tableId, string groupName, string columnName, int rowIndex, T value)
-            where T : Enum;
+        IColumnStatistic GetColumnStatistic(Guid tableId, string columnName);
+        bool TryReadCell(Guid tableId, string columnName, int rowIndex, out BsonValue value);
+        void UpsetCell(Guid tableId, string columnName, int rowIndex, BsonValue value);
+       
         IDynamicTableStatistic GetTableStatistic(Guid tableId);
-        int ObserveAll(Guid tableId, Action<IDynamicTablesRawObserver> callback);
-        void AddRaw(Guid tableId, Action<IDynamicTablesRawObserver> callback);
+        int ObserveAll(Guid tableId, Action<IDynamicTableRawObserver> callback);
+        void AddRaw(Guid tableId, Action<IDynamicTableRawObserver> callback);
         bool RemoveRaw(Guid tableId, int rawIndex);
     }
 
-    public interface IDynamicTablesRawObserver
+
+    public static class DynamicTablesStoreHelper
+    {
+        public static bool TryReadDoubleCell(this IDynamicTablesStore src, Guid tableId, string columnName, int rowIndex, out double value)
+        {
+            if (src.TryReadCell(tableId, columnName, rowIndex, out var bsonValue) && bsonValue.IsDouble)
+            {
+                value = bsonValue.AsDouble;
+                return true;
+            }
+            value = double.NaN;
+            return false;
+        }
+
+        public static bool TryReadEnumCell<T>(this IDynamicTablesStore src, Guid tableId, string columnName, int rowIndex, out T value)
+            where T : struct, Enum
+        {
+            if (src.TryReadCell(tableId, columnName, rowIndex, out var bsonValue) && bsonValue.IsString)
+            {
+                if (Enum.TryParse(bsonValue.AsString, out value))
+                {
+                    return true;
+                }
+            }
+            value = default;
+            return false;
+        }
+
+        public static void UpsetEnumCell<T>(this IDynamicTablesStore src, Guid tableId, string groupName, string columnName, int rowIndex, T value)
+            where T : Enum
+        {
+            src.UpsetCell(tableId,columnName,rowIndex,value.ToString());
+        }
+        public static bool TryReadDoubleCell(this IDynamicTableRawObserver src, string columnName, out double value)
+        {
+            if (src.TryReadCell( columnName, out var bsonValue) && bsonValue.IsDouble)
+            {
+                value = bsonValue.AsDouble;
+                return true;
+            }
+            value = double.NaN;
+            return false;
+        }
+
+        public static bool TryReadEnumCell<T>(this IDynamicTableRawObserver src, string columnName, out T value)
+            where T : struct, Enum
+        {
+            if (src.TryReadCell(columnName, out var bsonValue) && bsonValue.IsString)
+            {
+                if (Enum.TryParse(bsonValue.AsString, out value))
+                {
+                    return true;
+                }
+            }
+            value = default;
+            return false;
+        }
+
+        public static void WriteEnumCell<T>(this IDynamicTableRawObserver src, string groupName, string columnName, T value)
+            where T : Enum
+        {
+            src.WriteCell(columnName, value.ToString());
+        }
+    }
+
+    public interface IDynamicTableRawObserver
     {
         Guid TableId { get; }
         int RawIndex { get; }
         IEnumerable<string> Columns { get; }
-        bool TryReadDoubleCell(string groupName, string columnName, out double value);
-        bool TryReadEnumCell<T>(string groupName, string columnName, out T value)
-            where T:Enum;
-        void WriteDoubleCell(string groupName, string columnName, double value);
-        void WriteEnumCell<T>(string groupName, string columnName, T value)
-            where T : Enum;
+        bool TryReadCell(string columnName, out BsonValue value);
+        void WriteCell(string columnName, BsonValue value);
     }
 
     
