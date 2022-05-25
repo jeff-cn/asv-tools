@@ -17,6 +17,9 @@ namespace Asv.Tools
         public readonly double Latitude;
         public readonly double? Altitude;
 
+        public double Lat => Latitude;
+        public double Lng => Longitude;
+
         public static GeoPoint FromLatLon(double lat, double lon) { return new GeoPoint(lat, lon); }
         public static GeoPoint NordPole => new GeoPoint(90.0, 0.0);
 
@@ -52,7 +55,17 @@ namespace Asv.Tools
         {
             return new GeoPoint(point1.Latitude - GeoPoint.Latitude, point1.Longitude - GeoPoint.Longitude);
         }
-       
+
+        // public void Offset(GeoPoint pos)
+        // {
+        //     Offset(pos.Latitude, pos.Longitude);
+        // }
+        //
+        // public void Offset(double lat, double lng)
+        // {
+        //     Longitude += lng;
+        //     Latitude -= lat;
+        // }
 
         public static bool operator <(GeoPoint p1, GeoPoint p2)
         {
@@ -88,9 +101,9 @@ namespace Asv.Tools
         {
             if (Altitude.HasValue)
             {
-                return string.Concat(Latitude, CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator, Longitude, CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator,Altitude.Value);
+                return $"Lat:{Latitude:F7},Lon:{Longitude:F7},Alt:{Altitude:F1} m"; 
             }
-            return string.Concat(Latitude, CultureInfo.InvariantCulture.NumberFormat.NumberGroupSeparator, Longitude);
+            return $"Lat:{Latitude:F7},Lon:{Longitude:F7}";
         }
 
         public static GeoPoint Parse(string src)
