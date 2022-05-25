@@ -110,7 +110,23 @@ namespace Asv.Tools
                 var path = Path.GetFileName(dir);
                 if (Guid.TryParse(path, out var guid))
                 {
-                    yield return new SessionId(guid);
+                    var sesId = new SessionId(guid);
+                    var metadataFile = GetMetadataFileName(sesId);
+                    try
+                    {
+                        var metadata = File.Exists(metadataFile) ? JsonConvert.DeserializeObject<SessionMetadata>(File.ReadAllText(metadataFile)) : null;
+                        if (metadata == null)
+                        {
+                            Logger.Warn($"Found unexpected RTT folder {path} without metadata file {metadataFile}. Ignore it.");
+                            yield break;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Warn(e,$"Found unexpected RTT folder {path} with bad metadata file {metadataFile}:{e.Message}");
+                        yield break;
+                    }
+                    yield return sesId;
                 }
             }
         }
@@ -120,6 +136,10 @@ namespace Asv.Tools
             var metadataFile = GetMetadataFileName(sessionId);
             var created = new FileInfo(metadataFile).CreationTime;
             var metadata = File.Exists(metadataFile) ? JsonConvert.DeserializeObject<SessionMetadata>(File.ReadAllText(metadataFile)): null;
+            if (metadata == null)
+            {
+                Logger.Warn("");
+            }
             var files = Directory.EnumerateFiles(GetSessionFolderName(sessionId), $"*.{RecordFileExt}");
             var enumerable = files as string[] ?? files.ToArray();
             var itemsCount = 0U;
