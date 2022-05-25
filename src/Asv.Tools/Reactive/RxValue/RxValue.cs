@@ -6,6 +6,16 @@ namespace Asv.Tools
 {
     public class RxValue<TValue> : DisposableOnce, IRxEditableValue<TValue>
     {
+        public RxValue()
+        {
+            
+        }
+
+        public RxValue(TValue initValue) : this()
+        {
+            _value = initValue;
+        }
+
         private readonly Subject<TValue> _subject = new();
         private TValue _value;
 
