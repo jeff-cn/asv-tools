@@ -32,5 +32,8 @@ namespace Asv.Tools
         {
             return Value.ToString();
         }
+
+        public static explicit operator SpanByteType(byte value) => new(value);
+        public static implicit operator byte(SpanByteType value) => value.Value;
     }
 }

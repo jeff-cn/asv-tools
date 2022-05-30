@@ -32,5 +32,8 @@ namespace Asv.Tools
         {
             return Value.ToString();
         }
+
+        public static explicit operator SpanPacketUnsignedIntegerType(uint value) => new(value);
+        public static implicit operator uint(SpanPacketUnsignedIntegerType value) => value.Value;
     }
 }

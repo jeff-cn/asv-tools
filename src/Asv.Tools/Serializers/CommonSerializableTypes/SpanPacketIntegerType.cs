@@ -32,5 +32,7 @@ namespace Asv.Tools
         {
             return Value.ToString();
         }
+        public static explicit operator SpanPacketIntegerType(int value) => new(value);
+        public static implicit operator int(SpanPacketIntegerType value) => value.Value;
     }
 }
