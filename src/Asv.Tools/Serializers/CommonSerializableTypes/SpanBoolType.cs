@@ -32,5 +32,8 @@ namespace Asv.Tools
         {
             return Value.ToString();
         }
+
+        public static explicit operator SpanBoolType(bool value) => new(value);
+        public static implicit operator bool(SpanBoolType value) => value.Value;
     }
 }

@@ -87,7 +87,7 @@ namespace Asv.Tools.Store
 
         public IDynamicTablesStore GetDynamicTables(string name)
         {
-            return new LiteDbDynamicTablesStore(name, _db, ConvertCollectionName(name, SimpleSeriesPrefix), DynamicTableSubPrefix);
+            return new LiteDbDynamicTablesStore(name, _db, ConvertCollectionName(name, SimpleSeriesPrefix), ConvertCollectionName(name, DynamicTableSubPrefix));
         }
     }
 

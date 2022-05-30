@@ -33,5 +33,8 @@ namespace Asv.Tools
         {
             return Value ?? "NULL";
         }
+
+        public static explicit operator SpanStringType(string value) => new(value);
+        public static implicit operator string(SpanStringType value) => value.Value;
     }
 }
