@@ -108,26 +108,24 @@ namespace Asv.Tools
             foreach (var dir in Directory.EnumerateDirectories(_rootFolder))
             {
                 var path = Path.GetFileName(dir);
-                if (Guid.TryParse(path, out var guid))
+                if (!Guid.TryParse(path, out var guid)) continue;
+                var sesId = new SessionId(guid);
+                var metadataFile = GetMetadataFileName(sesId);
+                try
                 {
-                    var sesId = new SessionId(guid);
-                    var metadataFile = GetMetadataFileName(sesId);
-                    try
+                    var metadata = File.Exists(metadataFile) ? JsonConvert.DeserializeObject<SessionMetadata>(File.ReadAllText(metadataFile)) : null;
+                    if (metadata == null)
                     {
-                        var metadata = File.Exists(metadataFile) ? JsonConvert.DeserializeObject<SessionMetadata>(File.ReadAllText(metadataFile)) : null;
-                        if (metadata == null)
-                        {
-                            Logger.Warn($"Found unexpected RTT folder {path} without metadata file {metadataFile}. Ignore it.");
-                            yield break;
-                        }
+                        Logger.Warn($"Found unexpected RTT folder {path} without metadata file {metadataFile}. Ignore it.");
+                        continue;
                     }
-                    catch (Exception e)
-                    {
-                        Logger.Warn(e,$"Found unexpected RTT folder {path} with bad metadata file {metadataFile}:{e.Message}");
-                        yield break;
-                    }
-                    yield return sesId;
                 }
+                catch (Exception e)
+                {
+                    Logger.Warn(e,$"Found unexpected RTT folder {path} with bad metadata file {metadataFile}:{e.Message}");
+                    continue;
+                }
+                yield return sesId;
             }
         }
 
