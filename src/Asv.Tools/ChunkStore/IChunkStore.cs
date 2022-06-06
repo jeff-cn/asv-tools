@@ -6,7 +6,7 @@ namespace Asv.Tools
 {
     public static class ChunkStoreHelper
     {
-        public const string NameRegexString = "^[A-Za-z][A-Za-z0-9_]{2,29}$";
+        public const string NameRegexString = "^[A-Za-z][A-Za-z0-9_ -]{2,29}$";
         public static readonly Regex NameRegex = new(NameRegexString, RegexOptions.Compiled);
 
         public static void CheckAndSetName(ref string name, string value)
