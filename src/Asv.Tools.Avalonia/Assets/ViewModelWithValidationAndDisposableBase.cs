@@ -5,7 +5,7 @@ using ReactiveUI.Validation.Helpers;
 
 namespace Asv.Tools.Avalonia
 {
-    public class ViewModelWithValidationAndDisposableBase : ReactiveValidationObject
+    public class ViewModelWithValidationAndDisposableBase : ReactiveValidationObject,IDisposable
     {
         private const int Disposed = 1;
         private const int NotDisposed = 0;
