@@ -46,14 +46,30 @@ namespace Asv.Tools
         }
 
 
-        public static GeoPoint operator +(GeoPoint point1, GeoPoint GeoPoint)
+        public static GeoPoint operator +(GeoPoint x, GeoPoint y)
         {
-            return new GeoPoint(point1.Latitude + GeoPoint.Latitude, point1.Longitude + GeoPoint.Longitude);
+            if (x.Altitude.HasValue && y.Altitude.HasValue)
+            {
+                return new GeoPoint(x.Latitude + y.Latitude, x.Longitude + y.Longitude,x.Altitude.Value + y.Altitude.Value);
+            }
+            else
+            {
+                return new GeoPoint(x.Latitude + y.Latitude, x.Longitude + y.Longitude);
+            }
+            
         }
 
-        public static GeoPoint operator -(GeoPoint point1, GeoPoint GeoPoint)
+        public static GeoPoint operator -(GeoPoint x, GeoPoint y)
         {
-            return new GeoPoint(point1.Latitude - GeoPoint.Latitude, point1.Longitude - GeoPoint.Longitude);
+            if (x.Altitude.HasValue && y.Altitude.HasValue)
+            {
+                return new GeoPoint(x.Latitude - y.Latitude, x.Longitude - y.Longitude, x.Altitude.Value - y.Altitude.Value);
+            }
+            else
+            {
+                return new GeoPoint(x.Latitude - y.Latitude, x.Longitude - y.Longitude);
+            }
+                
         }
 
         // public void Offset(GeoPoint pos)
@@ -67,35 +83,22 @@ namespace Asv.Tools
         //     Latitude -= lat;
         // }
 
-        public static bool operator <(GeoPoint p1, GeoPoint p2)
-        {
-            return p1.Latitude < p2.Latitude || (p1.Latitude.EqualsWithTolerance(p2.Latitude) && p1.Longitude < p2.Longitude);
-        }
+        // public static bool operator <(GeoPoint p1, GeoPoint p2)
+        // {
+        //     return p1.Latitude < p2.Latitude || (p1.Latitude.EqualsWithTolerance(p2.Latitude) && p1.Longitude < p2.Longitude);
+        // }
+        //
+        // public static bool operator >(GeoPoint p1, GeoPoint p2)
+        // {
+        //     return p1.Latitude > p2.Latitude || (p1.Latitude.EqualsWithTolerance(p2.Latitude) && p1.Longitude > p2.Longitude);
+        // }
+        //
+        // public int CompareTo(GeoPoint other)
+        // {
+        //     return (this > other) ? -1 : ((this < other) ? 1 : 0);
+        // }
 
-        public static bool operator >(GeoPoint p1, GeoPoint p2)
-        {
-            return p1.Latitude > p2.Latitude || (p1.Latitude.EqualsWithTolerance(p2.Latitude) && p1.Longitude > p2.Longitude);
-        }
-
-        public int CompareTo(GeoPoint other)
-        {
-            return (this > other) ? -1 : ((this < other) ? 1 : 0);
-        }
-
-        public bool Equals(GeoPoint other)
-        {
-            return Latitude.Equals(other.Latitude) && Longitude.Equals(other.Longitude);
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is GeoPoint && Equals((GeoPoint)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return Longitude.GetHashCode() ^ Latitude.GetHashCode();
-        }
+       
 
         public override string ToString()
         {
@@ -120,5 +123,27 @@ namespace Asv.Tools
             }
         }
 
+        public bool Equals(GeoPoint other)
+        {
+            return Longitude.Equals(other.Longitude) && Latitude.Equals(other.Latitude) && Nullable.Equals(Altitude, other.Altitude);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is GeoPoint other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            if (Altitude.HasValue)
+            {
+                return Longitude.GetHashCode() ^ Latitude.GetHashCode() ^ Altitude.Value.GetHashCode();
+            }
+            else
+            {
+                return Longitude.GetHashCode() ^ Latitude.GetHashCode();
+            }
+            
+        }
     }
 }
