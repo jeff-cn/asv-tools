@@ -289,6 +289,15 @@ namespace Asv.Tools
             }
         }
 
+        public bool Delete(SessionId sessionId)
+        {
+            CheckNotStarted();
+            var folder = GetSessionFolderName(sessionId);
+            if (!Directory.Exists(folder)) return false;
+            Directory.Delete(folder,true);
+            return true;
+        }
+
         private string GetMetadataFileName(SessionId sessionId)
         {
             return Path.Combine(GetSessionFolderName(sessionId), MetadataFileName);

@@ -37,6 +37,6 @@ namespace Asv.Tools
         IEnumerable<uint> GetFieldsIds(SessionId sessionId);
         SessionFieldInfo GetFieldInfo(SessionId sessionId, uint recordId);
         bool ReadRecord(SessionId sessionId, uint recordId, uint index, FieldReadCallback readCallback);
-
+        bool Delete(SessionId sessionId);
     }
 }
