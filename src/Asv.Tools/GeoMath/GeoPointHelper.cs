@@ -16,12 +16,7 @@ namespace Asv.Tools
 
         public static GeoPoint RadialPoint(this GeoPoint point, double distance, double radialDeg)
         {
-            var a = GeoMath.RadialPoint(point.Latitude, point.Longitude, distance, radialDeg);
-            if (point.Altitude.HasValue)
-            {
-                a = a.SetAltitude(point.Altitude.Value);
-            }
-            return a;
+            return GeoMath.RadialPoint(point.Latitude, point.Longitude, point.Altitude, distance, radialDeg);
         }
 
         public static double AngleBetween(this GeoPoint a, GeoPoint b)
@@ -45,7 +40,7 @@ namespace Asv.Tools
 
         public static GeoPoint AddAltitude(this GeoPoint point, double alt)
         {
-            return new GeoPoint(point.Latitude, point.Longitude, (point.Altitude ?? 0) + alt);
+            return new GeoPoint(point.Latitude, point.Longitude, (point.Altitude) + alt);
         }
 
         public static GeoPoint SetAltitude(this GeoPoint point, double alt)

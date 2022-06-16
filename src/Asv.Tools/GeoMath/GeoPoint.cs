@@ -15,23 +15,23 @@ namespace Asv.Tools
         public readonly double Longitude;
         // Nord-South
         public readonly double Latitude;
-        public readonly double? Altitude;
+        public readonly double Altitude;
 
-        public double Lat => Latitude;
-        public double Lng => Longitude;
+        // public double Lat => Latitude;
+        // public double Lng => Longitude;
+        //
+        // public static GeoPoint FromLatLon(double lat, double lon) { return new GeoPoint(lat, lon); }
+        // public static GeoPoint NordPole => new(90.0, 0.0);
 
-        public static GeoPoint FromLatLon(double lat, double lon) { return new GeoPoint(lat, lon); }
-        public static GeoPoint NordPole => new GeoPoint(90.0, 0.0);
+        // public static GeoPoint Zero => new(0.0, 0.0);
+        public static GeoPoint ZeroWithAlt => new(0.0, 0.0, 0.0);
 
-        public static GeoPoint Zero => new GeoPoint(0.0, 0.0);
-        public static GeoPoint ZeroWithAlt => new GeoPoint(0.0, 0.0, 0.0);
-
-        public GeoPoint(double latitude, double longitude)
-        {
-            this.Latitude = latitude;
-            this.Longitude = longitude;
-            this.Altitude = null;
-        }
+        // public GeoPoint(double latitude, double longitude)
+        // {
+        //     this.Latitude = latitude;
+        //     this.Longitude = longitude;
+        //     this.Altitude = null;
+        // }
         public GeoPoint(double latitude, double longitude, double altitude)
         {
             this.Latitude = latitude;
@@ -39,37 +39,21 @@ namespace Asv.Tools
             this.Altitude = altitude;
         }
 
-        public void Deconstruct(out double lat, out double lon)
-        {
-            lat = this.Latitude;
-            lon = this.Longitude;
-        }
+        // public void Deconstruct(out double lat, out double lon)
+        // {
+        //     lat = this.Latitude;
+        //     lon = this.Longitude;
+        // }
 
 
         public static GeoPoint operator +(GeoPoint x, GeoPoint y)
         {
-            if (x.Altitude.HasValue && y.Altitude.HasValue)
-            {
-                return new GeoPoint(x.Latitude + y.Latitude, x.Longitude + y.Longitude,x.Altitude.Value + y.Altitude.Value);
-            }
-            else
-            {
-                return new GeoPoint(x.Latitude + y.Latitude, x.Longitude + y.Longitude);
-            }
-            
+            return new GeoPoint(x.Latitude + y.Latitude, x.Longitude + y.Longitude, x.Altitude + y.Altitude);
         }
 
         public static GeoPoint operator -(GeoPoint x, GeoPoint y)
         {
-            if (x.Altitude.HasValue && y.Altitude.HasValue)
-            {
-                return new GeoPoint(x.Latitude - y.Latitude, x.Longitude - y.Longitude, x.Altitude.Value - y.Altitude.Value);
-            }
-            else
-            {
-                return new GeoPoint(x.Latitude - y.Latitude, x.Longitude - y.Longitude);
-            }
-                
+            return new GeoPoint(x.Latitude - y.Latitude, x.Longitude - y.Longitude, x.Altitude - y.Altitude);
         }
 
         // public void Offset(GeoPoint pos)
@@ -102,11 +86,7 @@ namespace Asv.Tools
 
         public override string ToString()
         {
-            if (Altitude.HasValue)
-            {
-                return $"Lat:{Latitude:F7},Lon:{Longitude:F7},Alt:{Altitude:F1} m"; 
-            }
-            return $"Lat:{Latitude:F7},Lon:{Longitude:F7}";
+            return $"Lat:{Latitude:F7},Lon:{Longitude:F7},Alt:{Altitude:F1} m";
         }
 
         public static GeoPoint Parse(string src)
@@ -115,7 +95,7 @@ namespace Asv.Tools
             switch (source.Length)
             {
                 case 2:
-                    return new GeoPoint(double.Parse(source[0]),double.Parse(source[1]));
+                    return new GeoPoint(double.Parse(source[0]),double.Parse(source[1]),0);
                 case 3:
                     return new GeoPoint(double.Parse(source[0]), double.Parse(source[1]), double.Parse(source[2]));
                 default:
@@ -135,15 +115,7 @@ namespace Asv.Tools
 
         public override int GetHashCode()
         {
-            if (Altitude.HasValue)
-            {
-                return Longitude.GetHashCode() ^ Latitude.GetHashCode() ^ Altitude.Value.GetHashCode();
-            }
-            else
-            {
-                return Longitude.GetHashCode() ^ Latitude.GetHashCode();
-            }
-            
+            return Longitude.GetHashCode() ^ Latitude.GetHashCode() ^ Altitude.GetHashCode();
         }
     }
 }

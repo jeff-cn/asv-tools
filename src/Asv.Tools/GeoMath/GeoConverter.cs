@@ -45,17 +45,17 @@ namespace Asv.Tools
 
         public static GeoPoint PZ90_WGS84(this GeoPoint point)
         {
-            var lat = PZ90_WGS84_Lat(point.Latitude, point.Longitude, point.Altitude ?? 0);
-            var lon = PZ90_WGS84_Long(point.Latitude, point.Longitude, point.Altitude ?? 0);
-            var alt = WGS84Alt(point.Latitude, point.Longitude, point.Altitude ?? 0, dx_90_84, dy_90_84, dz_90_84);
+            var lat = PZ90_WGS84_Lat(point.Latitude, point.Longitude, point.Altitude);
+            var lon = PZ90_WGS84_Long(point.Latitude, point.Longitude, point.Altitude);
+            var alt = WGS84Alt(point.Latitude, point.Longitude, point.Altitude, dx_90_84, dy_90_84, dz_90_84);
             return new GeoPoint(lat,lon,alt);
         }
 
         public static GeoPoint WGS84_PZ90(this GeoPoint point)
         {
-            var lat = WGS84_PZ90_Lat(point.Latitude, point.Longitude, point.Altitude ?? 0);
-            var lon = WGS84_PZ90_Long(point.Latitude, point.Longitude, point.Altitude ?? 0);
-            var alt = WGS84Alt(point.Latitude, point.Longitude, point.Altitude ?? 0, dx_90_84, dy_90_84, dz_90_84);
+            var lat = WGS84_PZ90_Lat(point.Latitude, point.Longitude, point.Altitude);
+            var lon = WGS84_PZ90_Long(point.Latitude, point.Longitude, point.Altitude);
+            var alt = WGS84Alt(point.Latitude, point.Longitude, point.Altitude, dx_90_84, dy_90_84, dz_90_84);
             return new GeoPoint(lat, lon, alt);
         }
 

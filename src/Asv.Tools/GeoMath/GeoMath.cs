@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Geodesy;
 
 namespace Asv.Tools
@@ -45,7 +46,7 @@ namespace Asv.Tools
             {
                 return Distance(point1.Latitude, point1.Longitude, point2.Latitude, point2.Longitude);
             }
-            return Distance(point1.Latitude, point1.Longitude, point1.Altitude.Value, point2.Latitude, point2.Longitude, point2.Altitude.Value);
+            return Distance(point1.Latitude, point1.Longitude, point1.Altitude, point2.Latitude, point2.Longitude, point2.Altitude);
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace Asv.Tools
 
         public static double Elevation(GeoPoint p1, GeoPoint p2)
         {
-            return Elevation(p1.Latitude, p1.Longitude, p1.Altitude ?? 0, p2.Latitude, p2.Longitude, p2.Altitude ?? 0);
+            return Elevation(p1.Latitude, p1.Longitude, p1.Altitude, p2.Latitude, p2.Longitude, p2.Altitude);
         }
 
         /// <summary>
@@ -220,13 +221,13 @@ namespace Asv.Tools
         /// calculated point.
         /// </returns>
         /// <remarks>The antemeridian is not considered.</remarks>
-        public static GeoPoint RadialPoint(double latitude, double longitude, double distance, double radialDeg)
+        public static GeoPoint RadialPoint(double latitude, double longitude, double altitude, double distance, double radialDeg)
         {
             radialDeg = !double.IsNaN(radialDeg) ? radialDeg : 0;
             var coordinates = Calculator.CalculateEndingGlobalCoordinates(
                 new GlobalCoordinates(new Angle(latitude), new Angle(longitude)), new Angle(radialDeg), distance);
 
-            return new GeoPoint(coordinates.Latitude.Degrees, coordinates.Longitude.Degrees);
+            return new GeoPoint(coordinates.Latitude.Degrees, coordinates.Longitude.Degrees, altitude);
         }
 
         /// <summary>Converts the specified value in radians to degrees.</summary>
@@ -242,6 +243,49 @@ namespace Asv.Tools
         public static double DegreesToRadians(double degrees)
         {
             return degrees * Math.PI / 180.0;
+        }
+
+        /// <summary>
+        /// Generate wagging path points
+        ///           [2]     [4]
+        /// [START]--/   \   /   \--[STOP]
+        ///               [3]
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="waggingCountsValue"></param>
+        /// <param name="value"></param>
+        /// <param name="deviationFromCenterLineInMeters"></param>
+        /// <returns></returns>
+        public static IEnumerable<GeoPoint> GenerateWaggingLatLonPoints(GeoPoint start, GeoPoint stop, int waggingCountsValue, double deviationFromCenterLineInMeters)
+        {
+
+            if (waggingCountsValue <= 0 || deviationFromCenterLineInMeters <= 0)
+            {
+                // this is simple path from start to stop without sub points
+                yield return start;
+                yield return stop;
+            }
+            else
+            {
+                var distance = start.DistanceTo(stop);
+                var alt = stop.Altitude - start.Altitude;
+                var azimuth = start.Azimuth(stop);
+                var incDistance = distance / (waggingCountsValue + 1);
+                var incAlt = alt / (waggingCountsValue + 1);
+
+
+                yield return start;
+                var currDist = 0.0;
+                var currAlt = 0.0;
+                for (var i = 0; i < waggingCountsValue; i++)
+                {
+                    currDist += incDistance;
+                    currAlt += incAlt;
+                    yield return start.RadialPoint(currDist, azimuth).RadialPoint(deviationFromCenterLineInMeters, azimuth + (i % 2 == 0 ? -90 : 90)).SetAltitude(start.Altitude + currAlt);
+                }
+                yield return stop;
+            }
         }
     }
 }
