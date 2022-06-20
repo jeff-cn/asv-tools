@@ -41,7 +41,5 @@ namespace Asv.Tools.Avalonia
         public object CommandParameter { get; set; }
         [Reactive]
         public string Title { get; set; }
-
-        
     }
 }
