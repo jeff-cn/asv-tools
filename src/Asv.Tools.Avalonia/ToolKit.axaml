@@ -8,11 +8,13 @@
         <StackPanel>
             <avalonia:StatusButton  Title="Title" Icon="Drone" StatusText="Status" BottomRightStatus="BotRight" Classes="Error" TopRightStatus="TopRight"  />
             <avalonia:ConnectionCard  Title="Title" IconName="Drone" StatusText="Status" Classes="Error" />
+            <avalonia:AttitudeIndicator Width="300" ></avalonia:AttitudeIndicator>
         </StackPanel>
     </Design.PreviewWith>
     <StyleInclude Source="avares://Material.Icons.Avalonia/App.xaml"/>
     <StyleInclude Source="avares://Asv.Tools.Avalonia/StatusButton.axaml"/>
     <StyleInclude Source="avares://Asv.Tools.Avalonia/ConnectionCard.axaml"/>
+    <StyleInclude Source="avares://Asv.Tools.Avalonia/AttitudeIndicator.axaml"/>
     
     
 </Styles>
