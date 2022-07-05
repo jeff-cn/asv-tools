@@ -16,11 +16,11 @@ namespace Asv.Tools
     {
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private Process _process;
-        private readonly BlockingCollection<string> _output = new BlockingCollection<string>();
+        private readonly BlockingCollection<string> _output = new();
         private StreamWriter _input;
-        private readonly Subject<string> _inputSubject = new Subject<string>();
-        private readonly Subject<string> _outputSubject = new Subject<string>();
-        private readonly Subject<string> _errorSubject = new Subject<string>();
+        private readonly Subject<string> _inputSubject = new();
+        private readonly Subject<string> _outputSubject = new();
+        private readonly Subject<string> _errorSubject = new();
         private const int DefaultTimeoutMs = 5000;
 
         public IObservable<string> OnInput => _inputSubject;

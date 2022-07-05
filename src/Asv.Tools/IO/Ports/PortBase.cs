@@ -103,7 +103,7 @@ namespace Asv.Tools
         {
             _enableStream.OnNext(false);
             _portStateStream.OnNext(PortState.Disabled);
-            Task.Factory.StartNew(Stop);
+            Task.Factory.StartNew(Stop, DisposeCancel);
         }
 
         private void Stop()
