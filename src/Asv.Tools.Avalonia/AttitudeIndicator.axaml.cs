@@ -26,9 +26,9 @@ namespace Asv.Tools.Avalonia
         private static double _headingPositionStep;
         private static double _headingCenterPosition;
 
-        private StatusButtonViewModel _statusButtonLeft;
-        private StatusButtonViewModel _statusButtonCenter;
-        private StatusButtonViewModel _statusButtonRight;
+        private StatusButtonViewModel _leftStatus;
+        private StatusButtonViewModel _centerStatus;
+        private StatusButtonViewModel _rightStatus;
 
         private IEnumerable<PitchItem> _pitchItems;
         private IEnumerable<RollItem> _rollItems;
@@ -40,8 +40,10 @@ namespace Asv.Tools.Avalonia
         private double _pitchTranslateX;
         private double _pitchTranslateY;
         private double _homeAzimuthPosition = -100;
+        private string _statusText;
+        private string _rightStatusText;
 
-        public double ScaleY { get; }
+        public double Scale { get; }
 
         public static readonly StyledProperty<double> RollAngleProperty = AvaloniaProperty.Register<AttitudeIndicator, double>(nameof(RollAngle), default(double), notifying: UpdateRollAngle);
 
@@ -101,6 +103,26 @@ namespace Asv.Tools.Avalonia
             set => SetValue(IsArmedProperty, value);
         }
 
+        public static readonly DirectProperty<AttitudeIndicator, string> StatusTextProperty =
+            AvaloniaProperty.RegisterDirect<AttitudeIndicator, string>(nameof(StatusText), _ => _.StatusText,
+                (_, value) => _.StatusText = value);
+
+        public string StatusText
+        {
+            get => _statusText;
+            set => SetAndRaise(StatusTextProperty, ref _statusText, value);
+        }
+
+        public static readonly DirectProperty<AttitudeIndicator, string> RightStatusTextProperty =
+            AvaloniaProperty.RegisterDirect<AttitudeIndicator, string>(nameof(RightStatusText), _ => _.RightStatusText,
+                (_, value) => _.RightStatusText = value);
+
+        public string RightStatusText
+        {
+            get => _rightStatusText;
+            set => SetAndRaise(RightStatusTextProperty, ref _rightStatusText, value);
+        }
+
         public static readonly StyledProperty<TimeSpan> ArmedTimeProperty = AvaloniaProperty.Register<AttitudeIndicator, TimeSpan>(nameof(ArmedTime), default(TimeSpan));
         
         public TimeSpan ArmedTime
@@ -109,43 +131,33 @@ namespace Asv.Tools.Avalonia
             set => SetValue(ArmedTimeProperty, value);
         }
 
-        public static readonly StyledProperty<StatusButtonViewModel> StatusButtonLeftProperty =
-            AvaloniaProperty.Register<AttitudeIndicator, StatusButtonViewModel>(nameof(StatusButtonLeft), default(StatusButtonViewModel));
-
-
-        public StatusButtonViewModel StatusButtonLeft
+        public static readonly DirectProperty<AttitudeIndicator, StatusButtonViewModel> LeftStatusProperty =
+            AvaloniaProperty.RegisterDirect<AttitudeIndicator, StatusButtonViewModel>(nameof(LeftStatus), _ => _.LeftStatus, (ind, model) => ind.LeftStatus = model);
+        
+        
+        public StatusButtonViewModel LeftStatus
         {
-            get => GetValue(StatusButtonLeftProperty);
-            set => SetValue(StatusButtonLeftProperty, value);
+            get => _leftStatus;
+            set => SetAndRaise(LeftStatusProperty, ref _leftStatus, value);
         }
 
-        // public static readonly DirectProperty<AttitudeIndicator, StatusButtonViewModel> StatusButtonLeftProperty =
-        //     AvaloniaProperty.RegisterDirect<AttitudeIndicator, StatusButtonViewModel>(nameof(StatusButtonLeft), _ => _.StatusButtonLeft, (ind, model) => ind.StatusButtonLeft = model);
-        //
-        //
-        // public StatusButtonViewModel StatusButtonLeft
-        // {
-        //     get => _statusButtonLeft;
-        //     set => SetAndRaise(StatusButtonLeftProperty, ref _statusButtonLeft, value);
-        // }
-
-        public static readonly DirectProperty<AttitudeIndicator, StatusButtonViewModel> StatusButtonRightProperty =
-            AvaloniaProperty.RegisterDirect<AttitudeIndicator, StatusButtonViewModel>(nameof(StatusButtonRight), _ => _.StatusButtonRight, (ind, model) => ind.StatusButtonRight = model);
+        public static readonly DirectProperty<AttitudeIndicator, StatusButtonViewModel> CenterStatusProperty =
+            AvaloniaProperty.RegisterDirect<AttitudeIndicator, StatusButtonViewModel>(nameof(CenterStatus), _ => _.CenterStatus, (ind, model) => ind.CenterStatus = model);
 
         
-        public StatusButtonViewModel StatusButtonRight
+        public StatusButtonViewModel CenterStatus
         {
-            get => _statusButtonRight;
-            set => SetAndRaise(StatusButtonRightProperty, ref _statusButtonRight, value);
+            get => _centerStatus;
+            set => SetAndRaise(CenterStatusProperty, ref _centerStatus, value);
         }
 
-        public static readonly DirectProperty<AttitudeIndicator, StatusButtonViewModel> StatusButtonCenterProperty =
-            AvaloniaProperty.RegisterDirect<AttitudeIndicator, StatusButtonViewModel>(nameof(StatusButtonCenter), _ => _.StatusButtonCenter, (ind, model) => ind.StatusButtonCenter = model);
+        public static readonly DirectProperty<AttitudeIndicator, StatusButtonViewModel> RightStatusProperty =
+            AvaloniaProperty.RegisterDirect<AttitudeIndicator, StatusButtonViewModel>(nameof(RightStatus), _ => _.RightStatus, (ind, model) => ind.RightStatus = model);
 
-        public StatusButtonViewModel StatusButtonCenter
+        public StatusButtonViewModel RightStatus
         {
-            get => _statusButtonCenter;
-            set => SetAndRaise(StatusButtonCenterProperty, ref _statusButtonCenter, value);
+            get => _rightStatus;
+            set => SetAndRaise(RightStatusProperty, ref _rightStatus, value);
         }
 
         #region Internal direct property
@@ -244,6 +256,7 @@ namespace Asv.Tools.Avalonia
             AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(nameof(HomeAzimuthPosition),
                 _ => _.HomeAzimuthPosition, (_, value) => _.HomeAzimuthPosition = value);
 
+        
         private double HomeAzimuthPosition
         {
             get => _homeAzimuthPosition;
@@ -257,13 +270,48 @@ namespace Asv.Tools.Avalonia
         {
             if (Design.IsDesignMode)
             {
-                StatusButtonRight = new StatusButtonViewModel("");
-                StatusButtonRight.Title = "Right";
-                StatusButtonRight.Status = StatusEnum.Success;
+                RightStatus = new StatusButtonViewModel
+                {
+                    StatusText = "GPS Fix",
+                    Title = "GPS 2",
+                    TopRightStatus = "12",
+                    BottomRightStatus = "12.1",
+                    Status = StatusEnum.Unknown
+                };
+                LeftStatus = new StatusButtonViewModel
+                {
+                    StatusText = "14.5",
+                    Title = "Battery 1",
+                    TopRightStatus = "25.6",
+                    BottomRightStatus = "12.7",
+                    Status = StatusEnum.Success
+                };
+                CenterStatus = new StatusButtonViewModel
+                {
+                    StatusText = "GPS Fix",
+                    Title = "GPS 1",
+                    TopRightStatus = "18",
+                    BottomRightStatus = "11.9",
+                    Status = StatusEnum.Success
+                };
+
+                var status = new[] { "Armed", "Disarmed" };
+                Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1)).ObserveOn(RxApp.MainThreadScheduler).Subscribe(_ =>
+                {
+                    CenterStatus.Status = (StatusEnum)(_ % 4);
+                    CenterStatus.SubStatus = (StatusEnum)(_ % 4);
+                    LeftStatus.Status = (StatusEnum)(_ % 4);
+                    LeftStatus.SubStatus = (StatusEnum)(_ % 4);
+                    RightStatus.Status = (StatusEnum)(_ % 4);
+                    RightStatus.SubStatus = (StatusEnum)(_ % 4);
+
+                    StatusText = status[_ % 2];
+                });
+                StatusText = status[1];
             }
 
-
-            ScaleY = InternalHeight / 100;
+            var smallerSide = Math.Min(InternalWidth, InternalHeight);
+            Scale = smallerSide / 100;
 
             RollItems = new AvaloniaList<RollItem>(
                 new RollItem(0), new RollItem(10), new RollItem(20), new RollItem(30), new RollItem(45),
@@ -271,35 +319,35 @@ namespace Asv.Tools.Avalonia
                 new RollItem(350));
             
             PitchItems = new AvaloniaList<PitchItem>(
-                new PitchItem(135, ScaleY, false), new PitchItem(130, ScaleY), new PitchItem(125, ScaleY, false), new PitchItem(120, ScaleY),
-                new PitchItem(115, ScaleY, false), new PitchItem(110, ScaleY), new PitchItem(105, ScaleY, false), new PitchItem(100, ScaleY),
-                new PitchItem(95, ScaleY, false), new PitchItem(90, ScaleY), new PitchItem(85, ScaleY, false), new PitchItem(80, ScaleY),
-                new PitchItem(75, ScaleY, false), new PitchItem(70, ScaleY), new PitchItem(65, ScaleY, false), new PitchItem(60, ScaleY),
-                new PitchItem(55, ScaleY, false), new PitchItem(50, ScaleY), new PitchItem(45, ScaleY, false), new PitchItem(40, ScaleY),
-                new PitchItem(35, ScaleY, false), new PitchItem(30, ScaleY), new PitchItem(25, ScaleY, false), new PitchItem(20, ScaleY),
-                new PitchItem(15, ScaleY, false), new PitchItem(10, ScaleY), new PitchItem(5, ScaleY, false), new PitchItem(0, ScaleY),
-                new PitchItem(-5, ScaleY, false), new PitchItem(-10, ScaleY), new PitchItem(-15, ScaleY, false), new PitchItem(-20, ScaleY),
-                new PitchItem(-25, ScaleY, false), new PitchItem(-30, ScaleY), new PitchItem(-35, ScaleY, false), new PitchItem(-40, ScaleY),
-                new PitchItem(-45, ScaleY, false), new PitchItem(-50, ScaleY), new PitchItem(-55, ScaleY, false), new PitchItem(-60, ScaleY),
-                new PitchItem(-65, ScaleY, false), new PitchItem(-70, ScaleY), new PitchItem(-75, ScaleY, false), new PitchItem(-80, ScaleY),
-                new PitchItem(-85, ScaleY, false), new PitchItem(-90, ScaleY), new PitchItem(-95, ScaleY, false), new PitchItem(-100, ScaleY),
-                new PitchItem(-105, ScaleY, false), new PitchItem(-110, ScaleY), new PitchItem(-115, ScaleY, false), new PitchItem(-120, ScaleY),
-                new PitchItem(-125, ScaleY, false), new PitchItem(-130, ScaleY), new PitchItem(-135, ScaleY, false)
+                new PitchItem(135, Scale, false), new PitchItem(130, Scale), new PitchItem(125, Scale, false), new PitchItem(120, Scale),
+                new PitchItem(115, Scale, false), new PitchItem(110, Scale), new PitchItem(105, Scale, false), new PitchItem(100, Scale),
+                new PitchItem(95, Scale, false), new PitchItem(90, Scale), new PitchItem(85, Scale, false), new PitchItem(80, Scale),
+                new PitchItem(75, Scale, false), new PitchItem(70, Scale), new PitchItem(65, Scale, false), new PitchItem(60, Scale),
+                new PitchItem(55, Scale, false), new PitchItem(50, Scale), new PitchItem(45, Scale, false), new PitchItem(40, Scale),
+                new PitchItem(35, Scale, false), new PitchItem(30, Scale), new PitchItem(25, Scale, false), new PitchItem(20, Scale),
+                new PitchItem(15, Scale, false), new PitchItem(10, Scale), new PitchItem(5, Scale, false), new PitchItem(0, Scale),
+                new PitchItem(-5, Scale, false), new PitchItem(-10, Scale), new PitchItem(-15, Scale, false), new PitchItem(-20, Scale),
+                new PitchItem(-25, Scale, false), new PitchItem(-30, Scale), new PitchItem(-35, Scale, false), new PitchItem(-40, Scale),
+                new PitchItem(-45, Scale, false), new PitchItem(-50, Scale), new PitchItem(-55, Scale, false), new PitchItem(-60, Scale),
+                new PitchItem(-65, Scale, false), new PitchItem(-70, Scale), new PitchItem(-75, Scale, false), new PitchItem(-80, Scale),
+                new PitchItem(-85, Scale, false), new PitchItem(-90, Scale), new PitchItem(-95, Scale, false), new PitchItem(-100, Scale),
+                new PitchItem(-105, Scale, false), new PitchItem(-110, Scale), new PitchItem(-115, Scale, false), new PitchItem(-120, Scale),
+                new PitchItem(-125, Scale, false), new PitchItem(-130, Scale), new PitchItem(-135, Scale, false)
             );
 
-            var velocityControlLength = InternalHeight * VelocityControlLengthPrc;
+            var velocityControlLength = smallerSide * VelocityControlLengthPrc;
             var velocityItemLength = velocityControlLength / (VelocityItemCount - 1);
             VelocityItems = new AvaloniaList<ScaleItem>(Enumerable.Range(0, VelocityItemCount).Select(_ =>
                 new ScaleItem(0, VelocityValueRange, _, VelocityItemCount, velocityControlLength + velocityItemLength,
                     velocityControlLength, showNegative: false)));
             
-            var altitudeControlLength = InternalHeight * AltitudeControlLengthPrc;
+            var altitudeControlLength = smallerSide * AltitudeControlLengthPrc;
             var altitudeItemLength = altitudeControlLength / (AltitudeItemCount - 1);
             AltitudeItems = new AvaloniaList<ScaleItem>(Enumerable.Range(0, AltitudeItemCount).Select(_ =>
                 new ScaleItem(0, AltitudeValueRange, _, AltitudeItemCount, altitudeControlLength + altitudeItemLength,
                     altitudeControlLength)));
 
-            var headingControlLength = InternalHeight * HeadingControlLengthPrc;
+            var headingControlLength = smallerSide * HeadingControlLengthPrc;
             var headingItemLength = headingControlLength / (HeadingItemCount - 1);
             HeadingItems = new AvaloniaList<ScaleItem>(Enumerable.Range(0, HeadingItemCount).Select(_ =>
                 new HeadingScaleItem(0, HeadingValueRange, _, HeadingItemCount,
@@ -326,8 +374,8 @@ namespace Asv.Tools.Avalonia
             if (source is not AttitudeIndicator indicator) return;
             var roll = indicator.RollAngle;
             var pitch = indicator.PitchAngle;
-            indicator.PitchTranslateX = -pitch * indicator.ScaleY * Math.Cos((roll - 90.0) * Math.PI / 180.0);
-            indicator.PitchTranslateY = pitch * indicator.ScaleY * Math.Sin((90 - roll) * Math.PI / 180.0);
+            indicator.PitchTranslateX = -pitch * indicator.Scale * Math.Cos((roll - 90.0) * Math.PI / 180.0);
+            indicator.PitchTranslateY = pitch * indicator.Scale * Math.Sin((90 - roll) * Math.PI / 180.0);
         }
 
         private static void UpdateVelocityItems(IAvaloniaObject source, bool beforeChanged)

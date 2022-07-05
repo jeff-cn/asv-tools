@@ -42,10 +42,6 @@ namespace Asv.Tools
         /// <exception cref="ArgumentNullException">point1 or point2 is null.</exception>
         public static double Distance(GeoPoint point1, GeoPoint point2)
         {
-            if ((point1.Altitude == null) || (point2.Altitude == null))
-            {
-                return Distance(point1.Latitude, point1.Longitude, point2.Latitude, point2.Longitude);
-            }
             return Distance(point1.Latitude, point1.Longitude, point1.Altitude, point2.Latitude, point2.Longitude, point2.Altitude);
         }
 
@@ -253,11 +249,64 @@ namespace Asv.Tools
         /// </summary>
         /// <param name="start"></param>
         /// <param name="stop"></param>
+        /// <param name="convergencePoint"></param>
         /// <param name="waggingCountsValue"></param>
-        /// <param name="value"></param>
         /// <param name="deviationFromCenterLineInMeters"></param>
         /// <returns></returns>
-        public static IEnumerable<GeoPoint> GenerateWaggingLatLonPoints(GeoPoint start, GeoPoint stop, int waggingCountsValue, double deviationFromCenterLineInMeters)
+        public static IEnumerable<GeoPoint> GenerateWaggingLatLonPoints(GeoPoint start, GeoPoint stop, GeoPoint convergencePoint, int waggingCountsValue, double deviationFromCenterLineInMeters, double minAltitudeInMeters)
+        {
+            var distanceToStart = convergencePoint.DistanceTo(start);
+            var distanceToStop = convergencePoint.DistanceTo(stop);
+            var factor = distanceToStart > distanceToStop ? deviationFromCenterLineInMeters / distanceToStart : deviationFromCenterLineInMeters / distanceToStop;
+            
+            if (waggingCountsValue <= 0 || deviationFromCenterLineInMeters <= 0)
+            {
+                // this is simple path from start to stop without sub points
+                yield return start;
+                yield return stop;
+            }
+            else
+            {
+                var altDiff = stop.Altitude - start.Altitude;
+                var azimuth = start.Azimuth(stop);
+                var distance = start.DistanceTo(stop);
+                var incDistance = distance / (waggingCountsValue + 1);
+                var incAlt = altDiff / (waggingCountsValue + 1);
+                var m = distanceToStart > distanceToStop ? -1 : 1;
+                
+                yield return start;
+                var currentDist = 0.0;
+                var currentAlt = 0.0;
+                for (var i = 0; i < waggingCountsValue; i++)
+                {
+                    currentDist += incDistance;
+                    currentAlt += incAlt;
+                    var alt = start.Altitude + currentAlt;
+                    alt = alt < minAltitudeInMeters ? minAltitudeInMeters : alt;
+                    yield return start.RadialPoint(currentDist, azimuth)
+                        .RadialPoint((distanceToStart + m * currentDist) * factor, azimuth + (i % 2 == 0 ? -90 : 90))
+                        .SetAltitude(alt);
+                }
+                yield return stop;
+            }
+        }
+
+
+        /// <summary>
+        /// Generate wagging path points
+        ///           [2]     [4]
+        /// [START]--/   \   /   \--[STOP]
+        ///               [3]
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="stop"></param>
+        /// <param name="convergencePoint"></param>
+        /// <param name="waggingCountsValue"></param>
+        /// <param name="deviationFromCenterLineInMeters"></param>
+        /// <param name="minAltitudeInMeters"></param>
+        /// <returns></returns>
+        public static IEnumerable<GeoPoint> GenerateWaggingAltPoints(GeoPoint start, GeoPoint stop,
+            GeoPoint convergencePoint, int waggingCountsValue, double deviationFromCenterLineInMeters, double minAltitudeInMeters)
         {
 
             if (waggingCountsValue <= 0 || deviationFromCenterLineInMeters <= 0)
@@ -268,22 +317,75 @@ namespace Asv.Tools
             }
             else
             {
-                var distance = start.DistanceTo(stop);
-                var alt = stop.Altitude - start.Altitude;
+                var isApproach = true;
+                var pointDistance = start.DistanceTo(stop);
+                if (pointDistance == 0)
+                {
+                    yield return start;
+                    yield return stop;
+                }
+
+                var aimingToStartDistance = convergencePoint.DistanceTo(start);
+                var aimingToStopDistance = convergencePoint.DistanceTo(stop);
+                var maxAltDev = deviationFromCenterLineInMeters;
+                var minAltDev = maxAltDev * aimingToStopDistance / aimingToStartDistance;
+                if (aimingToStartDistance < aimingToStopDistance)
+                {
+                    isApproach = false;
+                    minAltDev = maxAltDev * aimingToStartDistance / aimingToStopDistance;
+                }
+
+                var upAltDiff = isApproach
+                    ? (start.Altitude + maxAltDev - (stop.Altitude + minAltDev))
+                    : (stop.Altitude + maxAltDev - (start.Altitude + minAltDev));
+                var downAltDiff = isApproach
+                    ? (start.Altitude - maxAltDev - (stop.Altitude - minAltDev))
+                    : (stop.Altitude - maxAltDev - (start.Altitude - minAltDev));
+
                 var azimuth = start.Azimuth(stop);
-                var incDistance = distance / (waggingCountsValue + 1);
-                var incAlt = alt / (waggingCountsValue + 1);
+                var incDistance = pointDistance / (waggingCountsValue + 1);
+                var incUpAlt = upAltDiff / (waggingCountsValue + 1);
+                var incDownAlt = downAltDiff / (waggingCountsValue + 1);
 
 
                 yield return start;
-                var currDist = 0.0;
-                var currAlt = 0.0;
-                for (var i = 0; i < waggingCountsValue; i++)
+                var currentDist = 0.0;
+                var currentUpAlt = 0.0;
+                var currentDownAlt = 0.0;
+
+                if (isApproach)
                 {
-                    currDist += incDistance;
-                    currAlt += incAlt;
-                    yield return start.RadialPoint(currDist, azimuth).RadialPoint(deviationFromCenterLineInMeters, azimuth + (i % 2 == 0 ? -90 : 90)).SetAltitude(start.Altitude + currAlt);
+                    var startUpAltitude = start.Altitude + maxAltDev;
+                    var startDownAltitude = start.Altitude - maxAltDev;
+                    for (var i = 0; i < waggingCountsValue; i++)
+                    {
+                        currentDist += incDistance;
+                        currentUpAlt += incUpAlt;
+                        currentDownAlt += incDownAlt;
+                        var alt = i % 2 == 0
+                            ? startDownAltitude - currentDownAlt
+                            : startUpAltitude - currentUpAlt;
+                        if (alt < minAltitudeInMeters) alt = minAltitudeInMeters;
+                        yield return start.RadialPoint(currentDist, azimuth).SetAltitude(alt);
+                    }
                 }
+                else
+                {
+                    var startUpAltitude = start.Altitude + minAltDev;
+                    var startDownAltitude = start.Altitude - minAltDev;
+                    for (var i = 0; i < waggingCountsValue; i++)
+                    {
+                        currentDist += incDistance;
+                        currentUpAlt += incUpAlt;
+                        currentDownAlt += incDownAlt;
+                        var alt = i % 2 == 0
+                            ? startDownAltitude + currentDownAlt
+                            : startUpAltitude + currentUpAlt;
+                        if (alt < minAltitudeInMeters) alt = minAltitudeInMeters;
+                        yield return start.RadialPoint(currentDist, azimuth).SetAltitude(alt);
+                    }
+                }
+                
                 yield return stop;
             }
         }

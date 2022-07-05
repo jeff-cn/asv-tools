@@ -3,7 +3,7 @@
         xmlns:indicators="clr-namespace:Asv.Tools.Avalonia">
     <Design.PreviewWith>
         <Border Padding="0">
-            <indicators:AttitudeIndicator RollAngle="0" PitchAngle="0" Velocity="11" Altitude="150" Heading="57" HomeAzimuth="37"/>
+            <indicators:AttitudeIndicator RollAngle="0" PitchAngle="0" Velocity="0" Altitude="150" Heading="57" HomeAzimuth="37" RightStatusText="5.4 km"/>
         </Border>
     </Design.PreviewWith>
     <Style Selector="indicators|AttitudeIndicator">
@@ -56,7 +56,7 @@
                                 </TransformGroup>
                             </Rectangle.RenderTransform>
                         </Rectangle>
-                        
+
                         <Path Width="500" Height="500" Stroke="#e0e0e0" StrokeThickness="5">
                             <Path.RenderTransform>
                                 <TransformGroup>
@@ -149,7 +149,7 @@
                         <Line StartPoint="400,500" EndPoint="600,500" Stroke="#e0e0e0" StrokeThickness="5"/>
                         <Line StartPoint="400,540" EndPoint="502,500" Stroke="#e53935" StrokeThickness="10"/>
                         <Line StartPoint="498,500" EndPoint="600,540" Stroke="#e53935" StrokeThickness="10"/>
-                        
+
 
                         <!-- Velocity -->
                         <Rectangle Canvas.Top="301"  Canvas.Left="-3" Fill="#e0e0e0" Opacity="0.3" StrokeThickness="0" HorizontalAlignment="Stretch" Width="111" Height="398"/>
@@ -242,57 +242,60 @@
                         <!-- Home -->
                         <Polygon Canvas.Top="2" Canvas.Left="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=HomeAzimuthPosition}" Points="-15,0 0,15 15,0" Fill="#e53935" StrokeThickness="3" Stroke="Red"/>
 
-                        <!-- <Viewbox Canvas.Left="0" Canvas.Top="735" Width="1000" Height="145"> -->
-                        <!--     <StackPanel Orientation="Horizontal"> -->
-                        <!--         <indicators:StatusButton MinWidth="150" BottomRightStatus="asdas" Title="GPS1" StatusText="RTK Fixed" Icon="CrosshairsGps"/> -->
-                        <!--         <indicators:StatusButton MinWidth="150" BottomRightStatus="asdas" Title="GPS1" StatusText="RTK Fixed" Icon="CrosshairsGps"/> -->
-                        <!--         <indicators:StatusButton MinWidth="150" BottomRightStatus="asdas" Title="GPS1" StatusText="RTK Fixed" Icon="CrosshairsGps"/> -->
-                        <!--     </StackPanel> -->
-                        <!-- </Viewbox> -->
-                        <Viewbox Canvas.Left="0" Canvas.Top="855" Width="1000" Height="145">
-                            <StackPanel Orientation="Horizontal">
-                                <!--  -->
+                        <Grid Canvas.Top="730" Canvas.Right="-3" Width="165" Height="60" IsVisible="True">
+                            <Rectangle  Fill="#e0e0e0" Opacity="0.3" StrokeThickness="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatusText}" Foreground="#e0e0e0" FontSize="40" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,10,0"></TextBlock>
+                            <Border BorderBrush="#e0e0e0" VerticalAlignment="Stretch" DockPanel.Dock="Right" BorderThickness="5" CornerRadius="3" Width="165" Height="60"/>
+                        </Grid>
+
+                        <Grid Canvas.Left="0" Canvas.Top="800" Width="1000" Height="200" ColumnDefinitions="*,*,*">
+                            <Viewbox Grid.Column="0">
                                 <indicators:StatusButton x:DataType="indicators:StatusButtonViewModel"
-                                                         MinWidth="150"
-                                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonLeft.Command, Mode=TwoWay}"
-                                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonLeft.CommandParameter, Mode=TwoWay}"
-                                                         StatusText="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonLeft.StatusText, Mode=TwoWay}"
-                                                         Title="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonLeft.Title, Mode=TwoWay}"
-                                                         TopRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonLeft.TopRightStatus, Mode=TwoWay}"
-                                                         BottomRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonLeft.BottomRightStatus, Mode=TwoWay}"
-                                                         IsVisible="{Binding Path=., Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                         Icon="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonLeft.Icon, Mode=TwoWay}"
-                                                         Status="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonLeft.Status, Mode=TwoWay}"
-                                                         SubStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonLeft.SubStatus, Mode=TwoWay}"/>
-                                <!-- IsVisible="{Binding Path=., Converter={x:Static ObjectConverters.IsNotNull}}" -->
+                                                         VerticalAlignment="Stretch"
+                                                         Width="125"
+                                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftStatus.Command, Mode=TwoWay}"
+                                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftStatus.CommandParameter, Mode=TwoWay}"
+                                                         StatusText="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftStatus.StatusText, Mode=TwoWay}"
+                                                         Title="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftStatus.Title, Mode=TwoWay}"
+                                                         TopRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftStatus.TopRightStatus, Mode=TwoWay}"
+                                                         BottomRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftStatus.BottomRightStatus, Mode=TwoWay}"
+                                                         IsVisible="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftStatus, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                         Icon="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftStatus.Icon, Mode=TwoWay}"
+                                                         Status="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftStatus.Status, Mode=TwoWay}"
+                                                         SubStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=LeftStatus.SubStatus, Mode=TwoWay}"/>
+                            </Viewbox>
+                            <Viewbox Grid.Column="1">
                                 <indicators:StatusButton x:DataType="indicators:StatusButtonViewModel"
-                                                         MinWidth="150"
-                                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonCenter.Command, Mode=TwoWay}"
-                                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonCenter.CommandParameter, Mode=TwoWay}"
-                                                         StatusText="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonCenter.StatusText, Mode=TwoWay}"
-                                                         Title="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonCenter.Title, Mode=TwoWay}"
-                                                         TopRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonCenter.TopRightStatus, Mode=TwoWay}"
-                                                         BottomRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonCenter.BottomRightStatus, Mode=TwoWay}"
-                                                         IsVisible="{Binding Path=., Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                         Icon="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonCenter.Icon, Mode=TwoWay}"
-                                                         Status="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonCenter.Status, Mode=TwoWay}"
-                                                         SubStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonCenter.SubStatus, Mode=TwoWay}"/>
-                                <!-- IsVisible="{Binding Path=., Converter={x:Static ObjectConverters.IsNotNull}}" -->
+                                                         VerticalAlignment="Stretch"
+                                                         Width="125"
+                                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterStatus.Command, Mode=TwoWay}"
+                                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterStatus.CommandParameter, Mode=TwoWay}"
+                                                         StatusText="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterStatus.StatusText, Mode=TwoWay}"
+                                                         Title="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterStatus.Title, Mode=TwoWay}"
+                                                         TopRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterStatus.TopRightStatus, Mode=TwoWay}"
+                                                         BottomRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterStatus.BottomRightStatus, Mode=TwoWay}"
+                                                         IsVisible="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterStatus, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                         Icon="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterStatus.Icon, Mode=TwoWay}"
+                                                         Status="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterStatus.Status, Mode=TwoWay}"
+                                                         SubStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterStatus.SubStatus, Mode=TwoWay}"/>
+                            </Viewbox>
+                            <Viewbox Grid.Column="2">
                                 <indicators:StatusButton x:DataType="indicators:StatusButtonViewModel"
-                                                         MinWidth="150"
-                                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonRight.Command, Mode=TwoWay}"
-                                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonRight.CommandParameter, Mode=TwoWay}"
-                                                         StatusText="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonRight.StatusText, Mode=TwoWay}"
-                                                         Title="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonRight.Title, Mode=TwoWay}"
-                                                         TopRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonRight.TopRightStatus, Mode=TwoWay}"
-                                                         BottomRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonRight.BottomRightStatus, Mode=TwoWay}"
-                                                         IsVisible="{Binding Path=., Converter={x:Static ObjectConverters.IsNotNull}}"
-                                                         Icon="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonRight.Icon, Mode=TwoWay}"
-                                                         Status="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonRight.Status, Mode=TwoWay}"
-                                                         SubStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusButtonRight.SubStatus, Mode=TwoWay}"/>
-                            </StackPanel>
-                        </Viewbox>
-                        
+                                                         VerticalAlignment="Stretch"
+                                                         Width="125"
+                                                         Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatus.Command, Mode=TwoWay}"
+                                                         CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatus.CommandParameter, Mode=TwoWay}"
+                                                         StatusText="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatus.StatusText, Mode=TwoWay}"
+                                                         Title="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatus.Title, Mode=TwoWay}"
+                                                         TopRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatus.TopRightStatus, Mode=TwoWay}"
+                                                         BottomRightStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatus.BottomRightStatus, Mode=TwoWay}"
+                                                         IsVisible="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatus, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                         Icon="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatus.Icon, Mode=TwoWay}"
+                                                         Status="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatus.Status, Mode=TwoWay}"
+                                                         SubStatus="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=RightStatus.SubStatus, Mode=TwoWay}"/>
+                            </Viewbox>
+                        </Grid>
+                        <TextBlock Canvas.Left="0" Canvas.Top="550" Foreground="#e53935" FontSize="100" Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=StatusText, Mode=TwoWay}" Width="1000" TextAlignment="Center" HorizontalAlignment="Center"/>
 
                     </Canvas>
                 </Viewbox>
