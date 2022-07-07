@@ -1,3 +1,5 @@
+using System;
+
 namespace Asv.Tools
 {
     public static class Crc32Q
@@ -59,6 +61,16 @@ namespace Asv.Tools
             return crc;
         }
 
-        
+        public static uint Calc(ReadOnlySpan<byte> buf, int buffLen, uint initValue)
+        {
+            uint crc = initValue;
+            for (var i = 0; i < buffLen; i++)
+                crc = ((crc << 8) & 0xFFFFFF) ^ Crc32[((crc >> 8) ^ buf[i]) & 0xff];
+            return crc;
+        }
+
+
+
+
     }
 }

@@ -4,17 +4,17 @@ namespace Asv.Tools
 {
     public  static partial class SpanBitHelper
     {
-        public static uint GetBitU(ref ReadOnlySpan<byte> buff,ref uint pos, uint len)
+        public static uint GetBitU(ReadOnlySpan<byte> buff,ref int pos, int len)
         {
             uint bits = 0;
-            uint i;
+            int i;
             for (i = pos; i < pos + len; i++)
                 bits = (uint)((bits << 1) + ((buff[(int)(i / 8)] >> (int)(7 - i % 8)) & 1u));
             pos += len;
             return bits;
         }
 
-        public static uint GetBitUReverse(ref ReadOnlySpan<byte> buff, ref uint pos, uint len)
+        public static uint GetBitUReverse(ReadOnlySpan<byte> buff, ref int pos, int len)
         {
             uint bits = 0;
             for (var i = (int)(pos + len) - 1; i >= pos; i--)
@@ -23,7 +23,16 @@ namespace Asv.Tools
             return bits;
         }
 
-        public static void SetBitU(ref Span<byte> buff, ref uint pos, uint len, uint data)
+        public static uint GetBitUReverse(Span<byte> buff, ref int pos, int len)
+        {
+            uint bits = 0;
+            for (var i = (int)(pos + len) - 1; i >= pos; i--)
+                bits = (uint)((bits << 1) + ((buff[i / 8] >> 7 - i % 8) & 1u));
+            pos += len;
+            return bits;
+        }
+
+        public static void SetBitU(Span<byte> buff, ref int pos, int len, uint data)
         {
             var mask = 1u << (int)(len - 1);
 
@@ -39,7 +48,7 @@ namespace Asv.Tools
             pos += len;
         }
 
-        public static void SetBitUReverse(ref Span<byte> buff, ref uint pos, uint len, uint data)
+        public static void SetBitUReverse(Span<byte> buff, ref int pos, int len, uint data)
         {
             var mask = 1u;
 
@@ -55,61 +64,61 @@ namespace Asv.Tools
             pos += len;
         }
 
-        public static void SetBitU(ref Span<byte> buff,ref uint pos, uint len, double data)
+        public static void SetBitU(Span<byte> buff,ref int pos, int len, double data)
         {
-            SetBitU(ref buff,ref pos, len, (uint)data);
+            SetBitU(buff,ref pos, len, (uint)data);
         }
 
-        public static void SetBitUReverse(ref Span<byte> buff, ref uint pos, uint len, double data)
+        public static void SetBitUReverse(Span<byte> buff, ref int pos, int len, double data)
         {
-            SetBitUReverse(ref buff, ref pos, len, (uint)data);
+            SetBitUReverse(buff, ref pos, len, (uint)data);
         }
 
-        public static int GetBitS(ref ReadOnlySpan<byte> buff, ref uint pos, uint len)
+        public static int GetBitS(ReadOnlySpan<byte> buff, ref int pos, int len)
         {
-            var bits = GetBitU(ref buff,ref pos, len);
+            var bits = GetBitU(buff,ref pos, len);
             if (len <= 0 || 32 <= len || (bits & (1u << (int)(len - 1))) == 0)
                 return (int)bits;
             return (int)(bits | (~0u << (int)len)); /* extend sign */
         }
 
-        public static int GetBitSReverse(ref ReadOnlySpan<byte> buff, ref uint pos, uint len)
+        public static int GetBitSReverse(ReadOnlySpan<byte> buff, ref int pos, int len)
         {
-            var bits = GetBitUReverse(ref buff,ref  pos, len);
+            var bits = GetBitUReverse(buff,ref  pos, len);
             if (len <= 0 || 32 <= len || (bits & (1u << (int)(len - 1))) == 0)
                 return (int)bits;
             return (int)(bits | (~0u << (int)len)); /* extend sign */
         }
 
-        public static void SetBitS(ref Span<byte> buff,ref uint pos, uint len, int data)
+        public static void SetBitS(Span<byte> buff,ref int pos, int len, int data)
         {
             if (data < 0)
                 data |= 1 << (int)(len - 1);
             else
                 data &= ~(1 << (int)(len - 1)); /* set sign bit */
-            SetBitU(ref buff, ref pos, len, (uint)data);
+            SetBitU(buff, ref pos, len, (uint)data);
         }
 
-        public static void SetBitSReverse(ref Span<byte> buff,ref uint pos, uint len, int data)
+        public static void SetBitSReverse(Span<byte> buff,ref int pos, int len, int data)
         {
             if (data < 0)
                 data |= 1 << (int)(len - 1);
             else
                 data &= ~(1 << (int)(len - 1)); /* set sign bit */
-            SetBitUReverse(ref buff, ref pos, len, (uint)data);
+            SetBitUReverse(buff, ref pos, len, (uint)data);
         }
 
-        public static void SetBitS(ref Span<byte> buff,ref uint pos, uint len, double data)
+        public static void SetBitS(Span<byte> buff,ref int pos, int len, double data)
         {
-            SetBitS(ref buff, ref pos, len, (int)data);
+            SetBitS(buff, ref pos, len, (int)data);
         }
 
-        public static void SetBitSReverse(ref Span<byte> buff,ref uint pos, uint len, double data)
+        public static void SetBitSReverse(Span<byte> buff,ref int pos, int len, double data)
         {
-            SetBitSReverse(ref buff, ref pos, len, (int)data);
+            SetBitSReverse(buff, ref pos, len, (int)data);
         }
 
-        public static void SetBitStr(ref Span<byte> buffer, ref uint bitPosition, string message, int maxBitSize)
+        public static void SetBitStr(Span<byte> buffer, ref int bitPosition, string message, int maxBitSize)
         {
             throw new NotImplementedException();
         }

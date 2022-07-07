@@ -5,7 +5,7 @@ namespace Asv.Tools
     public interface ISpanBitCompactSerializable:ISizedSpanSerializable
     {
         int GetBitSize();
-        void Deserialize(ref ReadOnlySpan<byte> buffer, ref uint bitPosition);
-        void Serialize(ref Span<byte> buffer, ref uint bitPosition);
+        void Deserialize(ReadOnlySpan<byte> buffer, ref int bitPosition);
+        void Serialize(Span<byte> buffer, ref int bitPosition);
     }
 }

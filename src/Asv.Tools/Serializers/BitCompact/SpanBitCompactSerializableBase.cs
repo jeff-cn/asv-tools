@@ -6,16 +6,16 @@ namespace Asv.Tools
     {
         public void Deserialize(ref ReadOnlySpan<byte> buffer)
         {
-            uint bitIndex = 0;
-            Deserialize(ref buffer,ref bitIndex);
-            buffer = bitIndex % 8.0 == 0 ? buffer.Slice((int)(bitIndex / 8)) : buffer.Slice((int)(bitIndex / 8) + 1);
+            int bitIndex = 0;
+            Deserialize(buffer,ref bitIndex);
+            buffer = bitIndex % 8.0 == 0 ? buffer.Slice(bitIndex / 8) : buffer.Slice(bitIndex / 8 + 1);
         }
     
         public void Serialize(ref Span<byte> buffer)
         {
-            uint bitIndex = 0;
-            Serialize(ref buffer, ref bitIndex);
-            buffer = bitIndex % 8.0 == 0 ? buffer.Slice((int)(bitIndex / 8)) : buffer.Slice((int)(bitIndex / 8) + 1);
+            int bitIndex = 0;
+            Serialize(buffer, ref bitIndex);
+            buffer = bitIndex % 8.0 == 0 ? buffer.Slice(bitIndex / 8) : buffer.Slice(bitIndex / 8 + 1);
         }
     
         public int GetByteSize()
@@ -26,8 +26,8 @@ namespace Asv.Tools
         }
     
         public abstract int GetBitSize();
-        public abstract void Deserialize(ref ReadOnlySpan<byte> buffer, ref uint bitPosition);
-        public abstract void Serialize(ref Span<byte> buffer, ref uint bitPosition);
+        public abstract void Deserialize(ReadOnlySpan<byte> buffer, ref int bitPosition);
+        public abstract void Serialize(Span<byte> buffer, ref int bitPosition);
     
     }
 }

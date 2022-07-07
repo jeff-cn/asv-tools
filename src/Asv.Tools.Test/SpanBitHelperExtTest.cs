@@ -9,8 +9,7 @@ namespace Asv.Tools.Test
     {
         public const double Fraction1 = .00000001;
         public const double Offset1 = 0;
-    
-         #region FixedPointS3
+             #region FixedPointS3
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS3Max + 1, double.PositiveInfinity)]
@@ -34,13 +33,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS3Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS3Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(3U,bitIndex); // check correct bit length
+            Assert.Equal(3,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS3Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS3Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -51,7 +50,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(3U, bitIndex); // check correct bit length
+            Assert.Equal(3, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -75,13 +74,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS3Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS3Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(3U, bitIndex); // check correct bit length
+            Assert.Equal(3, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS3Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS3Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -91,7 +90,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(3U, bitIndex); // check correct bit length
+            Assert.Equal(3, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -115,13 +114,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS3Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS3Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(3U, bitIndex); // check correct bit length
+            Assert.Equal(3, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS3Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS3Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -131,7 +130,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(3U, bitIndex); // check correct bit length
+            Assert.Equal(3, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -141,11 +140,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS3Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS3Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -158,15 +157,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS3Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS3Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS3Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS3Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -174,8 +173,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS4
+             #region FixedPointS4
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS4Max + 1, double.PositiveInfinity)]
@@ -199,13 +197,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS4Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS4Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(4U,bitIndex); // check correct bit length
+            Assert.Equal(4,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS4Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS4Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -216,7 +214,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(4U, bitIndex); // check correct bit length
+            Assert.Equal(4, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -240,13 +238,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS4Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS4Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(4U, bitIndex); // check correct bit length
+            Assert.Equal(4, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS4Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS4Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -256,7 +254,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(4U, bitIndex); // check correct bit length
+            Assert.Equal(4, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -280,13 +278,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS4Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS4Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(4U, bitIndex); // check correct bit length
+            Assert.Equal(4, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS4Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS4Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -296,7 +294,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(4U, bitIndex); // check correct bit length
+            Assert.Equal(4, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -306,11 +304,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS4Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS4Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -323,15 +321,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS4Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS4Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS4Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS4Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -339,8 +337,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS5
+             #region FixedPointS5
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS5Max + 1, double.PositiveInfinity)]
@@ -364,13 +361,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS5Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS5Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(5U,bitIndex); // check correct bit length
+            Assert.Equal(5,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS5Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS5Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -381,7 +378,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(5U, bitIndex); // check correct bit length
+            Assert.Equal(5, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -405,13 +402,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS5Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS5Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(5U, bitIndex); // check correct bit length
+            Assert.Equal(5, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS5Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS5Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -421,7 +418,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(5U, bitIndex); // check correct bit length
+            Assert.Equal(5, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -445,13 +442,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS5Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS5Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(5U, bitIndex); // check correct bit length
+            Assert.Equal(5, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS5Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS5Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -461,7 +458,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(5U, bitIndex); // check correct bit length
+            Assert.Equal(5, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -471,11 +468,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS5Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS5Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -488,15 +485,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS5Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS5Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS5Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS5Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -504,8 +501,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS6
+             #region FixedPointS6
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS6Max + 1, double.PositiveInfinity)]
@@ -529,13 +525,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS6Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS6Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(6U,bitIndex); // check correct bit length
+            Assert.Equal(6,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS6Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS6Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -546,7 +542,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(6U, bitIndex); // check correct bit length
+            Assert.Equal(6, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -570,13 +566,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS6Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS6Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(6U, bitIndex); // check correct bit length
+            Assert.Equal(6, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS6Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS6Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -586,7 +582,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(6U, bitIndex); // check correct bit length
+            Assert.Equal(6, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -610,13 +606,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS6Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS6Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(6U, bitIndex); // check correct bit length
+            Assert.Equal(6, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS6Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS6Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -626,7 +622,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(6U, bitIndex); // check correct bit length
+            Assert.Equal(6, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -636,11 +632,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS6Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS6Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -653,15 +649,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS6Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS6Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS6Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS6Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -669,8 +665,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS7
+             #region FixedPointS7
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS7Max + 1, double.PositiveInfinity)]
@@ -694,13 +689,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS7Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS7Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(7U,bitIndex); // check correct bit length
+            Assert.Equal(7,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS7Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS7Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -711,7 +706,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(7U, bitIndex); // check correct bit length
+            Assert.Equal(7, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -735,13 +730,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS7Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS7Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(7U, bitIndex); // check correct bit length
+            Assert.Equal(7, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS7Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS7Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -751,7 +746,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(7U, bitIndex); // check correct bit length
+            Assert.Equal(7, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -775,13 +770,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS7Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS7Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(7U, bitIndex); // check correct bit length
+            Assert.Equal(7, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS7Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS7Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -791,7 +786,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(7U, bitIndex); // check correct bit length
+            Assert.Equal(7, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -801,11 +796,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS7Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS7Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -818,15 +813,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS7Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS7Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS7Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS7Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -834,8 +829,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS8
+             #region FixedPointS8
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS8Max + 1, double.PositiveInfinity)]
@@ -859,13 +853,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS8Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS8Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(8U,bitIndex); // check correct bit length
+            Assert.Equal(8,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS8Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS8Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -876,7 +870,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(8U, bitIndex); // check correct bit length
+            Assert.Equal(8, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -900,13 +894,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS8Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS8Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(8U, bitIndex); // check correct bit length
+            Assert.Equal(8, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS8Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS8Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -916,7 +910,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(8U, bitIndex); // check correct bit length
+            Assert.Equal(8, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -940,13 +934,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS8Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS8Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(8U, bitIndex); // check correct bit length
+            Assert.Equal(8, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS8Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS8Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -956,7 +950,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(8U, bitIndex); // check correct bit length
+            Assert.Equal(8, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -966,11 +960,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS8Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS8Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -983,15 +977,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS8Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS8Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS8Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS8Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -999,8 +993,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS9
+             #region FixedPointS9
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS9Max + 1, double.PositiveInfinity)]
@@ -1024,13 +1017,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS9Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS9Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(9U,bitIndex); // check correct bit length
+            Assert.Equal(9,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS9Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS9Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -1041,7 +1034,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(9U, bitIndex); // check correct bit length
+            Assert.Equal(9, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1065,13 +1058,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS9Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS9Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(9U, bitIndex); // check correct bit length
+            Assert.Equal(9, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS9Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS9Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1081,7 +1074,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(9U, bitIndex); // check correct bit length
+            Assert.Equal(9, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1105,13 +1098,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS9Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS9Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(9U, bitIndex); // check correct bit length
+            Assert.Equal(9, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS9Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS9Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1121,7 +1114,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(9U, bitIndex); // check correct bit length
+            Assert.Equal(9, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1131,11 +1124,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS9Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS9Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -1148,15 +1141,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS9Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS9Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS9Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS9Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -1164,8 +1157,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS10
+             #region FixedPointS10
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS10Max + 1, double.PositiveInfinity)]
@@ -1189,13 +1181,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS10Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS10Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(10U,bitIndex); // check correct bit length
+            Assert.Equal(10,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS10Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS10Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -1206,7 +1198,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(10U, bitIndex); // check correct bit length
+            Assert.Equal(10, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1230,13 +1222,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS10Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS10Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(10U, bitIndex); // check correct bit length
+            Assert.Equal(10, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS10Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS10Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1246,7 +1238,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(10U, bitIndex); // check correct bit length
+            Assert.Equal(10, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1270,13 +1262,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS10Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS10Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(10U, bitIndex); // check correct bit length
+            Assert.Equal(10, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS10Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS10Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1286,7 +1278,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(10U, bitIndex); // check correct bit length
+            Assert.Equal(10, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1296,11 +1288,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS10Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS10Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -1313,15 +1305,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS10Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS10Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS10Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS10Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -1329,8 +1321,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS11
+             #region FixedPointS11
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS11Max + 1, double.PositiveInfinity)]
@@ -1354,13 +1345,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS11Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS11Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(11U,bitIndex); // check correct bit length
+            Assert.Equal(11,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS11Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS11Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -1371,7 +1362,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(11U, bitIndex); // check correct bit length
+            Assert.Equal(11, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1395,13 +1386,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS11Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS11Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(11U, bitIndex); // check correct bit length
+            Assert.Equal(11, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS11Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS11Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1411,7 +1402,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(11U, bitIndex); // check correct bit length
+            Assert.Equal(11, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1435,13 +1426,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS11Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS11Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(11U, bitIndex); // check correct bit length
+            Assert.Equal(11, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS11Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS11Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1451,7 +1442,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(11U, bitIndex); // check correct bit length
+            Assert.Equal(11, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1461,11 +1452,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS11Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS11Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -1478,15 +1469,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS11Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS11Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS11Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS11Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -1494,8 +1485,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS12
+             #region FixedPointS12
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS12Max + 1, double.PositiveInfinity)]
@@ -1519,13 +1509,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS12Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS12Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(12U,bitIndex); // check correct bit length
+            Assert.Equal(12,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS12Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS12Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -1536,7 +1526,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(12U, bitIndex); // check correct bit length
+            Assert.Equal(12, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1560,13 +1550,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS12Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS12Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(12U, bitIndex); // check correct bit length
+            Assert.Equal(12, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS12Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS12Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1576,7 +1566,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(12U, bitIndex); // check correct bit length
+            Assert.Equal(12, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1600,13 +1590,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS12Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS12Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(12U, bitIndex); // check correct bit length
+            Assert.Equal(12, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS12Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS12Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1616,7 +1606,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(12U, bitIndex); // check correct bit length
+            Assert.Equal(12, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1626,11 +1616,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS12Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS12Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -1643,15 +1633,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS12Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS12Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS12Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS12Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -1659,8 +1649,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS13
+             #region FixedPointS13
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS13Max + 1, double.PositiveInfinity)]
@@ -1684,13 +1673,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS13Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS13Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(13U,bitIndex); // check correct bit length
+            Assert.Equal(13,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS13Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS13Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -1701,7 +1690,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(13U, bitIndex); // check correct bit length
+            Assert.Equal(13, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1725,13 +1714,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS13Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS13Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(13U, bitIndex); // check correct bit length
+            Assert.Equal(13, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS13Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS13Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1741,7 +1730,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(13U, bitIndex); // check correct bit length
+            Assert.Equal(13, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1765,13 +1754,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS13Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS13Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(13U, bitIndex); // check correct bit length
+            Assert.Equal(13, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS13Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS13Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1781,7 +1770,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(13U, bitIndex); // check correct bit length
+            Assert.Equal(13, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1791,11 +1780,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS13Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS13Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -1808,15 +1797,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS13Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS13Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS13Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS13Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -1824,8 +1813,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS14
+             #region FixedPointS14
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS14Max + 1, double.PositiveInfinity)]
@@ -1849,13 +1837,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS14Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS14Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(14U,bitIndex); // check correct bit length
+            Assert.Equal(14,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS14Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS14Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -1866,7 +1854,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(14U, bitIndex); // check correct bit length
+            Assert.Equal(14, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1890,13 +1878,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS14Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS14Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(14U, bitIndex); // check correct bit length
+            Assert.Equal(14, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS14Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS14Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1906,7 +1894,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(14U, bitIndex); // check correct bit length
+            Assert.Equal(14, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1930,13 +1918,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS14Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS14Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(14U, bitIndex); // check correct bit length
+            Assert.Equal(14, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS14Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS14Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -1946,7 +1934,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(14U, bitIndex); // check correct bit length
+            Assert.Equal(14, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -1956,11 +1944,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS14Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS14Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -1973,15 +1961,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS14Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS14Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS14Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS14Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -1989,8 +1977,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS15
+             #region FixedPointS15
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS15Max + 1, double.PositiveInfinity)]
@@ -2014,13 +2001,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS15Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS15Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(15U,bitIndex); // check correct bit length
+            Assert.Equal(15,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS15Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS15Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -2031,7 +2018,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(15U, bitIndex); // check correct bit length
+            Assert.Equal(15, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2055,13 +2042,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS15Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS15Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(15U, bitIndex); // check correct bit length
+            Assert.Equal(15, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS15Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS15Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2071,7 +2058,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(15U, bitIndex); // check correct bit length
+            Assert.Equal(15, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2095,13 +2082,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS15Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS15Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(15U, bitIndex); // check correct bit length
+            Assert.Equal(15, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS15Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS15Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2111,7 +2098,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(15U, bitIndex); // check correct bit length
+            Assert.Equal(15, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2121,11 +2108,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS15Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS15Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -2138,15 +2125,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS15Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS15Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS15Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS15Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -2154,8 +2141,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS16
+             #region FixedPointS16
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS16Max + 1, double.PositiveInfinity)]
@@ -2179,13 +2165,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS16Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS16Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(16U,bitIndex); // check correct bit length
+            Assert.Equal(16,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS16Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS16Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -2196,7 +2182,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(16U, bitIndex); // check correct bit length
+            Assert.Equal(16, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2220,13 +2206,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS16Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS16Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(16U, bitIndex); // check correct bit length
+            Assert.Equal(16, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS16Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS16Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2236,7 +2222,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(16U, bitIndex); // check correct bit length
+            Assert.Equal(16, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2260,13 +2246,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS16Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS16Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(16U, bitIndex); // check correct bit length
+            Assert.Equal(16, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS16Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS16Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2276,7 +2262,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(16U, bitIndex); // check correct bit length
+            Assert.Equal(16, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2286,11 +2272,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS16Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS16Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -2303,15 +2289,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS16Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS16Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS16Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS16Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -2319,8 +2305,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS17
+             #region FixedPointS17
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS17Max + 1, double.PositiveInfinity)]
@@ -2344,13 +2329,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS17Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS17Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(17U,bitIndex); // check correct bit length
+            Assert.Equal(17,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS17Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS17Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -2361,7 +2346,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(17U, bitIndex); // check correct bit length
+            Assert.Equal(17, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2385,13 +2370,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS17Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS17Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(17U, bitIndex); // check correct bit length
+            Assert.Equal(17, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS17Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS17Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2401,7 +2386,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(17U, bitIndex); // check correct bit length
+            Assert.Equal(17, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2425,13 +2410,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS17Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS17Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(17U, bitIndex); // check correct bit length
+            Assert.Equal(17, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS17Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS17Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2441,7 +2426,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(17U, bitIndex); // check correct bit length
+            Assert.Equal(17, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2451,11 +2436,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS17Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS17Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -2468,15 +2453,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS17Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS17Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS17Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS17Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -2484,8 +2469,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS18
+             #region FixedPointS18
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS18Max + 1, double.PositiveInfinity)]
@@ -2509,13 +2493,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS18Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS18Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(18U,bitIndex); // check correct bit length
+            Assert.Equal(18,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS18Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS18Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -2526,7 +2510,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(18U, bitIndex); // check correct bit length
+            Assert.Equal(18, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2550,13 +2534,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS18Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS18Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(18U, bitIndex); // check correct bit length
+            Assert.Equal(18, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS18Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS18Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2566,7 +2550,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(18U, bitIndex); // check correct bit length
+            Assert.Equal(18, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2590,13 +2574,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS18Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS18Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(18U, bitIndex); // check correct bit length
+            Assert.Equal(18, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS18Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS18Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2606,7 +2590,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(18U, bitIndex); // check correct bit length
+            Assert.Equal(18, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2616,11 +2600,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS18Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS18Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -2633,15 +2617,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS18Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS18Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS18Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS18Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -2649,8 +2633,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS19
+             #region FixedPointS19
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS19Max + 1, double.PositiveInfinity)]
@@ -2674,13 +2657,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS19Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS19Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(19U,bitIndex); // check correct bit length
+            Assert.Equal(19,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS19Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS19Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -2691,7 +2674,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(19U, bitIndex); // check correct bit length
+            Assert.Equal(19, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2715,13 +2698,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS19Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS19Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(19U, bitIndex); // check correct bit length
+            Assert.Equal(19, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS19Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS19Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2731,7 +2714,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(19U, bitIndex); // check correct bit length
+            Assert.Equal(19, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2755,13 +2738,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS19Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS19Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(19U, bitIndex); // check correct bit length
+            Assert.Equal(19, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS19Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS19Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2771,7 +2754,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(19U, bitIndex); // check correct bit length
+            Assert.Equal(19, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2781,11 +2764,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS19Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS19Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -2798,15 +2781,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS19Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS19Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS19Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS19Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -2814,8 +2797,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS20
+             #region FixedPointS20
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS20Max + 1, double.PositiveInfinity)]
@@ -2839,13 +2821,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS20Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS20Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(20U,bitIndex); // check correct bit length
+            Assert.Equal(20,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS20Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS20Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -2856,7 +2838,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(20U, bitIndex); // check correct bit length
+            Assert.Equal(20, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2880,13 +2862,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS20Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS20Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(20U, bitIndex); // check correct bit length
+            Assert.Equal(20, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS20Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS20Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2896,7 +2878,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(20U, bitIndex); // check correct bit length
+            Assert.Equal(20, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2920,13 +2902,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS20Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS20Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(20U, bitIndex); // check correct bit length
+            Assert.Equal(20, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS20Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS20Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -2936,7 +2918,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(20U, bitIndex); // check correct bit length
+            Assert.Equal(20, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -2946,11 +2928,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS20Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS20Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -2963,15 +2945,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS20Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS20Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS20Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS20Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -2979,8 +2961,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS21
+             #region FixedPointS21
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS21Max + 1, double.PositiveInfinity)]
@@ -3004,13 +2985,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS21Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS21Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(21U,bitIndex); // check correct bit length
+            Assert.Equal(21,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS21Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS21Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -3021,7 +3002,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(21U, bitIndex); // check correct bit length
+            Assert.Equal(21, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3045,13 +3026,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS21Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS21Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(21U, bitIndex); // check correct bit length
+            Assert.Equal(21, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS21Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS21Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3061,7 +3042,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(21U, bitIndex); // check correct bit length
+            Assert.Equal(21, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3085,13 +3066,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS21Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS21Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(21U, bitIndex); // check correct bit length
+            Assert.Equal(21, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS21Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS21Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3101,7 +3082,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(21U, bitIndex); // check correct bit length
+            Assert.Equal(21, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3111,11 +3092,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS21Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS21Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -3128,15 +3109,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS21Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS21Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS21Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS21Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -3144,8 +3125,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS22
+             #region FixedPointS22
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS22Max + 1, double.PositiveInfinity)]
@@ -3169,13 +3149,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS22Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS22Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(22U,bitIndex); // check correct bit length
+            Assert.Equal(22,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS22Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS22Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -3186,7 +3166,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(22U, bitIndex); // check correct bit length
+            Assert.Equal(22, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3210,13 +3190,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS22Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS22Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(22U, bitIndex); // check correct bit length
+            Assert.Equal(22, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS22Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS22Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3226,7 +3206,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(22U, bitIndex); // check correct bit length
+            Assert.Equal(22, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3250,13 +3230,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS22Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS22Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(22U, bitIndex); // check correct bit length
+            Assert.Equal(22, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS22Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS22Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3266,7 +3246,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(22U, bitIndex); // check correct bit length
+            Assert.Equal(22, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3276,11 +3256,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS22Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS22Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -3293,15 +3273,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS22Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS22Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS22Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS22Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -3309,8 +3289,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS23
+             #region FixedPointS23
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS23Max + 1, double.PositiveInfinity)]
@@ -3334,13 +3313,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS23Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS23Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(23U,bitIndex); // check correct bit length
+            Assert.Equal(23,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS23Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS23Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -3351,7 +3330,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(23U, bitIndex); // check correct bit length
+            Assert.Equal(23, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3375,13 +3354,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS23Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS23Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(23U, bitIndex); // check correct bit length
+            Assert.Equal(23, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS23Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS23Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3391,7 +3370,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(23U, bitIndex); // check correct bit length
+            Assert.Equal(23, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3415,13 +3394,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS23Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS23Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(23U, bitIndex); // check correct bit length
+            Assert.Equal(23, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS23Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS23Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3431,7 +3410,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(23U, bitIndex); // check correct bit length
+            Assert.Equal(23, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3441,11 +3420,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS23Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS23Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -3458,15 +3437,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS23Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS23Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS23Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS23Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -3474,8 +3453,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS24
+             #region FixedPointS24
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS24Max + 1, double.PositiveInfinity)]
@@ -3499,13 +3477,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS24Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS24Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(24U,bitIndex); // check correct bit length
+            Assert.Equal(24,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS24Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS24Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -3516,7 +3494,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(24U, bitIndex); // check correct bit length
+            Assert.Equal(24, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3540,13 +3518,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS24Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS24Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(24U, bitIndex); // check correct bit length
+            Assert.Equal(24, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS24Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS24Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3556,7 +3534,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(24U, bitIndex); // check correct bit length
+            Assert.Equal(24, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3580,13 +3558,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS24Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS24Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(24U, bitIndex); // check correct bit length
+            Assert.Equal(24, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS24Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS24Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3596,7 +3574,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(24U, bitIndex); // check correct bit length
+            Assert.Equal(24, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3606,11 +3584,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS24Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS24Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -3623,15 +3601,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS24Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS24Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS24Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS24Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -3639,8 +3617,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS25
+             #region FixedPointS25
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS25Max + 1, double.PositiveInfinity)]
@@ -3664,13 +3641,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS25Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS25Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(25U,bitIndex); // check correct bit length
+            Assert.Equal(25,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS25Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS25Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -3681,7 +3658,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(25U, bitIndex); // check correct bit length
+            Assert.Equal(25, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3705,13 +3682,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS25Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS25Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(25U, bitIndex); // check correct bit length
+            Assert.Equal(25, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS25Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS25Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3721,7 +3698,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(25U, bitIndex); // check correct bit length
+            Assert.Equal(25, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3745,13 +3722,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS25Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS25Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(25U, bitIndex); // check correct bit length
+            Assert.Equal(25, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS25Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS25Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3761,7 +3738,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(25U, bitIndex); // check correct bit length
+            Assert.Equal(25, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3771,11 +3748,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS25Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS25Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -3788,15 +3765,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS25Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS25Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS25Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS25Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -3804,8 +3781,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS26
+             #region FixedPointS26
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS26Max + 1, double.PositiveInfinity)]
@@ -3829,13 +3805,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS26Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS26Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(26U,bitIndex); // check correct bit length
+            Assert.Equal(26,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS26Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS26Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -3846,7 +3822,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(26U, bitIndex); // check correct bit length
+            Assert.Equal(26, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3870,13 +3846,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS26Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS26Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(26U, bitIndex); // check correct bit length
+            Assert.Equal(26, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS26Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS26Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3886,7 +3862,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(26U, bitIndex); // check correct bit length
+            Assert.Equal(26, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3910,13 +3886,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS26Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS26Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(26U, bitIndex); // check correct bit length
+            Assert.Equal(26, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS26Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS26Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -3926,7 +3902,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(26U, bitIndex); // check correct bit length
+            Assert.Equal(26, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -3936,11 +3912,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS26Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS26Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -3953,15 +3929,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS26Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS26Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS26Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS26Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -3969,8 +3945,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS27
+             #region FixedPointS27
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS27Max + 1, double.PositiveInfinity)]
@@ -3994,13 +3969,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS27Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS27Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(27U,bitIndex); // check correct bit length
+            Assert.Equal(27,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS27Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS27Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -4011,7 +3986,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(27U, bitIndex); // check correct bit length
+            Assert.Equal(27, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4035,13 +4010,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS27Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS27Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(27U, bitIndex); // check correct bit length
+            Assert.Equal(27, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS27Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS27Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4051,7 +4026,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(27U, bitIndex); // check correct bit length
+            Assert.Equal(27, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4075,13 +4050,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS27Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS27Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(27U, bitIndex); // check correct bit length
+            Assert.Equal(27, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS27Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS27Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4091,7 +4066,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(27U, bitIndex); // check correct bit length
+            Assert.Equal(27, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4101,11 +4076,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS27Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS27Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -4118,15 +4093,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS27Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS27Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS27Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS27Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -4134,8 +4109,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS28
+             #region FixedPointS28
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS28Max + 1, double.PositiveInfinity)]
@@ -4159,13 +4133,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS28Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS28Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(28U,bitIndex); // check correct bit length
+            Assert.Equal(28,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS28Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS28Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -4176,7 +4150,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(28U, bitIndex); // check correct bit length
+            Assert.Equal(28, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4200,13 +4174,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS28Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS28Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(28U, bitIndex); // check correct bit length
+            Assert.Equal(28, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS28Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS28Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4216,7 +4190,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(28U, bitIndex); // check correct bit length
+            Assert.Equal(28, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4240,13 +4214,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS28Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS28Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(28U, bitIndex); // check correct bit length
+            Assert.Equal(28, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS28Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS28Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4256,7 +4230,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(28U, bitIndex); // check correct bit length
+            Assert.Equal(28, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4266,11 +4240,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS28Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS28Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -4283,15 +4257,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS28Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS28Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS28Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS28Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -4299,8 +4273,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS29
+             #region FixedPointS29
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS29Max + 1, double.PositiveInfinity)]
@@ -4324,13 +4297,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS29Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS29Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(29U,bitIndex); // check correct bit length
+            Assert.Equal(29,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS29Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS29Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -4341,7 +4314,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(29U, bitIndex); // check correct bit length
+            Assert.Equal(29, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4365,13 +4338,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS29Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS29Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(29U, bitIndex); // check correct bit length
+            Assert.Equal(29, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS29Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS29Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4381,7 +4354,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(29U, bitIndex); // check correct bit length
+            Assert.Equal(29, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4405,13 +4378,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS29Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS29Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(29U, bitIndex); // check correct bit length
+            Assert.Equal(29, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS29Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS29Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4421,7 +4394,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(29U, bitIndex); // check correct bit length
+            Assert.Equal(29, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4431,11 +4404,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS29Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS29Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -4448,15 +4421,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS29Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS29Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS29Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS29Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -4464,8 +4437,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS30
+             #region FixedPointS30
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS30Max + 1, double.PositiveInfinity)]
@@ -4489,13 +4461,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS30Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS30Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(30U,bitIndex); // check correct bit length
+            Assert.Equal(30,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS30Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS30Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -4506,7 +4478,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(30U, bitIndex); // check correct bit length
+            Assert.Equal(30, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4530,13 +4502,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS30Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS30Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(30U, bitIndex); // check correct bit length
+            Assert.Equal(30, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS30Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS30Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4546,7 +4518,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(30U, bitIndex); // check correct bit length
+            Assert.Equal(30, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4570,13 +4542,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS30Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS30Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(30U, bitIndex); // check correct bit length
+            Assert.Equal(30, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS30Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS30Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4586,7 +4558,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(30U, bitIndex); // check correct bit length
+            Assert.Equal(30, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4596,11 +4568,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS30Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS30Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -4613,15 +4585,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS30Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS30Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS30Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS30Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -4629,8 +4601,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS31
+             #region FixedPointS31
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS31Max + 1, double.PositiveInfinity)]
@@ -4654,13 +4625,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS31Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS31Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(31U,bitIndex); // check correct bit length
+            Assert.Equal(31,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS31Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS31Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -4671,7 +4642,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(31U, bitIndex); // check correct bit length
+            Assert.Equal(31, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4695,13 +4666,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS31Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS31Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(31U, bitIndex); // check correct bit length
+            Assert.Equal(31, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS31Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS31Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4711,7 +4682,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(31U, bitIndex); // check correct bit length
+            Assert.Equal(31, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4735,13 +4706,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS31Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS31Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(31U, bitIndex); // check correct bit length
+            Assert.Equal(31, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS31Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS31Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4751,7 +4722,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(31U, bitIndex); // check correct bit length
+            Assert.Equal(31, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4761,11 +4732,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS31Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS31Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -4778,15 +4749,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS31Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS31Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS31Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS31Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -4794,8 +4765,7 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-         #region FixedPointS32
+             #region FixedPointS32
 
          [Theory]
         [InlineData(SpanBitHelper.FixedPointS32Max + 1, double.PositiveInfinity)]
@@ -4819,13 +4789,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS32Bit(ref writeSpan, ref bitIndex,writed);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS32Bit(writeSpan, ref bitIndex,writed);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(32U,bitIndex); // check correct bit length
+            Assert.Equal(32,bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS32Bit(ref readSpan, ref bitIndex);
+            var value = SpanBitHelper.GetFixedPointS32Bit(readSpan, ref bitIndex);
 
             if (double.IsNaN(expected))
             {
@@ -4836,7 +4806,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, 1.0);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(32U, bitIndex); // check correct bit length
+            Assert.Equal(32, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4860,13 +4830,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS32Bit(ref writeSpan, ref bitIndex, writed, fraction);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS32Bit(writeSpan, ref bitIndex, writed, fraction);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(32U, bitIndex); // check correct bit length
+            Assert.Equal(32, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS32Bit(ref readSpan, ref bitIndex, fraction);
+            var value = SpanBitHelper.GetFixedPointS32Bit(readSpan, ref bitIndex, fraction);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4876,7 +4846,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(32U, bitIndex); // check correct bit length
+            Assert.Equal(32, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4900,13 +4870,13 @@ namespace Asv.Tools.Test
             var data = new byte[256];
             var writeSpan = new Span<byte>(data);
             var readSpan = new ReadOnlySpan<byte>(data);
-            uint bitIndex = 0;
-            SpanBitHelper.SetFixedPointS32Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            int bitIndex = 0;
+            SpanBitHelper.SetFixedPointS32Bit(writeSpan, ref bitIndex, writed, fraction, offset);
             Assert.Equal(data.Length, writeSpan.Length); // Check thant didn't slice span
-            Assert.Equal(32U, bitIndex); // check correct bit length
+            Assert.Equal(32, bitIndex); // check correct bit length
 
             bitIndex = 0;
-            var value = SpanBitHelper.GetFixedPointS32Bit(ref readSpan, ref bitIndex, fraction, offset);
+            var value = SpanBitHelper.GetFixedPointS32Bit(readSpan, ref bitIndex, fraction, offset);
             if (double.IsNaN(expected))
             {
                 Assert.Equal(expected, value);
@@ -4916,7 +4886,7 @@ namespace Asv.Tools.Test
                 value.Should().BeApproximately(expected, fraction);
             }
             Assert.Equal(data.Length, readSpan.Length); // Check thant didn't slice span
-            Assert.Equal(32U, bitIndex); // check correct bit length
+            Assert.Equal(32, bitIndex); // check correct bit length
         }
 
         [Theory]
@@ -4926,11 +4896,11 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
 
-            uint bitIndex = 0;
+            int bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var writeSpan = new Span<byte>(data);
-                SpanBitHelper.SetFixedPointS32Bit(ref writeSpan, ref bitIndex, writed, fraction, offset, max, min);
+                SpanBitHelper.SetFixedPointS32Bit(writeSpan, ref bitIndex, writed, fraction, offset, max, min);
             });
 
 
@@ -4943,15 +4913,15 @@ namespace Asv.Tools.Test
         {
             var data = new byte[256];
             
-            uint bitIndex = 0;
+            int bitIndex = 0;
             var writeSpan = new Span<byte>(data);
-            SpanBitHelper.SetFixedPointS32Bit(ref writeSpan, ref bitIndex, writed, fraction, offset);
+            SpanBitHelper.SetFixedPointS32Bit(writeSpan, ref bitIndex, writed, fraction, offset);
 
             bitIndex = 0;
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var readSpan = new ReadOnlySpan<byte>(data);
-                SpanBitHelper.GetFixedPointS32Bit(ref readSpan, ref bitIndex, fraction, offset,max,min);
+                SpanBitHelper.GetFixedPointS32Bit(readSpan, ref bitIndex, fraction, offset,max,min);
             });
 
 
@@ -4959,6 +4929,5 @@ namespace Asv.Tools.Test
 
         #endregion
 
-    
-    }
+        }
 }
