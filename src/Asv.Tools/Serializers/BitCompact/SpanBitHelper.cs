@@ -4,6 +4,8 @@ namespace Asv.Tools
 {
     public  static partial class SpanBitHelper
     {
+        
+
         public static uint GetBitU(ReadOnlySpan<byte> buff,ref int pos, int len)
         {
             uint bits = 0;
@@ -73,7 +75,7 @@ namespace Asv.Tools
         {
             SetBitUReverse(buff, ref pos, len, (uint)data);
         }
-
+       
         public static int GetBitS(ReadOnlySpan<byte> buff, ref int pos, int len)
         {
             var bits = GetBitU(buff,ref pos, len);

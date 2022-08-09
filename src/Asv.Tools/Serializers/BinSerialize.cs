@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -795,20 +796,30 @@ namespace Asv.Tools
 
             // Decode on the stack to avoid having to allocate a temporary buffer on the heap.
             var maxCharCount = uft8.GetMaxCharCount(byteCount);
-            var charBuffer = stackalloc char[maxCharCount];
 
-            // Read chars as utf8.
-            int actualCharCount;
-            fixed (byte* bytePointer = span)
+            // var charBuffer = stackalloc char[maxCharCount];
+            var charBuffer = ArrayPool<char>.Shared.Rent(maxCharCount); // faster then  stackalloc char[maxCharCount]; (https://stackoverflow.com/questions/55229518/why-allocation-on-arraypool-is-faster-then-allocation-on-stack)
+
+            try
             {
-                actualCharCount = utf8decoder.GetChars(bytePointer, byteCount, charBuffer, maxCharCount, flush: false);
+                // Read chars as utf8.
+                int actualCharCount;
+                fixed (byte* bytePointer = span)
+                fixed (char* charPointer = charBuffer)
+                {
+                    actualCharCount =
+                        utf8decoder.GetChars(bytePointer, byteCount, charPointer, maxCharCount, flush: false);
+                }
+                // 'Advance' the span.
+                span = span.Slice(byteCount);
+
+                // Allocate the string.
+                return new string(charBuffer, startIndex: 0, length: actualCharCount);
             }
-
-            // 'Advance' the span.
-            span = span.Slice(byteCount);
-
-            // Allocate the string.
-            return new string(charBuffer, startIndex: 0, length: actualCharCount);
+            finally
+            {
+                ArrayPool<char>.Shared.Return(charBuffer);
+            }
         }
 
         /// <summary>

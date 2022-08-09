@@ -9,14 +9,13 @@ using System.Xml.XPath;
 
 namespace Asv.Tools
 {
-
     /// <summary>
     /// Extension methods for the string data type
     /// </summary>
     public static class StringExtensions
     {
-        
 
+       
 
         public static string ByteArrayToString(this byte[] buff, uint startBitIndex, uint bitLength, params int[] printLength)
         {

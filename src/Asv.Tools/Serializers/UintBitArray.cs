@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 
 namespace Asv.Tools
 {
@@ -19,6 +20,41 @@ namespace Asv.Tools
             0xFFFFFEFF, 0xFFFFFDFF, 0xFFFFFBFF, 0xFFFFF7FF, 0xFFFFEFFF, 0xFFFFDFFF, 0xFFFFBFFF, 0xFFFF7FFF,
             0xFFFEFFFF, 0xFFFDFFFF, 0xFFFBFFFF, 0xFFF7FFFF, 0xFFEFFFFF, 0xFFDFFFFF, 0xFFBFFFFF, 0xFF7FFFFF,
             0xFEFFFFFF, 0xFDFFFFFF, 0xFBFFFFFF, 0xF7FFFFFF, 0xEFFFFFFF, 0xDFFFFFFF, 0xBFFFFFFF, 0x7FFFFFFF
+        };
+
+        private static readonly uint[] MutiplyMask = {
+            0b0000_0000_0000_0000_0000_0000_0000_0000,
+            0b0000_0000_0000_0000_0000_0000_0000_0001,
+            0b0000_0000_0000_0000_0000_0000_0000_0011,
+            0b0000_0000_0000_0000_0000_0000_0000_0111,
+            0b0000_0000_0000_0000_0000_0000_0000_1111,
+            0b0000_0000_0000_0000_0000_0000_0001_1111,
+            0b0000_0000_0000_0000_0000_0000_0011_1111,
+            0b0000_0000_0000_0000_0000_0000_0111_1111,
+            0b0000_0000_0000_0000_0000_0000_1111_1111,
+            0b0000_0000_0000_0000_0000_0001_1111_1111,
+            0b0000_0000_0000_0000_0000_0011_1111_1111,
+            0b0000_0000_0000_0000_0000_0111_1111_1111,
+            0b0000_0000_0000_0000_0000_1111_1111_1111,
+            0b0000_0000_0000_0000_0001_1111_1111_1111,
+            0b0000_0000_0000_0000_0011_1111_1111_1111,
+            0b0000_0000_0000_0000_0111_1111_1111_1111,
+            0b0000_0000_0000_0000_1111_1111_1111_1111,
+            0b0000_0000_0000_0001_1111_1111_1111_1111,
+            0b0000_0000_0000_0011_1111_1111_1111_1111,
+            0b0000_0000_0000_0111_1111_1111_1111_1111,
+            0b0000_0000_0000_1111_1111_1111_1111_1111,
+            0b0000_0000_0001_1111_1111_1111_1111_1111,
+            0b0000_0000_0011_1111_1111_1111_1111_1111,
+            0b0000_0000_0111_1111_1111_1111_1111_1111,
+            0b0000_0001_1111_1111_1111_1111_1111_1111,
+            0b0000_0011_1111_1111_1111_1111_1111_1111,
+            0b0000_0111_1111_1111_1111_1111_1111_1111,
+            0b0000_1111_1111_1111_1111_1111_1111_1111,
+            0b0001_1111_1111_1111_1111_1111_1111_1111,
+            0b0011_1111_1111_1111_1111_1111_1111_1111,
+            0b0111_1111_1111_1111_1111_1111_1111_1111,
+            0b1111_1111_1111_1111_1111_1111_1111_1111,
         };
 
         private uint _value;
@@ -47,6 +83,19 @@ namespace Asv.Tools
 
         public uint Value => _value;
 
+        public uint GetBitU(int index, int size)
+        {
+            if ((index + size) > Size)
+                throw new ArgumentOutOfRangeException(nameof(Size), $"Size + Index must be less then {Size} bit");
+            return (_value >> index) & MutiplyMask[size];
+        }
+
+        public void SetBitU(int index, int size, uint value)
+        {
+            if ((index + size) > Size)
+                throw new ArgumentOutOfRangeException(nameof(Size), $"Size + Index must be less then {Size} bit");
+            _value = (_value & ~(MutiplyMask[size] << index)) | ((value & MutiplyMask[size]) << index);
+        }
 
         public bool this[int index]
         {

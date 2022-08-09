@@ -35,32 +35,38 @@ namespace Asv.Tools
 
     public static class PortFactory
     {
-        public static IPort Create(string connectionString)
+        public static IPort Create(string connectionString, bool enabled = false)
         {
             var uri = new Uri(connectionString);
-
-            TcpPortConfig tcp;
-            if (TcpPortConfig.TryParseFromUri(uri, out tcp))
+            IPort result = null;
+            if (TcpPortConfig.TryParseFromUri(uri, out var tcp))
             {
                 if (tcp.IsServer)
                 {
-                    return new TcpServerPort(tcp);
+                    result = new TcpServerPort(tcp);
                 }
                 else
                 {
-                    return new TcpClientPort(tcp);
+                    result = new TcpClientPort(tcp);
                 }
             }
-
-            UdpPortConfig udp;
-            if (UdpPortConfig.TryParseFromUri(uri, out udp)) return new UdpPort(udp);
-
-            SerialPortConfig ser;
-            if (SerialPortConfig.TryParseFromUri(uri, out ser)) return new CustomSerialPort(ser);
-
-
-
-            throw new Exception(string.Format("Connection string '{0}' is invalid", connectionString));
+            else if (UdpPortConfig.TryParseFromUri(uri, out var udp))
+            {
+                result = new UdpPort(udp);
+            }
+            else if (SerialPortConfig.TryParseFromUri(uri, out var ser))
+            {
+                result = new CustomSerialPort(ser);
+            }
+            else
+            {
+                throw new Exception($"Connection string '{connectionString}' is invalid");
+            }
+            if (enabled)
+            {
+                result.Enable();
+            }
+            return result;
         }
     }
 }

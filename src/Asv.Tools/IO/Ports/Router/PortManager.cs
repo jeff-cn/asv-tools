@@ -221,6 +221,8 @@ namespace Asv.Tools
             return _onRecv.Subscribe(observer);
         }
 
+        public string Name => "PortManager";
+
         public async Task<bool> Send(byte[] data, int count, CancellationToken cancel)
         {
             Interlocked.Add(ref _txBytes, count);

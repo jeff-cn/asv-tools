@@ -23,7 +23,7 @@ namespace Asv.Tools
         // public static GeoPoint FromLatLon(double lat, double lon) { return new GeoPoint(lat, lon); }
         // public static GeoPoint NordPole => new(90.0, 0.0);
 
-        // public static GeoPoint Zero => new(0.0, 0.0);
+        public static GeoPoint Zero => new(0.0, 0.0,0.0);
         public static GeoPoint ZeroWithAlt => new(0.0, 0.0, 0.0);
 
         // public GeoPoint(double latitude, double longitude)

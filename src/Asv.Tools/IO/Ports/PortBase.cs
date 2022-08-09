@@ -73,6 +73,8 @@ namespace Asv.Tools
 
         public abstract string PortLogName { get; }
 
+        public string Name => PortLogName;
+
         public async Task<bool> Send(byte[] data, int count, CancellationToken cancel)
         {
             if (!IsEnabled.Value) return false;
@@ -134,7 +136,7 @@ namespace Asv.Tools
 
                 if (_disposedCancel.IsCancellationRequested) return;
                 _portStateStream.OnNext(PortState.Connecting);
-                MetricProbeTag = new KeyValuePair<string, object>("cs", ToString());
+                MetricProbeTag = new KeyValuePair<string, object>("cs", PortLogName);
                 InternalStart();
                 _portStateStream.OnNext(PortState.Connected);
             }
